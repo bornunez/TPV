@@ -20,11 +20,10 @@ GameObject::~GameObject()
 }
 
 void GameObject::render() {
-
 	SDL_Rect destRect;
 	destRect.x = x; destRect.y = y;
 	destRect.w = w; destRect.h = h;
-	texture->renderFrame(destRect, texRow, texCol);
+	texture->renderFrame(destRect, texRow,texCol);
 }
 
 void GameObject::update() {

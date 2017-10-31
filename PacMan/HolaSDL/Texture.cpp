@@ -43,7 +43,7 @@ void Texture:: renderFrame(const SDL_Rect&	destRect, int	row, int	col, SDL_Rende
 	srcRect.h = fh;
 	srcRect.w = fw;
 	srcRect.x = col * fw;
-	srcRect.y = col * fh;
+	srcRect.y = row * fh;
 	//Y LO AÑADIMOS A LA COLA
 	SDL_RenderCopy(renderer, texture, &srcRect, &destRect);
 }

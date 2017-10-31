@@ -9,13 +9,14 @@ Game::Game()
 	winX = winY = SDL_WINDOWPOS_CENTERED;
 	window = SDL_CreateWindow("Pac-Man", winX, winY, winWidth, winHeight, SDL_WINDOW_SHOWN);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	TILE_H = winHeight / MAP_ROWS;
+	TILE_W = winWidth / MAP_COLS;
 	//Notificamos que todo ha ido bien
 	cout << "Window created"<<endl;
 	//Y cargamos texturas y creamos los objetos y personajes
 	loadTextures();
 	loadGO();
 
-	
 }
 
 
@@ -49,32 +50,43 @@ void Game::run() {
 }
 
 void Game::loadTextures() {
-	//Creamos las Texturas	
-	Texture* Text1 = new Texture(renderer,TEXT_PATH);
-	Texture* Text2 = new Texture(renderer,TEXT_PATH);
+	// | PERSONAJES | MURO | COMIDA | BONUS |
 
+	//Creamos las Texturas	
+	Texture* Chars_TX = new Texture(renderer,TEXT_PATH);
+	Texture* Wall_TX = new Texture(renderer,TEXT_PATH);
+	Texture* Food_TX = new Texture(renderer, TEXT_PATH);
+	Texture* PowerUp_TX = new Texture(renderer, TEXT_PATH);
 	//Cargamos las texturas
-	Text1->load("name1", 1, 6);
-	Text2->load("name2", 1, 1);
+	Chars_TX->load("characters1.png", 4, 14);
+	Wall_TX->load("wall2.png");
+	Food_TX->load("food2.png");
+	PowerUp_TX->load("burguer1.png");
 	//Guardamos las texturas
-	Textures[0] = Text1;
-	Textures[1] = Text2;
+	Textures[0] = Chars_TX;
+	Textures[1] = Wall_TX;
+	Textures[2] = Food_TX;
+	Textures[3] = PowerUp_TX;
 }
 
 void Game::loadGO() {
+	// | FANT 0 | FANT 1 | ... | PACMAN | MURO | COMIDA | VITAMINA |
+
 	//Creacion de GO
-	GameObject* GO_0 = new GameObject(Textures[0], 0, 0, 100, 100, 0, 0); //Modelo para personajes
-	GameObject* GO_1 = new GameObject(Textures[1], 0, 0, winWidth, winHeight); //Modelo para fondos
+	//GameObject* Fant_0 = new GameObject(Textures[0], 0, 0, 100, 100, 0, 0); //Modelo para personajes
+	for (int i = 0; i < 4; i++) {
+		//Cargamos los 4 fantasmas
+		gameObjects[i] = new GameObject(Textures[0],i*TILE_W, 0,TILE_W ,TILE_H, i * 2, 0);
+	}
+	gameObjects[4] = new GameObject(Textures[0],TILE_W*4, 0, TILE_W, TILE_H,11,0); //Modelo para fondos
 	//Y guardamos los GO
-	gameObjects[0] = GO_0;
-	gameObjects[1] = GO_1;
 }
 
 
 void Game::render() {
 	//AQUI LLAMAMOS AL RENDER DE CADA ENTIDAD
 	cout << "Render" << endl;
-	for (int i = 0; i < NUM_GO; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		gameObjects[i]->render();
 	}
