@@ -11,8 +11,8 @@ enum MapCell { Empty, Wall, Food, Vitamins };
 class GameMap
 {
 private:
-	Texture CellTex;
-	Texture EmptyCellTex;
+	Texture* CellTex;
+	Texture* EmptyCellTex;
 public:
 	GameMap();
 	~GameMap();
