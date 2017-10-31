@@ -1,0 +1,16 @@
+﻿  GameObject.cpp
+c:\users\dax\desktop\pacman\proyectossdl\holasdl\gameobject.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\dax\desktop\pacman\proyectossdl\holasdl\texture.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\dax\desktop\pacman\proyectossdl\holasdl\texture.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\dax\desktop\pacman\proyectossdl\holasdl\texture.h(4): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\dax\desktop\pacman\proyectossdl\holasdl\gameobject.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\dax\desktop\pacman\proyectossdl\holasdl\gameobject.cpp(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\dax\desktop\pacman\proyectossdl\holasdl\game.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\dax\desktop\pacman\proyectossdl\holasdl\game.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\dax\desktop\pacman\proyectossdl\holasdl\game.h(4): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\dax\desktop\pacman\proyectossdl\holasdl\ghost.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\dax\desktop\pacman\proyectossdl\holasdl\ghost.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\dax\desktop\pacman\proyectossdl\holasdl\game.h(5): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\dax\desktop\pacman\proyectossdl\holasdl\game.h(6): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+  HolaSDL.vcxproj -> C:\Users\Dax\Desktop\Pacman\ProyectosSDL\bin\HolaSDLDebug.exe
+  HolaSDL.vcxproj -> C:\Users\Dax\Desktop\Pacman\ProyectosSDL\bin\HolaSDLDebug.pdb (Full PDB)
