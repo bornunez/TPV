@@ -26,20 +26,20 @@ SDL_Rect dest;
 dest.w = cellWitdth;
 dest.h = cellHeight;
 
-for (int i = 0; i < numRows; i++) {
-	for (int j = 0; j < numCols; j++) {
+	for (int i = 0; i < numRows; i++) {
+		for (int j = 0; j < numCols; j++) {
 
-		dest.x = j * cellWitdth;
-		dest.y = i * cellHeight;
+			dest.x = j * cellWitdth;
+			dest.y = i * cellHeight;
 
-		//Dependiendo del valor de la casilla se pinta el sprite
-		if (getCell(i, j) == Wall)
-			wall->renderFrame(dest, 0, 0);
-		else if (getCell(i, j) == Food)
-			food->renderFrame(dest, 0, 0);
-		else if (getCell(i, j) == Vitamins)
-			vitamin->renderFrame(dest, 0, 0);
-}
-}
+			//Dependiendo del valor de la casilla se pinta el sprite
+			if (getCell(i, j) == Wall)
+				wall->renderFrame(dest, 0, 0);
+			else if (getCell(i, j) == Food)
+				food->renderFrame(dest, 0, 0);
+			else if (getCell(i, j) == Vitamins)
+				vitamin->renderFrame(dest, 0, 0);
+		}	
+	}
 
 }

@@ -12,7 +12,7 @@ const uint FRAME_RATE = 50;
 const uint WIN_WIDTH = 800;
 const uint WIN_HEIGHT = 600;
 const std::string IMAGES_PATH = "";
-const uint NUM_TEXTURES = 3;
+const uint NUM_TEXTURES = 4;
 
 
 class	Game {

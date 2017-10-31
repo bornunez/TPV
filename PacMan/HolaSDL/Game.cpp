@@ -5,22 +5,33 @@
 Game::Game()
 {
 	init();
-	loadMap();
-	//meter en .h una estructura con los atributos para cargar en bucle. array de estructuras rellenado en el .h??
+	map = new GameMap(); //Pasarle por el constructor las texturas de juego ??
 
-	//Se crean las texturas 
+	loadMap();
+
+	//meter en .h una estructura con los atributos para cargar en bucle. array de estructuras rellenado en el .h??
+	//Inicializar el array en un bucle	//Se crean las texturas 
 	Texture *text1 = new Texture(renderer);
 	Texture *text2 = new Texture(renderer);
 	Texture *text3 = new Texture(renderer);
+	Texture *text4 = new Texture(renderer);
 	
 	text1->load("wall2.png", 1, 1);		  //Bloque
 	text2->load("characters1.png", 4, 14); //PacMan y fantasmas
 	text3->load("food2.png", 1, 1);		  //Cocos
+	text4->load("burguer1.png", 1, 1);		//Vitamina
 
 	//Se insertan las texturas
 	textures[0] = text1;
 	textures[1] = text2;
 	textures[2] = text3;
+	textures[3] = text4;
+
+	//Hacer que los textures del gameMap apunten a las de Game, esto deberia hacerse mediante una funcion para que no sean publicas
+	map->wall = text1;
+	map->food = text3;
+	map->vitamin = text4;
+
 
 	// Se crean los GO
 	pacMan = new PacMan(text2, this, 0, 0, 32, 32, 0, 10);			//PACMAN
@@ -69,7 +80,6 @@ void Game::render() {
 }
 
 void Game::update() {
-	map->render(cellWitdth, cellHeight);
 	//Se actualiza PacMan
 	pacMan->update();
 	//Se actualiza el movimiento de los fantasmas
@@ -119,21 +129,25 @@ void Game::loadMap() {
 	ifstream file;
 	file.open("MAP.txt");
 	if (file.is_open()) {
-		int auxInt;
+		uint auxInt;
 		string aux;
+
+		//Leer num filas y columnas y guardarlas en map
 		file >> auxInt;
 		map->setNumRows(auxInt);
 		file >> auxInt;
 		map->setNumCols(auxInt);
 
+		// Inicializa la matriz del mapa
 		map->iniMapCell();
 
 		getline(file, aux);
 
-
+		// Asigna el tamaño de cada celda del juego
 		cellWitdth = WIN_WIDTH / map->getNumCols();
 		cellHeight = WIN_HEIGHT / map->getNumRows();
 
+		// Asigna a cada elemento de la matriz su numero que corresponde con una textura del GameMap
 		while (!file.fail()) {
 			for (int i = 0; i < map->getNumRows(); i++) {
 				for (int j = 0; j < map->getNumCols(); j++) {
