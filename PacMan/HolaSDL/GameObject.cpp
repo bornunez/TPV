@@ -17,6 +17,17 @@ GameObject:: GameObject(Texture* text, Game* mainGame, uint X, uint Y, uint W, u
 GameObject::~GameObject()
 {
 }
+void GameObject::setIniPosition(uint iniX, uint iniY) {
+	this->iniX = iniX;
+	this->iniY = iniY;
+}
+
+void GameObject::setActualPosition(uint x, uint y)
+{
+	this->x = x;
+	this->y = y;
+}
+
 
 void GameObject::render() {
 	SDL_Rect destRect;
@@ -25,8 +36,6 @@ void GameObject::render() {
 
 	destRect.w = w; destRect.h = h;
 	texture->renderFrame(destRect, texRow, texCol);
-	
-	update();
 }
 
 //Cada go tendra su propio update sobreescrito ya que todos heredaran de GO

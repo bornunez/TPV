@@ -1,11 +1,17 @@
 #include "GameMap.h"
 
-
 GameMap::GameMap()
 {
 	
 }
 
+// Constructor que asigna al mapa las texturas del muro, la comida y la vitamina.
+GameMap::GameMap(Texture* wall, Texture* food, Texture* vitamin)
+{
+	this->wall = wall;
+	this->food = food;
+	this->vitamin = vitamin;
+}
 
 GameMap::~GameMap()
 {
@@ -18,28 +24,18 @@ void GameMap::iniMapCell() {
 	}
 }
 
-
-void GameMap::render(uint cellWitdth, uint cellHeight) {
-//PINTAR EL MAPA
-//Se crea un Rect y se le asigna el tamaño que tendra cada sprite
-SDL_Rect dest;
-dest.w = cellWitdth;
-dest.h = cellHeight;
-
+// Pinta el mapa, ver como quitar los argumentos para no tener que pasarlos cada vez, preguntar si hacer estaticas las variables
+//E incluir aqui game.h
+void GameMap::render(int cellWitdth, int cellHeight) {
 	for (int i = 0; i < numRows; i++) {
 		for (int j = 0; j < numCols; j++) {
-
-			dest.x = j * cellWitdth;
-			dest.y = i * cellHeight;
-
 			//Dependiendo del valor de la casilla se pinta el sprite
 			if (getCell(i, j) == Wall)
-				wall->renderFrame(dest, 0, 0);
+				wall->renderFrame({j * cellWitdth, i * cellHeight, cellWitdth, cellHeight}, 0, 0);
 			else if (getCell(i, j) == Food)
-				food->renderFrame(dest, 0, 0);
+				food->renderFrame({ j * cellWitdth, i * cellHeight, cellWitdth, cellHeight }, 0, 0);
 			else if (getCell(i, j) == Vitamins)
-				vitamin->renderFrame(dest, 0, 0);
+				vitamin->renderFrame({ j * cellWitdth, i * cellHeight, cellWitdth, cellHeight }, 0, 0);
 		}	
 	}
-
 }

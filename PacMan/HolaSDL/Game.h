@@ -40,6 +40,7 @@ private:
 	//Texture* textures[NUM_TEXTURES];
 
 public:
+
 	Game();
 	~Game();
 	void run();
@@ -48,5 +49,7 @@ public:
 	void handleEvents();
 	void init();
 	bool nextCell();
+	void loadTextures();
 	void loadMap();
+	void iniPositions(uint goNumber, uint iniX, uint iniY);
 };

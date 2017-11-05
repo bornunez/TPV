@@ -5,46 +5,22 @@
 Game::Game()
 {
 	init();
-	map = new GameMap(); //Pasarle por el constructor las texturas de juego ??
 
+	loadTextures();
+	//Hacer que los textures del gameMap apunten a las de Game, esto deberia hacerse mediante una funcion para que no sean publicas
+	map = new GameMap(textures[0], textures[2], textures[3]); //Pasarle por el constructor las texturas de juego ??
 	loadMap();
 
-	//meter en .h una estructura con los atributos para cargar en bucle. array de estructuras rellenado en el .h??
-	//Inicializar el array en un bucle	//Se crean las texturas 
-	Texture *text1 = new Texture(renderer);
-	Texture *text2 = new Texture(renderer);
-	Texture *text3 = new Texture(renderer);
-	Texture *text4 = new Texture(renderer);
 	
-	text1->load("wall2.png", 1, 1);		  //Bloque
-	text2->load("characters1.png", 4, 14); //PacMan y fantasmas
-	text3->load("food2.png", 1, 1);		  //Cocos
-	text4->load("burguer1.png", 1, 1);		//Vitamina
-
-	//Se insertan las texturas
-	textures[0] = text1;
-	textures[1] = text2;
-	textures[2] = text3;
-	textures[3] = text4;
-
-	//Hacer que los textures del gameMap apunten a las de Game, esto deberia hacerse mediante una funcion para que no sean publicas
-	map->wall = text1;
-	map->food = text3;
-	map->vitamin = text4;
-
 
 	// Se crean los GO
-	pacMan = new PacMan(text2, this, 0, 0, 32, 32, 0, 10);			//PACMAN
-	Ghost *red = new Ghost(text2, this, 0, 0, 32, 32, 0, 0);		//ROJO
-	Ghost *orange = new Ghost(text2, this, 0, 0, 32, 32, 0, 2);		//NARANJA
-	Ghost *pink = new Ghost(text2, this, 0, 0, 32, 32, 0, 4);		//ROSA
-	Ghost *blue = new Ghost(text2, this, 0, 0, 32, 32, 0, 6);		//AZUL
-
-	//Se insertan los fantasmas
-	ghosts[0] = red;
-	ghosts[1] = orange;
-	ghosts[2] = pink;
-	ghosts[3] = blue;
+	/*
+	pacMan = new PacMan(textures[1], this, 0, 0, cellWitdth, cellHeight, 0, 10);		//PACMAN
+	ghosts[0] = new Ghost(textures[1], this, 0, 0, cellWitdth, cellHeight, 0, 0);		//ROJO
+	ghosts[1] = new Ghost(textures[1], this, 0, 0, cellWitdth, cellHeight, 0, 2);		//NARANJA
+	ghosts[2] = new Ghost(textures[1], this, 0, 0, cellWitdth, cellHeight, 0, 4);		//ROSA
+	ghosts[3] = new Ghost(textures[1], this, 0, 0, cellWitdth, cellHeight, 0, 6);		//AZUL
+	*/
 }
 
 
@@ -89,19 +65,29 @@ void Game::update() {
 }
 void Game::handleEvents() {
 	
-	SDL_Event e;
-	while (SDL_PollEvent(&e)) {
+	SDL_Event event;
+	while (SDL_PollEvent(&event)) {
 		//If user closes the window
-		if (e.type == SDL_QUIT) {
+		if (event.type == SDL_QUIT) {
 			exit = true;
 		}
 		//If user presses any key
-		if (e.type == SDL_KEYDOWN) {
+		if (event.type == SDL_KEYDOWN) {
 			exit = true;
 		}
 		//If user clicks the mouse
-		if (e.type == SDL_MOUSEBUTTONDOWN) {
+		if (event.type == SDL_MOUSEBUTTONDOWN) {
 			exit = true;
+		}
+		if (event.type == SDL_KEYDOWN) {
+			if (event.key.keysym.sym == SDLK_DOWN) {
+			}
+			else if (event.key.keysym.sym == SDLK_UP) {
+			}
+			else if (event.key.keysym.sym == SDLK_RIGHT) {
+			}
+			else if (event.key.keysym.sym == SDLK_LEFT) {
+			}
 		}
 	}
 }
@@ -124,8 +110,9 @@ void Game::init() {
 		cout << "Error	initializing	SDL\n";
 }
 
+//Carga el mapa
 void Game::loadMap() {
-	//Aqui va la carga del MAPA
+
 	ifstream file;
 	file.open("MAP.txt");
 	if (file.is_open()) {
@@ -154,7 +141,13 @@ void Game::loadMap() {
 					int aux;
 					//Se lee en un entero auxiliar
 					file >> aux;
-					//Se convierte el entero a la enum MapCell
+
+					// Se asigna la posicion inicial de pac man y los fantasmas
+					if (aux > 4) {
+						iniPositions(aux, j, i);
+						aux = 0;
+					}
+					//Se convierte el entero a la enum MapCell y se inserta en la matriz
 					map->setCell(i, j, (MapCell)aux);
 				}
 				getline(file, aux);
@@ -162,4 +155,43 @@ void Game::loadMap() {
 		}
 	}
 	
+}
+
+void Game::loadTextures() {
+	//meter en .h una estructura con los atributos para cargar en bucle. array de estructuras rellenado en el .h??
+	//Inicializar el array en un bucle	//Se crean las texturas 
+	for (uint i = 0; i < textures.size(); i++) {
+		textures[i] = new Texture(renderer);
+	}
+
+	textures[0]->load("wall2.png", 1, 1);		 //Bloque
+	textures[1]->load("characters1.png", 4, 14); //PacMan y fantasmas
+	textures[2]->load("food2.png", 1, 1);		 //Cocos
+	textures[3]->load("burguer1.png", 1, 1);	 //Vitamina
+}
+
+//Esto es por si los fantasmas no se comportan todos igual, si no hay que tener controlado que fantasma
+//pertenece a cada casilla se puede quitar esta funcion y guardar el fantasma en la parte del array que le toque random
+//Cambiar el nombre por iniGO y que el constructor reciba inix e iniy?
+void Game::iniPositions(uint goNumber, uint iniX, uint iniY) {
+	if (goNumber == 5) {
+		ghosts[0] = new Ghost(textures[1], this, iniX* cellWitdth, iniY * cellHeight, cellWitdth, cellHeight, 0, 0);
+		ghosts[0]->setIniPosition(iniX, iniY);
+	} 
+	else if (goNumber == 6) {
+		ghosts[1] = new Ghost(textures[1], this, iniX* cellWitdth, iniY * cellHeight, cellWitdth, cellHeight, 0, 2);
+		ghosts[1]->setIniPosition(iniX, iniY);
+	}
+	else if (goNumber == 7) {
+		ghosts[2] = new Ghost(textures[1], this, iniX* cellWitdth, iniY * cellHeight, cellWitdth, cellHeight, 0, 4);
+		ghosts[2]->setIniPosition(iniX, iniY);
+	}
+	else if (goNumber == 8) {
+		ghosts[3] = new Ghost(textures[1], this, iniX * cellWitdth, iniY * cellHeight, cellWitdth, cellHeight, 0, 6);
+		ghosts[3]->setIniPosition(iniX, iniY);
+	}
+	else if (goNumber == 9) {
+		pacMan = new PacMan(textures[1], this, iniX * cellWitdth, iniY * cellHeight, cellWitdth, cellHeight, 0, 10);
+		pacMan->setIniPosition(iniX, iniY);
+	}
 }

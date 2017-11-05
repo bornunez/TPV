@@ -20,9 +20,10 @@ public:
 	Texture* vitamin;
 
 	GameMap();
+	GameMap(Texture* wall, Texture* food, Texture* vitamin);
 	~GameMap();
 
-	void render(uint cellWitdth, uint cellHeight);
+	void render(int cellWitdth, int cellHeight);
 	void iniMapCell();
 	void setCell(int row, int col, MapCell obj) { mapCell[row][col] = obj; }
 	MapCell getCell(int row, int col) { return mapCell[row][col]; }
