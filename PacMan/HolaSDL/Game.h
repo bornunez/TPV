@@ -20,9 +20,7 @@ private:
 	SDL_Window*	window = nullptr;
 	SDL_Renderer* renderer = nullptr;
 
-	// Tamaño celdas
-	uint cellWitdth;
-	uint cellHeight;
+	
 
 	//Booleanos de control
 	bool exit = false;
@@ -40,7 +38,9 @@ private:
 	//Texture* textures[NUM_TEXTURES];
 
 public:
-
+	// Tamaño celdas posiblemente estatico
+	uint cellWitdth;
+	uint cellHeight;
 	Game();
 	~Game();
 	void run();

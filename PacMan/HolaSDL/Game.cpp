@@ -34,6 +34,7 @@ void Game::run() {
 
 	while (!exit) {
 		//Linea de tratar tiempo
+		SDL_Delay(100);
 		handleEvents();
 		update();
 		render();

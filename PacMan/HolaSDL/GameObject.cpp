@@ -17,6 +17,7 @@ GameObject:: GameObject(Texture* text, Game* mainGame, uint X, uint Y, uint W, u
 GameObject::~GameObject()
 {
 }
+
 void GameObject::setIniPosition(uint iniX, uint iniY) {
 	this->iniX = iniX;
 	this->iniY = iniY;
@@ -41,4 +42,9 @@ void GameObject::render() {
 //Cada go tendra su propio update sobreescrito ya que todos heredaran de GO
 void GameObject::update() {
 	
+}
+
+Game * GameObject::getGame()
+{
+	return game;
 }

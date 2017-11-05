@@ -16,7 +16,7 @@ PacMan::~PacMan()
 }
 
 void PacMan::update() {
-	//Logica propia de pacman
+
 }
 
 
