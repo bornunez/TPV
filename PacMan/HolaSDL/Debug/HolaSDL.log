@@ -1,40 +1,45 @@
-﻿  PacMan.cpp
-d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\gameobject.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\texture.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\texture.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\texture.h(4): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\gameobject.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-  GameObject.cpp
-d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\gameobject.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\texture.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\texture.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\texture.h(4): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\gameobject.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\gameobject.cpp(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+﻿  main.cpp
 d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\game.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
 d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\game.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\pacman.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\texture.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\texture.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\texture.h(4): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
 d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\game.h(4): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
 d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\ghost.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\ghost.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
 d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\game.h(5): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
 d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\game.h(6): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+  Texture.cpp
+d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\texture.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\texture.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\texture.h(4): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+  PacMan.cpp
+d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\pacman.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\texture.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\texture.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\texture.h(4): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+  Ghost.cpp
+d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\ghost.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\texture.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\texture.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\texture.h(4): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+  GameMap.cpp
+d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\texture.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\texture.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\texture.h(4): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
   Game.cpp
 d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\game.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
 d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\game.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\gameobject.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\pacman.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
 d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\texture.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
 d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\texture.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
 d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\texture.h(4): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\gameobject.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
 d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\game.h(4): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
 d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\ghost.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\ghost.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
 d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\game.h(5): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
 d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\game.h(6): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
 d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\game.cpp(33): warning C4101: 'event': variable local sin referencia
   Generando código...
-  Omitiendo... (no se detectaron cambios relevantes)
-  main.cpp
-  Ghost.cpp
+  LINK : no se encontró D:\Usuarios\Borj\Escritorio\Github\TPV\PacMan\bin\HolaSDLDebug.exe o no lo generó el último vínculo incremental; ejecutando vínculo completo
   HolaSDL.vcxproj -> D:\Usuarios\Borj\Escritorio\Github\TPV\PacMan\bin\HolaSDLDebug.exe
   HolaSDL.vcxproj -> D:\Usuarios\Borj\Escritorio\Github\TPV\PacMan\bin\HolaSDLDebug.pdb (Full PDB)
