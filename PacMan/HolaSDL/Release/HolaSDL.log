@@ -1,0 +1,15 @@
+﻿  Game.cpp
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\Texture.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\Texture.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\Texture.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\GameObject.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\GameObject.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+Game.cpp(15): warning C4101: 'PacMan': unreferenced local variable
+Game.cpp(16): warning C4101: 'Fant': unreferenced local variable
+  Generating code
+  0 of 220 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    20 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  HolaSDL.vcxproj -> C:\Users\Miniman\Desktop\Cosas de la uni\TPV_GIT\PacMan\bin\PacManRelease.exe
+  HolaSDL.vcxproj -> C:\Users\Miniman\Desktop\Cosas de la uni\TPV_GIT\PacMan\bin\PacManRelease.pdb (Full PDB)

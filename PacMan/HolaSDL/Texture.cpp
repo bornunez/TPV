@@ -18,10 +18,10 @@ bool Texture:: load(string filename, uint numRows, uint numCols) {
 	SDL_Surface* surface = IMG_Load(name.c_str()); 
 	texture = SDL_CreateTextureFromSurface(renderer, surface);
 
-	if (texture == NULL) {
+	if (texture == nullptr) {
 		SDL_FreeSurface(surface); 
 		cout << "Fallo cargando textura " << filename << endl;
-		return false; //SI NO SE CARGA SALIMOS
+		return true; //SI NO SE CARGA SALIMOS
 
 	}
 	else {
@@ -32,7 +32,7 @@ bool Texture:: load(string filename, uint numRows, uint numCols) {
 		fh = h / numRows;
 	}
 	SDL_FreeSurface(surface); // Se borra la estructura auxiliar
-	return true;
+	return false;
 }
 void Texture::render(const SDL_Rect&	rect, SDL_RendererFlip	flip) {
 	SDL_RenderCopy(renderer, texture, nullptr, &rect);
