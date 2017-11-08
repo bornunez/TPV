@@ -36,8 +36,6 @@ void GameMap:: render(int frameW, int frameH){
 			destRect.x = j*frameW;
 			destRect.y = i*frameH;
 			//Y RENDERIZAMOS
-			/*if (mapCell[i][j] == Empty)
-				EmptyCellTex->render(destRect);*/
 			if (mapCell[i][j] == Wall)
 				CellTex->render(destRect);
 			else if (mapCell[i][j] == Food)

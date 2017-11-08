@@ -1,9 +1,10 @@
 #pragma once
 #include "SDL.h"
 #include "Texture.h"
+#include "Utilities.h"
 
 class Game;
-enum Direction { Up, Down, Left, Right, None };
+//enum Direction { Up, Down, Left, Right, None };
 
 class Pac_Man
 {

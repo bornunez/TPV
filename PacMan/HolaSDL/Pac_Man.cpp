@@ -43,7 +43,7 @@ void Pac_Man::update() {
 		x = nx;
 		y = ny;
 		//Vemos nuestra siguiente casilla
-		MapCell cell = game->nextCell(ny, nx);
+		MapCell cell = game->getCell(ny, nx);
 		//Y nos movemos en consecuencia
 		if (cell == Food) {
 			game->eat();
@@ -71,7 +71,7 @@ bool Pac_Man::next(int& nx, int&ny,Direction ndir) {
 		ny = rows - 1;
 	else if (ny >= rows)
 		ny = 0;
-	return game->nextCell(ny, nx) != Wall;
+	return game->getCell(ny, nx) != Wall;
 }
 void Pac_Man::EnumToDir(Direction dir, int&ndx, int& ndy) {
 	if (dir == Left) {

@@ -12,11 +12,10 @@ Game::Game()
 	//Notificamos que todo ha ido bien
 	cout << "Window created"<<endl;
 	//Y cargamos texturas y creamos los objetos y personajes
-	Position PacMan;
-	Position Fant[4];
 	loadTextures();
+	gameMap = new GameMap(textures[1], textures[2], textures[3]);
 	if(!error)
-		if(loadMap("..\\levels\\level00.dat"))error=true;
+		if(loadMap("..\\levels\\level01.dat"))error=true;
 }
 
 
@@ -32,20 +31,21 @@ void Game::run() {
 
 		//BUCLE PRINCIPAL DEL JUEGO
 		while (!exit) {
+			handleEvents();
 			update();
 			render();
-			handleEvents();
 			SDL_Delay(TICK_SPEED);
 		}
 	}
 	// Finalización
+	//SDL_RenderClear(renderer);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 }
 
 void Game::loadTextures() {
-	// | PERSONAJES | MURO | COMIDA | BONUS |
+	// | PERSONAJES | MURO | COMIDA | BONUS |i
 
 	//Creamos las Texturas	
 	for(int i=0;i<NUM_TXTS;i++)
@@ -56,8 +56,6 @@ void Game::loadTextures() {
 	else if(textures[1]->load("wall2.png")) error = true;
 	else if(textures[2]->load("food2.png")) error = true;
 	else if(textures[3]->load("cereza.png"))error = true;
-
-	gameMap = new GameMap(textures[1], textures[2], textures[3]);
 }
 
 void Game::render() {
@@ -76,6 +74,9 @@ void Game::render() {
 }
 void Game::update() {
 	//AQUI SE LLAMA AL UPDATE DE CADA ENTIDAD
+	for (int i = 0; i < 4; i++) {
+		ghosts[i]->update();
+	}
 	PacMan->update();
 	cout << "Update"<<endl;
 }
@@ -128,22 +129,13 @@ bool Game::loadMap(string filename){
 		for (int j = 0; j < MAP_COLS; j++) {
 			//MAPA: 0 -> VACIO || 1 -> MURO || 2 -> COMIDA || 3 -> VITAMINA || 5,6,7,8 -> FANTASMAS || 9 -> PACMAN
 			file >> num;
-			/*if (num == 0)
-				gameMap->setCell(i, j, Empty);
-			else if (num == 1 || num == 4)
-				gameMap->setCell(i, j, Wall);
-			else if (num == 2) {
-				gameMap->setCell(i, j, Food);
-				numComida++;
-			}
-			else if (num == 3)
-				gameMap->setCell(i, j, PowerUp);*/
+
 			if (num < 5)
 				gameMap -> setCell(i, j, (MapCell)num);
 			//CARGA FANTASMAS
 			else if (num>4 && num<9) {
 				gameMap->setCell(i, j, Empty);
-				ghosts[num - 5] = new Ghost(textures[0], j, i, TILE_W, TILE_H, (num - 5) * 2, 0);
+				ghosts[num - 5] = new Ghost(textures[0], j, i, TILE_W, TILE_H,this, (num - 5) * 2, 0);
 			}
 			//PACMAN
 			else if (num == 9) {
@@ -157,14 +149,14 @@ bool Game::loadMap(string filename){
 }
 
 Game::~Game()
-{
-	//Borramos MApa
-	delete gameMap;
+{ /*
 	//Borramos Personajes
 	for (int i = 0; i < 4; i++)
 		delete(ghosts[i]);
 	delete(PacMan);
+	//Borramos MApa
+	delete gameMap;
 	//Borramos texturas
 	for (int i = 0; i < NUM_TXTS; i++)
-		delete(textures[i]);
+		delete(textures[i]);*/
 }

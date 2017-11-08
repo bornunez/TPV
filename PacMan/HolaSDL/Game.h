@@ -47,7 +47,7 @@ public:
 	void render();
 	void update();
 	void handleEvents();
-	MapCell nextCell(int row, int col) { return gameMap->getCell(row,col); }
+	MapCell getCell(int row, int col) { return gameMap->getCell(row,col); }
 	int getRows() { return MAP_ROWS; }
 	int getCols() { return MAP_COLS; }
 	void eat() { numComida--; }

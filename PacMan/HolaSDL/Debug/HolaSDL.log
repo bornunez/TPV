@@ -1,10 +1,4 @@
-﻿  Game.cpp
-c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\texture.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\texture.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\texture.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\gameobject.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\gameobject.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(15): warning C4101: 'PacMan': unreferenced local variable
-c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(16): warning C4101: 'Fant': unreferenced local variable
+﻿  Ghost.cpp
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\ghost.cpp(84): warning C4018: '<': no coinciden signed/unsigned
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\ghost.cpp(86): warning C4018: '<': no coinciden signed/unsigned
   HolaSDL.vcxproj -> C:\Users\Miniman\Desktop\Cosas de la uni\TPV_GIT\PacMan\bin\PacManDebug.exe
-  HolaSDL.vcxproj -> C:\Users\Miniman\Desktop\Cosas de la uni\TPV_GIT\PacMan\bin\PacManDebug.pdb (Full PDB)

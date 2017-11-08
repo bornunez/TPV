@@ -6,6 +6,25 @@ c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\GameObject.h(2):
 c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\GameObject.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
 Game.cpp(15): warning C4101: 'PacMan': unreferenced local variable
 Game.cpp(16): warning C4101: 'Fant': unreferenced local variable
+  GameObject.cpp
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\GameObject.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\Texture.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\Texture.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\Texture.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\GameObject.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+GameObject.cpp(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  Pac_Man.cpp
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\Texture.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\Texture.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\Texture.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\GameObject.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\GameObject.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  main.cpp
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\Texture.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\Texture.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\Texture.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\GameObject.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\GameObject.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
   Generating code
   0 of 220 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation

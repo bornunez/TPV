@@ -1,6 +1,6 @@
 #pragma once
-#include "Texture.h";
-#include "SDL.h";
+#include "Texture.h"
+#include "SDL.h"
 //#include "Game.h";
 class Game;
 class	GameObject {
