@@ -7,10 +7,8 @@ Ghost::Ghost(Texture* text)
 	texture = text;
 	//game = GAME;
 }
-Ghost::Ghost(Texture* text, uint X, uint Y, uint W, uint H, Game* GAME,uint iniCol, uint iniRow) {
+Ghost::Ghost(Texture* text, Game* GAME,uint iniCol, uint iniRow) {
 	texture = text;
-	x = X; y = Y;
-	w = W; h = H;
 	texRow = iniRow; texCol = iniCol;
 	game = GAME;
 }
@@ -29,7 +27,7 @@ void Ghost::render() {
 void Ghost::update() {
 	mueve();
 }
-bool Ghost::next(int& nx, int&ny, Direction ndir) {
+bool Ghost::next(int& nx, int&ny, Direction ndir) { //DADA UNA DIRECCION DIR, DECIMOS SI SE PUEDE MOVER, Y DEVOLVEMOS EL SIGUIENTE PUNTO
 	//Asignamos las variables
 	int ndx, ndy;
 	EnumToDir(ndir, ndx, ndy);
@@ -48,7 +46,7 @@ bool Ghost::next(int& nx, int&ny, Direction ndir) {
 		ny = 0;
 	return game->getCell(ny, nx) != Wall;
 }
-void Ghost::EnumToDir(Direction dir, int&ndx, int& ndy) {
+void Ghost::EnumToDir(Direction dir, int&ndx, int& ndy) { //DADA UNA DIRECCION, DEVOLVEMOS SUS CARDINALES
 	if (dir == Left) {
 		ndx = -1;
 		ndy = 0;
@@ -71,30 +69,34 @@ void Ghost::EnumToDir(Direction dir, int&ndx, int& ndy) {
 	}
 }
 void Ghost::mueve() {
-	vector<Direction> Dirs;
+	dirs.clear();
 	//Vamos a guardar las direcciones posibles, de donde luego cogeremos una
 	int nx, ny;
 	for (int i = 0; i < 4; i++) {
 		if (next(nx, ny, (Direction)i))
-			Dirs.push_back((Direction)i);
+			dirs.push_back((Direction)i);
 	}
-	if (Dirs.size() > 1) {
+	//Si hay mas de una posicion donde moverse
+	if (dirs.size() > 1) {
 		int i = 0;
 		Direction back = backDir(dir);
-		while (i < Dirs.size() && Dirs[i] != back )
+		//Buscamos a ver si esta la contraria a nuestro movimiento actual
+		while (i < dirs.size() && dirs[i] != back )
 			i++;
-		if (i < Dirs.size())
-			Dirs.erase(Dirs.begin()+ i);
+		if (i < dirs.size()) //En cuyo caso la eliminamos
+			dirs.erase(dirs.begin()+ i);
 	}
-	if (Dirs.size() >= 1)
-		dir = Dirs[rand() % Dirs.size()];
+	//Y cogemos una direccion aleatoria
+	if (dirs.size() >= 1)
+		dir = dirs[rand() % dirs.size()];
 	else
 		dir = None;
+	//Y nos movemos
 	next(nx, ny, dir);
 	x = nx;
 	y = ny;
 }
-Direction Ghost::backDir(Direction currDir) {
+Direction Ghost::backDir(Direction currDir) { //DADA UNA DIRECCION DIR, DEVOLVEMOS LA INVERSA
 	if (currDir == Up)
 		return Down;
 	else if (currDir == Down)
@@ -105,4 +107,13 @@ Direction Ghost::backDir(Direction currDir) {
 		return Left;
 	else
 		return None;
+}
+
+void Ghost::init(int iniPosX, int iniPosY, uint W, uint H) {
+	iniX = iniPosX;
+	iniY = iniPosY;
+	x = iniX;
+	y = iniY;
+	w = W;
+	h = H;
 }

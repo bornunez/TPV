@@ -27,10 +27,11 @@ public:
 	GameMap(Texture* cellTex, Texture* food, Texture* powerUp);
 	~GameMap();
 	void render(int frameW, int frameH);
-	void setRows(int rows) { ROWS = rows; }
-	void setCols(int cols) { COLS = cols; }
 	void initMap();
 
+	//GETS Y SETS
+	void setRows(int rows) { ROWS = rows; }
+	void setCols(int cols) { COLS = cols; }
 	MapCell getCell(int rows, int cols) { return mapCell[rows][cols]; }
 	void setCell(int rows, int cols, MapCell cellType) { mapCell[rows][cols] = cellType; }
 };

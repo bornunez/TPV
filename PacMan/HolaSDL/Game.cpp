@@ -13,9 +13,10 @@ Game::Game()
 	cout << "Window created"<<endl;
 	//Y cargamos texturas y creamos los objetos y personajes
 	loadTextures();
+	loadCharacters();
 	gameMap = new GameMap(textures[1], textures[2], textures[3]);
 	if(!error)
-		if(loadMap("..\\levels\\level01.dat"))error=true;
+		if(loadMap("..\\levels\\level00.dat"))error=true;
 }
 
 
@@ -57,12 +58,19 @@ void Game::loadTextures() {
 	else if(textures[2]->load("food2.png")) error = true;
 	else if(textures[3]->load("cereza.png"))error = true;
 }
+void Game::loadCharacters() {
+	for (int i = 0; i < NUM_GHOST; i++) {
+		ghosts[i] = new Ghost(textures[0], this,i * 2, 0);
+	}
+	PacMan = new Pac_Man(textures[0], this, 11, 0); //Cargamos a PACMAN
+}
 
 void Game::render() {
 	//AQUI LLAMAMOS AL RENDER DE CADA ENTIDAD
 	SDL_RenderClear(renderer);
 
 	gameMap->render(TILE_W, TILE_H);
+	//renderMap();
 
 	cout << "Render" << endl;
 	for (int i = 0; i < 4; i++)
@@ -77,7 +85,9 @@ void Game::update() {
 	for (int i = 0; i < 4; i++) {
 		ghosts[i]->update();
 	}
+	collision();
 	PacMan->update();
+	collision();
 	cout << "Update"<<endl;
 }
 void Game::handleEvents() {
@@ -130,22 +140,40 @@ bool Game::loadMap(string filename){
 			//MAPA: 0 -> VACIO || 1 -> MURO || 2 -> COMIDA || 3 -> VITAMINA || 5,6,7,8 -> FANTASMAS || 9 -> PACMAN
 			file >> num;
 
-			if (num < 5)
+			//CARGA MAPA
+			if (num < 4)
 				gameMap -> setCell(i, j, (MapCell)num);
 			//CARGA FANTASMAS
 			else if (num>4 && num<9) {
 				gameMap->setCell(i, j, Empty);
-				ghosts[num - 5] = new Ghost(textures[0], j, i, TILE_W, TILE_H,this, (num - 5) * 2, 0);
+				ghosts[num - 5]->init(j, i, TILE_W, TILE_H); //Ponemos las posiciones iniciales del Fant
 			}
 			//PACMAN
 			else if (num == 9) {
 				gameMap->setCell(i, j, Empty);
-				PacMan = new Pac_Man(textures[0],j, i, TILE_W, TILE_H,this, 11, 0); //Cargamos a PACMAN
+				PacMan ->init(j, i, TILE_W, TILE_H); //Cargamos a PACMAN
 			}
 		}
 	}
 	file.close();
 	return false;
+}
+
+void Game::powerUp() {
+	for (int i = 0; i < NUM_GHOST; i++)
+		ghosts[i]->Die();
+}
+
+void Game::collision() {
+	for (int i = 0; i < NUM_GHOST; i++) {
+		bool collision = PacMan->getX() == ghosts[i]->getX() && PacMan->getY() == ghosts[i]->getY();
+		if (collision && PacMan->isPowered())
+			ghosts[i]->Die();
+		else if (collision && !gameOver) {
+			if (PacMan->die())
+				gameOver = true;
+		}
+	}
 }
 
 Game::~Game()
@@ -160,3 +188,18 @@ Game::~Game()
 	for (int i = 0; i < NUM_TXTS; i++)
 		delete(textures[i]);*/
 }
+
+/*void Game::renderMap() {
+	SDL_Rect destRect;
+	for (int i = 0; i<MAP_ROWS; i++)
+		for (int j = 0; j < MAP_COLS; j++) {
+			destRect.h = TILE_H;
+			destRect.w = TILE_W;
+			destRect.x = j*TILE_W;
+			destRect.y = i*TILE_H;
+			//Y RENDERIZAMOS
+			int celltype = (int)(gameMap->getCell(i, j));
+			if (celltype > 0 )
+				textures[celltype]->render(destRect);
+		}
+}*/

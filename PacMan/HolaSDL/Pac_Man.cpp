@@ -8,10 +8,8 @@ Pac_Man::Pac_Man(Texture* text,Game* GAME)
 	texture = text;
 	game = GAME;
 }
-Pac_Man::Pac_Man(Texture* text, uint X, uint Y, uint W, uint H, Game* GAME, uint iniCol, uint iniRow) {
+Pac_Man::Pac_Man(Texture* text, Game* GAME, uint iniCol, uint iniRow) {
 	texture = text;
-	x = X; y = Y;
-	w = W; h = H;
 	texRow = iniRow; texCol = iniCol;
 	game = GAME;
 }
@@ -34,6 +32,7 @@ void Pac_Man::setDir(Direction ndir) {
 
 
 void Pac_Man::update() {
+	setTexture();
 	int nx, ny;
 	if (buffer != None && next(nx, ny, buffer)) {
 		dir = buffer;
@@ -51,6 +50,7 @@ void Pac_Man::update() {
 		}
 		else if (cell == PowerUp) {
 			game->setCell(ny, nx, Empty);
+			powerUp = true;
 		}
 	}
 }
@@ -90,4 +90,21 @@ void Pac_Man::EnumToDir(Direction dir, int&ndx, int& ndy) {
 		ndx = 1;
 		ndy = 0;
 	}
+}
+
+void Pac_Man::init(int iniPosX, int iniPosY, uint W, uint H) {
+	iniX = iniPosX; iniY = iniPosY;
+	x = iniX; y = iniY;
+	w = W; h = H;
+}
+
+bool Pac_Man::die() {
+	life--;
+	if (life == 0)
+		return true;
+	else
+		return false;
+}
+void Pac_Man::setTexture() {
+
 }

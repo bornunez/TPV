@@ -22,7 +22,7 @@ GameMap::~GameMap()
 void GameMap::initMap() {
 	//INICIAMOS EL MAPA
 	mapCell = new MapCell *[ROWS];
-	for (int i = 0; i < COLS; i++) {
+	for (int i = 0; i < ROWS; i++) {
 		mapCell[i] = new MapCell[COLS];
 	}
 }
