@@ -1,10 +1,11 @@
 #include "Texture.h"
 
-//Hacer los cambios porque ahora en constructor se pasa renderer es decir se le quita a las funciones de render ela rgumento render
 
 
-Texture::Texture()
+Texture::Texture(SDL_Renderer* r,const string path)
 {
+	renderer = r;
+	PATH = path;
 }
 
 
@@ -13,14 +14,15 @@ Texture::~Texture()
 }
 bool Texture:: load(string filename, uint numRows, uint numCols) {
 	//Carga de textura en la estructura auxiliar
-	SDL_Surface* surface = IMG_Load(filename.c_str()); 
-	//Aqui hay otro control de errores
-
+	string name = PATH + filename;//Hay que hacer la concatenacion aqui
+	SDL_Surface* surface = IMG_Load(name.c_str()); 
 	texture = SDL_CreateTextureFromSurface(renderer, surface);
 
-	if (texture == NULL) {
+	if (texture == nullptr) {
 		SDL_FreeSurface(surface); 
-		return false; //SI NO SE CARGA SALIMOS
+		cout << "Fallo cargando textura " << filename << endl;
+		return true; //SI NO SE CARGA SALIMOS
+
 	}
 	else {
 		//Cuando tengamos seguro que hay textura, actualizamos nuestros datos
@@ -30,7 +32,7 @@ bool Texture:: load(string filename, uint numRows, uint numCols) {
 		fh = h / numRows;
 	}
 	SDL_FreeSurface(surface); // Se borra la estructura auxiliar
-	return true;
+	return false;
 }
 void Texture::render(const SDL_Rect&	rect, SDL_RendererFlip	flip) {
 	SDL_RenderCopy(renderer, texture, nullptr, &rect);
@@ -40,8 +42,8 @@ void Texture:: renderFrame(const SDL_Rect&	destRect, int	row, int	col, SDL_Rende
 	SDL_Rect srcRect;
 	srcRect.h = fh;
 	srcRect.w = fw;
-	srcRect.x = row * fw;
-	srcRect.y = col * fh;
+	srcRect.x = col * fw;
+	srcRect.y = row * fh;
 	//Y LO AÑADIMOS A LA COLA
 	SDL_RenderCopy(renderer, texture, &srcRect, &destRect);
 }

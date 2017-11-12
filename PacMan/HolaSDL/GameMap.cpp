@@ -1,41 +1,46 @@
 #include "GameMap.h"
 
-GameMap::GameMap()
-{
-	
+
+GameMap::GameMap() {
+
 }
 
-// Constructor que asigna al mapa las texturas del muro, la comida y la vitamina.
-GameMap::GameMap(Texture* wall, Texture* food, Texture* vitamin)
+GameMap::GameMap(Texture* cellTex, Texture* food, Texture* powerUp)
 {
-	this->wall = wall;
-	this->food = food;
-	this->vitamin = vitamin;
+	CellTex = cellTex;
+	FoodTex = food;
+	PowerUpTex = powerUp;
 }
 
 GameMap::~GameMap()
 {
+	for (int i = 0; i < ROWS; i++) {
+		delete mapCell[i];
+	}
+	delete mapCell;
 }
-
-void GameMap::iniMapCell() {
-	mapCell = new MapCell * [numRows];
-	for (int i = 0; i < numRows; i++) {
-		mapCell[i] = new MapCell[numCols];
+void GameMap::initMap() {
+	//INICIAMOS EL MAPA
+	mapCell = new MapCell *[ROWS];
+	for (int i = 0; i < ROWS; i++) {
+		mapCell[i] = new MapCell[COLS];
 	}
 }
 
-// Pinta el mapa, ver como quitar los argumentos para no tener que pasarlos cada vez, preguntar si hacer estaticas las variables
-//E incluir aqui game.h
-void GameMap::render(int cellWitdth, int cellHeight) {
-	for (int i = 0; i < numRows; i++) {
-		for (int j = 0; j < numCols; j++) {
-			//Dependiendo del valor de la casilla se pinta el sprite
-			if (getCell(i, j) == Wall)
-				wall->renderFrame({j * cellWitdth, i * cellHeight, cellWitdth, cellHeight}, 0, 0);
-			else if (getCell(i, j) == Food)
-				food->renderFrame({ j * cellWitdth, i * cellHeight, cellWitdth, cellHeight }, 0, 0);
-			else if (getCell(i, j) == Vitamins)
-				vitamin->renderFrame({ j * cellWitdth, i * cellHeight, cellWitdth, cellHeight }, 0, 0);
-		}	
-	}
+void GameMap:: render(int frameW, int frameH){
+	SDL_Rect destRect;
+	for(int i=0; i<ROWS;i++)
+		for (int j = 0; j < COLS; j++) {
+			destRect.h = frameH;
+			destRect.w = frameW;
+			destRect.x = j*frameW;
+			destRect.y = i*frameH;
+			//Y RENDERIZAMOS
+			if (mapCell[i][j] == Wall)
+				CellTex->render(destRect);
+			else if (mapCell[i][j] == Food)
+				FoodTex->render(destRect);
+			else if (mapCell[i][j] == PowerUp)
+				PowerUpTex->render(destRect);
+		}
 }

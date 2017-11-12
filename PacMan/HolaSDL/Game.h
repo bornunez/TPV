@@ -1,55 +1,68 @@
 #pragma once
-#include "SDL.h";
-#include "PacMan.h";
-#include "Ghost.h";
-#include "GameMap.h";
-#include "Texture.h"; 
-#include <array>
+#include "SDL.h"
+#include "GameMap.h"
+#include "GameObject.h"
+#include <vector>
 #include <iostream>
-#include <fstream>	
+#include "Pac_Man.h"
+#include "Ghost.h"
 
-const uint FRAME_RATE = 50;
-const uint WIN_WIDTH = 800;
-const uint WIN_HEIGHT = 600;
-const std::string IMAGES_PATH = "";
-const uint NUM_TEXTURES = 4;
-
-
-class	Game {
+class Game {
 private:
+	//CONSTANTES
+	const int NUM_TXTS = 4;
+	const int NUM_GHOST = 4;
+	const string TEXT_PATH = "..\\images\\";
+	const string LEVEL_PATH = "..\\levels\\";
+	const int TICK_SPEED = 100;
+	int MAP_ROWS;
+	int MAP_COLS;
+	int TILE_H, TILE_W;
+
+	//PROPIEDADES Y VARIABLES DE LA VENTANA
 	SDL_Window*	window = nullptr;
 	SDL_Renderer* renderer = nullptr;
+	uint winWidth = 750;
+	uint winHeight = 750;
+	int winX, winY; // Posición de la ventana
 
-	
-
-	//Booleanos de control
+	//PROPIEDADES Y VARIABLES DEL JUEGO (Flags de control)
 	bool exit = false;
-	bool gameOver = false;
+	bool error = false;
 	bool win = false;
+	bool gameOver = false;
+	int numComida;
+	GameMap* gameMap;
+	Texture* textures[4]; // | PERSONAJES | MURO | COMIDA | BONUS
+	Ghost* ghosts[4];
+	Pac_Man* PacMan;
+	Direction dir;
 
-	// Numero de casillas con comida
-	uint foodCells;
+	//GAMEMAP 
 
-	GameMap *map;
-	PacMan *pacMan;
-	//Ghost* ghosts[4];
-	array<Ghost*, 4> ghosts; //usar class array o hacerlo normal?
-	array<Texture*, NUM_TEXTURES> textures;
-	//Texture* textures[NUM_TEXTURES];
+	//METODOS AUXILIARES
+	void loadTextures();
+	void loadCharacters();
+	bool loadMap(string filename);
+
 
 public:
-	// Tamaño celdas posiblemente estatico
-	uint cellWitdth;
-	uint cellHeight;
 	Game();
 	~Game();
 	void run();
 	void render();
 	void update();
 	void handleEvents();
-	void init();
-	bool nextCell();
-	void loadTextures();
-	void loadMap();
-	void iniPositions(uint goNumber, uint iniX, uint iniY);
+
+	//METODOS DEL CICLO DE JUEGO PARA LOS COMPONENTES
+	void collision();
+	void powerUp();
+	void eat() { numComida--; }
+
+	//GETS Y SETS
+	MapCell getCell(int row, int col) { return gameMap->getCell(row,col); }
+	int getRows() { return MAP_ROWS; }
+	int getCols() { return MAP_COLS; }
+	void setCell(int row, int col, MapCell type) { gameMap->setCell(row, col, type); }
+	void renderMap();
 };

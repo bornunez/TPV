@@ -4,195 +4,202 @@
 
 Game::Game()
 {
-	init();
-
+	// Inicialización del sistema, ventana y renderer
+	SDL_Init(SDL_INIT_EVERYTHING);
+	winX = winY = SDL_WINDOWPOS_CENTERED;
+	window = SDL_CreateWindow("Pac-Man", winX, winY, winWidth, winHeight, SDL_WINDOW_SHOWN);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	//Notificamos que todo ha ido bien
+	cout << "Window created"<<endl;
+	//Y cargamos texturas y creamos los objetos y personajes
 	loadTextures();
-	//Hacer que los textures del gameMap apunten a las de Game, esto deberia hacerse mediante una funcion para que no sean publicas
-	map = new GameMap(textures[0], textures[2], textures[3]); //Pasarle por el constructor las texturas de juego ??
-	loadMap();
-
-	
-
-	// Se crean los GO
-	/*
-	pacMan = new PacMan(textures[1], this, 0, 0, cellWitdth, cellHeight, 0, 10);		//PACMAN
-	ghosts[0] = new Ghost(textures[1], this, 0, 0, cellWitdth, cellHeight, 0, 0);		//ROJO
-	ghosts[1] = new Ghost(textures[1], this, 0, 0, cellWitdth, cellHeight, 0, 2);		//NARANJA
-	ghosts[2] = new Ghost(textures[1], this, 0, 0, cellWitdth, cellHeight, 0, 4);		//ROSA
-	ghosts[3] = new Ghost(textures[1], this, 0, 0, cellWitdth, cellHeight, 0, 6);		//AZUL
-	*/
+	loadCharacters();
+	gameMap = new GameMap(textures[1], textures[2], textures[3]);
+	if(!error)
+		if(loadMap("..\\levels\\level00.dat"))error=true;
 }
 
-
-Game::~Game()
-{
-}
 
 void Game::run() {
-	
-	SDL_Event	event;
-
-	while (!exit) {
-		//Linea de tratar tiempo
-		SDL_Delay(100);
-		handleEvents();
-		update();
-		render();
-	}
-}
-
-void Game::render() {
-	SDL_RenderClear(renderer);		//	Borra	la	pantalla
-
-	map->render(cellWitdth, cellHeight);
-	//Se pinta PacMan
-	pacMan->render();
-
-	//Se pintan los fantasmas
-	for (uint i = 0; i < ghosts.size(); i++) {
-		ghosts[i]->render();
-	}
-
-	SDL_RenderPresent(renderer);	//	Muestra	la	escena
-}
-
-void Game::update() {
-	//Se actualiza PacMan
-	pacMan->update();
-	//Se actualiza el movimiento de los fantasmas
-	for (uint i = 0; i <  ghosts.size(); i++) {
-		ghosts[i]->update();
-	}
-}
-void Game::handleEvents() {
-	
-	SDL_Event event;
-	while (SDL_PollEvent(&event)) {
-		//If user closes the window
-		if (event.type == SDL_QUIT) {
-			exit = true;
-		}
-		//If user presses any key
-		if (event.type == SDL_KEYDOWN) {
-			exit = true;
-		}
-		//If user clicks the mouse
-		if (event.type == SDL_MOUSEBUTTONDOWN) {
-			exit = true;
-		}
-		if (event.type == SDL_KEYDOWN) {
-			if (event.key.keysym.sym == SDLK_DOWN) {
-			}
-			else if (event.key.keysym.sym == SDLK_UP) {
-			}
-			else if (event.key.keysym.sym == SDLK_RIGHT) {
-			}
-			else if (event.key.keysym.sym == SDLK_LEFT) {
-			}
-		}
-	}
-}
-
-bool Game::nextCell() {
-	return true;
-}
-
-
-void Game::init() {
-	int winX, winY;	//	Posición	de	la	ventana
-	winX = winY = SDL_WINDOWPOS_CENTERED;
-
-	//	Inicialización	del	sistema,	ventana	y	renderer
-	SDL_Init(SDL_INIT_EVERYTHING);
-	window = SDL_CreateWindow("First	test	with	SDL", winX, winY,
-		WIN_WIDTH, WIN_HEIGHT, SDL_WINDOW_SHOWN);
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	//AQUI SUCEDE EL BUCLE PRINCIPAL DEL JUEGO. 
 	if (window == nullptr || renderer == nullptr)
-		cout << "Error	initializing	SDL\n";
-}
+		cout << "Error initializing SDL\n";
+	else { // Programa que usa SDL
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // RGB y alpha
+		SDL_RenderClear(renderer); // Borra la pantalla
+		SDL_RenderPresent(renderer); // Muestra la escena
+		cout << "SDL Sucesfully initializated, running game..."<<endl;
 
-//Carga el mapa
-void Game::loadMap() {
-
-	ifstream file;
-	file.open("MAP.txt");
-	if (file.is_open()) {
-		uint auxInt;
-		string aux;
-
-		//Leer num filas y columnas y guardarlas en map
-		file >> auxInt;
-		map->setNumRows(auxInt);
-		file >> auxInt;
-		map->setNumCols(auxInt);
-
-		// Inicializa la matriz del mapa
-		map->iniMapCell();
-
-		getline(file, aux);
-
-		// Asigna el tamaño de cada celda del juego
-		cellWitdth = WIN_WIDTH / map->getNumCols();
-		cellHeight = WIN_HEIGHT / map->getNumRows();
-
-		// Asigna a cada elemento de la matriz su numero que corresponde con una textura del GameMap
-		while (!file.fail()) {
-			for (int i = 0; i < map->getNumRows(); i++) {
-				for (int j = 0; j < map->getNumCols(); j++) {
-					int aux;
-					//Se lee en un entero auxiliar
-					file >> aux;
-
-					// Se asigna la posicion inicial de pac man y los fantasmas
-					if (aux > 4) {
-						iniPositions(aux, j, i);
-						aux = 0;
-					}
-					//Se convierte el entero a la enum MapCell y se inserta en la matriz
-					map->setCell(i, j, (MapCell)aux);
-				}
-				getline(file, aux);
-			}
+		//BUCLE PRINCIPAL DEL JUEGO
+		while (!exit) {
+			handleEvents();
+			update();
+			render();
+			SDL_Delay(TICK_SPEED);
 		}
 	}
-	
+	// Finalización
+	//SDL_RenderClear(renderer);
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	SDL_Quit();
 }
 
 void Game::loadTextures() {
-	//meter en .h una estructura con los atributos para cargar en bucle. array de estructuras rellenado en el .h??
-	//Inicializar el array en un bucle	//Se crean las texturas 
-	for (uint i = 0; i < textures.size(); i++) {
-		textures[i] = new Texture(renderer);
-	}
+	// | PERSONAJES | MURO | COMIDA | BONUS |i
 
-	textures[0]->load("wall2.png", 1, 1);		 //Bloque
-	textures[1]->load("characters1.png", 4, 14); //PacMan y fantasmas
-	textures[2]->load("food2.png", 1, 1);		 //Cocos
-	textures[3]->load("burguer1.png", 1, 1);	 //Vitamina
+	//Creamos las Texturas	
+	for(int i=0;i<NUM_TXTS;i++)
+		textures[i] = new Texture(renderer, TEXT_PATH);
+
+	//Cargamos las texturas
+	if(textures[0]->load("characters1.png", 4, 14)) error = true;
+	else if(textures[1]->load("wall2.png")) error = true;
+	else if(textures[2]->load("food2.png")) error = true;
+	else if(textures[3]->load("cereza.png"))error = true;
+}
+void Game::loadCharacters() {
+	for (int i = 0; i < NUM_GHOST; i++) {
+		ghosts[i] = new Ghost(textures[0], this,i * 2, 0);
+	}
+	PacMan = new Pac_Man(textures[0], this, 11, 0); //Cargamos a PACMAN
 }
 
-//Esto es por si los fantasmas no se comportan todos igual, si no hay que tener controlado que fantasma
-//pertenece a cada casilla se puede quitar esta funcion y guardar el fantasma en la parte del array que le toque random
-//Cambiar el nombre por iniGO y que el constructor reciba inix e iniy?
-void Game::iniPositions(uint goNumber, uint iniX, uint iniY) {
-	if (goNumber == 5) {
-		ghosts[0] = new Ghost(textures[1], this, iniX* cellWitdth, iniY * cellHeight, cellWitdth, cellHeight, 0, 0);
-		ghosts[0]->setIniPosition(iniX, iniY);
-	} 
-	else if (goNumber == 6) {
-		ghosts[1] = new Ghost(textures[1], this, iniX* cellWitdth, iniY * cellHeight, cellWitdth, cellHeight, 0, 2);
-		ghosts[1]->setIniPosition(iniX, iniY);
+void Game::render() {
+	//AQUI LLAMAMOS AL RENDER DE CADA ENTIDAD
+	SDL_RenderClear(renderer);
+
+	gameMap->render(TILE_W, TILE_H);
+	//renderMap();
+
+	cout << "Render" << endl;
+	for (int i = 0; i < 4; i++)
+	{
+		ghosts[i]->render();
 	}
-	else if (goNumber == 7) {
-		ghosts[2] = new Ghost(textures[1], this, iniX* cellWitdth, iniY * cellHeight, cellWitdth, cellHeight, 0, 4);
-		ghosts[2]->setIniPosition(iniX, iniY);
+	PacMan->render();
+	SDL_RenderPresent(renderer);
+}
+void Game::update() {
+	//AQUI SE LLAMA AL UPDATE DE CADA ENTIDAD
+	for (int i = 0; i < 4; i++) {
+		ghosts[i]->update();
 	}
-	else if (goNumber == 8) {
-		ghosts[3] = new Ghost(textures[1], this, iniX * cellWitdth, iniY * cellHeight, cellWitdth, cellHeight, 0, 6);
-		ghosts[3]->setIniPosition(iniX, iniY);
+	collision();
+	PacMan->update();
+	collision();
+	cout << "Update"<<endl;
+}
+void Game::handleEvents() {
+
+	SDL_Event event;
+	cout << "Events" << endl;
+	//CONTROL DE EVENTOS / ACTIVAMOS FLAGS
+	while (SDL_PollEvent(&event)) {
+		if (event.type == SDL_QUIT)
+			exit = true;
+		if (event.type == SDL_KEYDOWN) {
+			switch (event.key.keysym.sym) {
+			case SDLK_LEFT:
+				dir = Left;
+				break;
+			case SDLK_RIGHT:
+				dir = Right;
+				break;
+			case SDLK_UP:
+				dir = Up;
+				break;
+			case SDLK_DOWN:
+				dir = Down;
+				break;
+			default:
+				break;
+			}
+			PacMan->setDir(dir);
+		}
 	}
-	else if (goNumber == 9) {
-		pacMan = new PacMan(textures[1], this, iniX * cellWitdth, iniY * cellHeight, cellWitdth, cellHeight, 0, 10);
-		pacMan->setIniPosition(iniX, iniY);
+
+}
+bool Game::loadMap(string filename){
+	ifstream file(filename);
+	if (!file.is_open())
+		return true;
+	//LAS DOS PRIMERAS FILAS SON EL NUMERO DE FILAS Y COLUMNAS
+	file >> MAP_ROWS;
+	file >> MAP_COLS;
+	TILE_H = winHeight / MAP_ROWS; TILE_W = winWidth / MAP_COLS;
+	//Las asignamos
+	gameMap->setCols(MAP_COLS);
+	gameMap->setRows(MAP_ROWS);
+	//E iniciamos el mapa
+	gameMap->initMap();
+	//Y EMPEZAMOS LA LECTURA
+	int num;
+	for (int i = 0; i < MAP_ROWS; i++) {
+		for (int j = 0; j < MAP_COLS; j++) {
+			//MAPA: 0 -> VACIO || 1 -> MURO || 2 -> COMIDA || 3 -> VITAMINA || 5,6,7,8 -> FANTASMAS || 9 -> PACMAN
+			file >> num;
+
+			//CARGA MAPA
+			if (num < 4)
+				gameMap -> setCell(i, j, (MapCell)num);
+			//CARGA FANTASMAS
+			else if (num>4 && num<9) {
+				gameMap->setCell(i, j, Empty);
+				ghosts[num - 5]->init(j, i, TILE_W, TILE_H); //Ponemos las posiciones iniciales del Fant
+			}
+			//PACMAN
+			else if (num == 9) {
+				gameMap->setCell(i, j, Empty);
+				PacMan ->init(j, i, TILE_W, TILE_H); //Cargamos a PACMAN
+			}
+		}
+	}
+	file.close();
+	return false;
+}
+
+void Game::powerUp() {
+	for (int i = 0; i < NUM_GHOST; i++)
+		ghosts[i]->Die();
+}
+
+void Game::collision() {
+	for (int i = 0; i < NUM_GHOST; i++) {
+		bool collision = PacMan->getX() == ghosts[i]->getX() && PacMan->getY() == ghosts[i]->getY();
+		if (collision && PacMan->isPowered())
+			ghosts[i]->Die();
+		else if (collision && !gameOver) {
+			if (PacMan->die())
+				gameOver = true;
+		}
 	}
 }
+
+Game::~Game()
+{ /*
+	//Borramos Personajes
+	for (int i = 0; i < 4; i++)
+		delete(ghosts[i]);
+	delete(PacMan);
+	//Borramos MApa
+	delete gameMap;
+	//Borramos texturas
+	for (int i = 0; i < NUM_TXTS; i++)
+		delete(textures[i]);*/
+}
+
+/*void Game::renderMap() {
+	SDL_Rect destRect;
+	for (int i = 0; i<MAP_ROWS; i++)
+		for (int j = 0; j < MAP_COLS; j++) {
+			destRect.h = TILE_H;
+			destRect.w = TILE_W;
+			destRect.x = j*TILE_W;
+			destRect.y = i*TILE_H;
+			//Y RENDERIZAMOS
+			int celltype = (int)(gameMap->getCell(i, j));
+			if (celltype > 0 )
+				textures[celltype]->render(destRect);
+		}
+}*/
