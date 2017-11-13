@@ -17,6 +17,7 @@ private:
 	uint texRow = 0; uint texCol = 0;	//	Posición del frame en la textura
 	uint w = 100; uint h = 100;
 	uint x = 0; uint y = 0;
+	uint frame = 0;
 
 	//PROPIEDADES DE GHOST
 	Direction dir = None;

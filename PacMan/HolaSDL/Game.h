@@ -7,6 +7,9 @@
 #include "Pac_Man.h"
 #include "Ghost.h"
 
+//Nombre de las texturas 
+enum TextureName {Characters, Background, FoodText, PowerUpText};
+
 class Game {
 private:
 	//CONSTANTES
@@ -14,10 +17,20 @@ private:
 	const int NUM_GHOST = 4;
 	const string TEXT_PATH = "..\\images\\";
 	const string LEVEL_PATH = "..\\levels\\";
-	const int TICK_SPEED = 100;
+	const int FRAME_RATE = 100;
 	int MAP_ROWS;
 	int MAP_COLS;
 	int TILE_H, TILE_W;
+	
+	// Estructura para las texturas
+	typedef struct {
+		string filename;
+		int numRows;
+		int numCols;
+	} TextureAtributes; 
+	
+	const TextureAtributes TEXTURE_ATRIBUTES[4]
+	{ {"characters1.png", 4, 14}, {"wall2.png", 1, 1} ,{"food2.png",1,1},{ "cereza.png",1,1 } };
 
 	//PROPIEDADES Y VARIABLES DE LA VENTANA
 	SDL_Window*	window = nullptr;
@@ -35,8 +48,8 @@ private:
 	GameMap* gameMap;
 	Texture* textures[4]; // | PERSONAJES | MURO | COMIDA | BONUS
 	Ghost* ghosts[4];
-	Pac_Man* PacMan;
-	Direction dir;
+	Pac_Man* pacMan;
+	//Direction dir;
 
 	//GAMEMAP 
 
@@ -56,7 +69,7 @@ public:
 
 	//METODOS DEL CICLO DE JUEGO PARA LOS COMPONENTES
 	void collision();
-	void powerUp();
+	bool powerUp();
 	void eat() { numComida -= 1; cout << numComida << endl; }
 
 	//GETS Y SETS
@@ -64,5 +77,4 @@ public:
 	int getRows() { return MAP_ROWS; }
 	int getCols() { return MAP_COLS; }
 	void setCell(int row, int col, MapCell type) { gameMap->setCell(row, col, type); }
-	void renderMap();
 };

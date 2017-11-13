@@ -32,7 +32,6 @@ void Pac_Man::setDir(Direction ndir) {
 
 
 void Pac_Man::update() {
-	//setTexture();
 	int nx, ny;
 	if (buffer != None && next(nx, ny, buffer)) {
 		dir = buffer;
@@ -103,10 +102,9 @@ bool Pac_Man::die() {
 	life--;
 	if (life == 0)
 		return true;
-	else
+	else {
+		x = iniX;
+		y = iniY;
 		return false;
-}
-
-void Pac_Man::setTexture(int i, int j) {
-
+	}
 }

@@ -21,11 +21,17 @@ void Ghost::render() {
 	SDL_Rect destRect;
 	destRect.x = x*w; destRect.y = y*h;
 	destRect.w = w; destRect.h = h;
-	texture->renderFrame(destRect, texRow, texCol);
+
+	if (game->powerUp())
+		texture->renderFrame(destRect, frame % 2, 12 + (frame % 2));
+	else
+		texture->renderFrame(destRect, texRow + ((int)dir % 4), texCol + (frame % 2));
+
 }
 
 void Ghost::update() {
 	mueve();
+	frame++;
 }
 bool Ghost::next(int& nx, int&ny, Direction ndir) { //DADA UNA DIRECCION DIR, DECIMOS SI SE PUEDE MOVER, Y DEVOLVEMOS EL SIGUIENTE PUNTO
 	//Asignamos las variables

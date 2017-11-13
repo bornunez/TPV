@@ -29,7 +29,6 @@ private:
 	//Metodos auxiliares
 	bool next(int& nx, int& ny,Direction dir); //Dada unadireccion, decimos si se puede mover a la siguiente casilla. nx y ny contienen la nueva casilla
 	void EnumToDir(Direction dir, int& ndx, int& ndy); //Dada una direccion, devolvemos la direccion en forma numerica
-	void setTexture(int i,int j);
 public:	
 	Pac_Man();
 	Pac_Man(Texture* text, Game* GAME);
