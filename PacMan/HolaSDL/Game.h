@@ -31,7 +31,7 @@ private:
 	bool error = false;
 	bool win = false;
 	bool gameOver = false;
-	int numComida;
+	int numComida = 0;
 	GameMap* gameMap;
 	Texture* textures[4]; // | PERSONAJES | MURO | COMIDA | BONUS
 	Ghost* ghosts[4];
@@ -57,7 +57,7 @@ public:
 	//METODOS DEL CICLO DE JUEGO PARA LOS COMPONENTES
 	void collision();
 	void powerUp();
-	void eat() { numComida--; }
+	void eat() { numComida -= 1; cout << numComida << endl; }
 
 	//GETS Y SETS
 	MapCell getCell(int row, int col) { return gameMap->getCell(row,col); }

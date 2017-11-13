@@ -1,4 +1,4 @@
-#include "Game.h"
+#include "Game.h"         
 
 
 
@@ -9,14 +9,16 @@ Game::Game()
 	winX = winY = SDL_WINDOWPOS_CENTERED;
 	window = SDL_CreateWindow("Pac-Man", winX, winY, winWidth, winHeight, SDL_WINDOW_SHOWN);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
 	//Notificamos que todo ha ido bien
 	cout << "Window created"<<endl;
+
 	//Y cargamos texturas y creamos los objetos y personajes
 	loadTextures();
 	loadCharacters();
 	gameMap = new GameMap(textures[1], textures[2], textures[3]);
 	if(!error)
-		if(loadMap("..\\levels\\level05.dat"))error=true;
+		if(loadMap("..\\levels\\level00.dat"))error=true;
 }
 
 
@@ -31,7 +33,7 @@ void Game::run() {
 		cout << "SDL Sucesfully initializated, running game..."<<endl;
 
 		//BUCLE PRINCIPAL DEL JUEGO
-		while (!exit && !gameOver) {
+		while (!exit && !gameOver && numComida > 0) {
 			handleEvents();
 			update();
 			render();
@@ -135,14 +137,19 @@ bool Game::loadMap(string filename){
 	gameMap->initMap();
 	//Y EMPEZAMOS LA LECTURA
 	int num;
+	numComida = 0;
+
 	for (int i = 0; i < MAP_ROWS; i++) {
 		for (int j = 0; j < MAP_COLS; j++) {
 			//MAPA: 0 -> VACIO || 1 -> MURO || 2 -> COMIDA || 3 -> VITAMINA || 5,6,7,8 -> FANTASMAS || 9 -> PACMAN
 			file >> num;
 
 			//CARGA MAPA
-			if (num < 4)
-				gameMap -> setCell(i, j, (MapCell)num);
+			if (num < 4) {
+				gameMap->setCell(i, j, (MapCell)num);
+				if (num == 2)
+					numComida+=1;
+			}
 			//CARGA FANTASMAS
 			else if (num>4 && num<9) {
 				gameMap->setCell(i, j, Empty);
