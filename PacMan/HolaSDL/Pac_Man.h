@@ -14,6 +14,7 @@ private:
 
 	//PROPIEDADES DEL RENDER
 	uint texRow = 0; uint texCol = 0;	//	Posición del frame en la textura
+	uint frame = 0;
 	uint w = 100; uint h = 100;
 	uint x = 0; uint y = 0;
 	uint iniX = 0; uint iniY = 0;

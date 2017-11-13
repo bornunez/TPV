@@ -16,7 +16,7 @@ Game::Game()
 	loadCharacters();
 	gameMap = new GameMap(textures[1], textures[2], textures[3]);
 	if(!error)
-		if(loadMap("..\\levels\\level00.dat"))error=true;
+		if(loadMap("..\\levels\\level05.dat"))error=true;
 }
 
 
@@ -31,7 +31,7 @@ void Game::run() {
 		cout << "SDL Sucesfully initializated, running game..."<<endl;
 
 		//BUCLE PRINCIPAL DEL JUEGO
-		while (!exit) {
+		while (!exit && !gameOver) {
 			handleEvents();
 			update();
 			render();
@@ -62,7 +62,7 @@ void Game::loadCharacters() {
 	for (int i = 0; i < NUM_GHOST; i++) {
 		ghosts[i] = new Ghost(textures[0], this,i * 2, 0);
 	}
-	PacMan = new Pac_Man(textures[0], this, 11, 0); //Cargamos a PACMAN
+	PacMan = new Pac_Man(textures[0], this, 10, 0); //Cargamos a PACMAN
 }
 
 void Game::render() {

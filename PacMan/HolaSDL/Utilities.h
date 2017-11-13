@@ -1,5 +1,5 @@
 #pragma once
-enum Direction { Up, Down, Left, Right, None };
+enum Direction { Right, Down, Left, Up, None };
 
 class Utilities
 {

@@ -23,7 +23,7 @@ void Pac_Man::render() {
 	SDL_Rect destRect;
 	destRect.x = x*w; destRect.y = y*h;
 	destRect.w = w; destRect.h = h;
-	texture->renderFrame(destRect, texRow, texCol);
+	texture->renderFrame(destRect, texRow + ((int) dir%4), texCol + (frame % 2));
 }
 
 void Pac_Man::setDir(Direction ndir) {
@@ -53,6 +53,7 @@ void Pac_Man::update() {
 			powerUp = true;
 		}
 	}
+	frame++;
 }
 bool Pac_Man::next(int& nx, int&ny,Direction ndir) {
 	//Asignamos las variables
