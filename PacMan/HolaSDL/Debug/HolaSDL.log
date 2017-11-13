@@ -1,15 +1,12 @@
-﻿  GameObject.cpp
-c:\users\miniman\desktop\cosas de la uni\tpv\protopacman\holasdl\gameobject.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\miniman\desktop\cosas de la uni\tpv\protopacman\holasdl\texture.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\miniman\desktop\cosas de la uni\tpv\protopacman\holasdl\texture.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\miniman\desktop\cosas de la uni\tpv\protopacman\holasdl\texture.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\miniman\desktop\cosas de la uni\tpv\protopacman\holasdl\gameobject.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\miniman\desktop\cosas de la uni\tpv\protopacman\holasdl\gameobject.cpp(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\miniman\desktop\cosas de la uni\tpv\protopacman\holasdl\game.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\miniman\desktop\cosas de la uni\tpv\protopacman\holasdl\game.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\miniman\desktop\cosas de la uni\tpv\protopacman\holasdl\game.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  Generating Code...
-  Skipping... (no relevant changes detected)
+﻿  Texture.cpp
+  Pac_Man.cpp
+  main.cpp
+  Ghost.cpp
+d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\ghost.cpp(84): warning C4018: '<': no coinciden signed/unsigned
+d:\usuarios\borj\escritorio\github\tpv\pacman\holasdl\ghost.cpp(86): warning C4018: '<': no coinciden signed/unsigned
+  GameObject.cpp
+  GameMap.cpp
   Game.cpp
-  HolaSDL.vcxproj -> C:\Users\Miniman\Desktop\Cosas de la uni\TPV\ProtoPacMan\bin\PacManDebug.exe
-  HolaSDL.vcxproj -> C:\Users\Miniman\Desktop\Cosas de la uni\TPV\ProtoPacMan\bin\PacManDebug.pdb (Full PDB)
+  Generando código...
+  HolaSDL.vcxproj -> D:\Usuarios\Borj\Escritorio\Github\TPV\PacMan\bin\HolaSDLDebug.exe
+  HolaSDL.vcxproj -> D:\Usuarios\Borj\Escritorio\Github\TPV\PacMan\bin\HolaSDLDebug.pdb (Full PDB)

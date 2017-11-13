@@ -1,6 +1,6 @@
 #pragma once
-#include "Texture.h";
-#include "SDL.h";
+#include "Texture.h"
+#include "SDL.h"
 //#include "Game.h";
 class Game;
 class	GameObject {
@@ -12,6 +12,7 @@ private:
 public:
 	uint w = 100;uint h = 100;
 	uint x = 0; uint y = 0;
+	GameObject();	
 	GameObject(Texture* text);
 	GameObject(Texture* text, uint X, uint Y, uint W, uint H,uint iniCol = 0, uint iniRow = 0);
 	~GameObject();
