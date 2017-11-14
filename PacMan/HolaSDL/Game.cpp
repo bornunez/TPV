@@ -18,7 +18,7 @@ Game::Game()
 	loadCharacters();
 	gameMap = new GameMap(textures[1], textures[2], textures[3]);
 	if(!error)
-		if(loadMap("..\\levels\\level00.dat"))error=true;
+		if(loadMap("..\\levels\\level04.dat"))error=true;
 }
 
 

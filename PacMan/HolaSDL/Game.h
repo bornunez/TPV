@@ -14,7 +14,7 @@ private:
 	const int NUM_GHOST = 4;
 	const string TEXT_PATH = "..\\images\\";
 	const string LEVEL_PATH = "..\\levels\\";
-	const int TICK_SPEED = 100;
+	const int TICK_SPEED = 125;
 	int MAP_ROWS;
 	int MAP_COLS;
 	int TILE_H, TILE_W;
