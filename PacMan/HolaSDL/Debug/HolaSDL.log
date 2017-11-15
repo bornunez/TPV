@@ -1,3 +1,4 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(387,5): warning MSB8028: El directorio intermedio (Debug\) contiene archivos compartidos de otro proyecto (HolaSDL.vcxproj). Esto puede dar lugar a un comportamiento incorrecto de limpieza y recompilación.
-  Game.cpp
+  Text.cpp
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\text.cpp(45): warning C4018: '<': no coinciden signed/unsigned
   HolaSDL.vcxproj -> C:\Users\Miniman\Desktop\Cosas de la uni\TPV_GIT\PacMan\bin\PacManDebug.exe

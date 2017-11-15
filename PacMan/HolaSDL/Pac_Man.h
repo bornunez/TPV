@@ -24,12 +24,12 @@ private:
 	Direction buffer = None;
 	int dirX = 1; int dirY = 0;
 	int life = 3;
-	bool powerUp = false;
+
+	
 
 	//Metodos auxiliares
 	bool next(int& nx, int& ny,Direction dir); //Dada unadireccion, decimos si se puede mover a la siguiente casilla. nx y ny contienen la nueva casilla
 	void EnumToDir(Direction dir, int& ndx, int& ndy); //Dada una direccion, devolvemos la direccion en forma numerica
-	void setTexture(int i,int j);
 public:	
 	Pac_Man();
 	Pac_Man(Texture* text, Game* GAME);
@@ -41,7 +41,6 @@ public:
 	void init(int iniPosX, int iniPosY, uint W, uint H);
 	int getX() { return x; }
 	int getY() { return y; }
-	bool isPowered() { return powerUp; }
 	bool die();
 };
 
