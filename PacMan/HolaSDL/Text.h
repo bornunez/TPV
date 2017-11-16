@@ -4,6 +4,7 @@
 struct TextBox {
 	int x, y, w, h;
 };
+
 class Text
 {
 private:

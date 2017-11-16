@@ -14,7 +14,6 @@ Pac_Man::Pac_Man(Texture* text, Game* GAME, uint iniCol, uint iniRow) {
 	game = GAME;
 }
 
-
 Pac_Man::~Pac_Man()
 {
 }
@@ -57,7 +56,7 @@ void Pac_Man::update() {
 bool Pac_Man::next(int& nx, int&ny,Direction ndir) {
 	//Asignamos las variables
 	int ndx, ndy;
-	EnumToDir(ndir, ndx, ndy);
+	Utilities::enumToDir(ndir, ndx, ndy);
 	nx = x + ndx;
 	ny = y + ndy;
 	int rows = game->getRows();
@@ -73,24 +72,7 @@ bool Pac_Man::next(int& nx, int&ny,Direction ndir) {
 		ny = 0;
 	return game->getCell(ny, nx) != Wall;
 }
-void Pac_Man::EnumToDir(Direction dir, int&ndx, int& ndy) {
-	if (dir == Left) {
-		ndx = -1;
-		ndy = 0;
-	}
-	else if (dir == Up) {
-		ndx = 0;
-		ndy = -1;
-	}
-	else if (dir == Down) {
-		ndx = 0;
-		ndy = 1;
-	}
-	else if (dir == Right) {
-		ndx = 1;
-		ndy = 0;
-	}
-}
+
 
 void Pac_Man::init(int iniPosX, int iniPosY, uint W, uint H) {
 	iniX = iniPosX; iniY = iniPosY;

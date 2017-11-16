@@ -11,9 +11,9 @@ class Ghost
 {
 private:
 	Texture* texture = nullptr;	//	Puntero	a	su textura
-	Game* game = nullptr;	//	Puntero	al	juego	al	que	pertenece
+	Game* game = nullptr;		//	Puntero	al	juego	al	que	pertenece
 
-							//PROPIEDADES DEL RENDER
+	//PROPIEDADES DEL RENDER
 	uint texRow = 0; uint texCol = 0;	//	Posición del frame en la textura
 	uint w = 100; uint h = 100;
 	uint x = 0; uint y = 0;
@@ -26,10 +26,9 @@ private:
 	int iniX = 0; int iniY = 0;
 	//Direction dir
 
-	bool next(int& nx, int& ny, Direction dir); //Dada unadireccion, decimos si se puede mover a la siguiente casilla. nx y ny contienen la nueva casilla
-	void EnumToDir(Direction dir, int& ndx, int& ndy); //Dada una direccion, devolvemos la direccion en forma numerica
+	bool next(int& nx, int& ny, Direction dir); //Dada una direccion, decimos si se puede mover a la siguiente casilla. nx y ny contienen la nueva casilla
 	void mueve();
-	Direction backDir(Direction currDir);
+
 public:
 
 	Ghost();
@@ -43,4 +42,3 @@ public:
 	int getX() { return x; }
 	int getY() { return y; }
 };
-

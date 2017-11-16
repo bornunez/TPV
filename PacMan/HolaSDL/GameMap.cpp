@@ -19,6 +19,7 @@ GameMap::~GameMap()
 	}
 	delete mapCell;
 }
+
 void GameMap::initMap() {
 	//INICIAMOS EL MAPA
 	mapCell = new MapCell *[ROWS];

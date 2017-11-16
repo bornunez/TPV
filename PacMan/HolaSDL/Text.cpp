@@ -24,21 +24,24 @@ void Text::drawChar(char c,int n) {
 	destRect.x = box.x + n * charW; destRect.y = box.y;
 
 	int row, col;
+	bool draw = true;
 
 	if (c >= '0' && c <= '9') {
 		row = 0;
 		col = c - '0';
 	}
 	else if (c >= 'A' && c <= 'Z') {
-		row = 1 + (c - 'A') % (('A' - 'Z') / 2);
-		col = c % (('A' - 'Z') / 2);
+		row = 1 + (c - 'A') / (('Z' - 'A') / 2);
+		col = ((c - 'A') % ((('Z' - 'A') / 2) + 1));
 	}
 	else if (c >= 'a' && c <= 'z') {
-		row = 1 + (c - 'a') % (('a' - 'z') / 2);
-		col = c % (('a' - 'z') / 2);
+		row = 3 + ((c - 'a') / (('z' - 'a') / 2));
+		col = ((c - 'a') % ((('z' - 'a') / 2) + 1));
 	}
-
-	texture->renderFrame(destRect, row, col);
+	else
+		draw = false;
+	if(draw)
+		texture->renderFrame(destRect, row, col);
 }
 
 void Text::render() {

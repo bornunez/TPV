@@ -36,7 +36,7 @@ void Ghost::update() {
 bool Ghost::next(int& nx, int&ny, Direction ndir) { //DADA UNA DIRECCION DIR, DECIMOS SI SE PUEDE MOVER, Y DEVOLVEMOS EL SIGUIENTE PUNTO
 	//Asignamos las variables
 	int ndx, ndy;
-	EnumToDir(ndir, ndx, ndy);
+	Utilities::enumToDir(ndir, ndx, ndy);
 	nx = x + ndx;
 	ny = y + ndy;
 	int rows = game->getRows();
@@ -52,28 +52,7 @@ bool Ghost::next(int& nx, int&ny, Direction ndir) { //DADA UNA DIRECCION DIR, DE
 		ny = 0;
 	return game->getCell(ny, nx) != Wall;
 }
-void Ghost::EnumToDir(Direction dir, int&ndx, int& ndy) { //DADA UNA DIRECCION, DEVOLVEMOS SUS CARDINALES
-	if (dir == Left) {
-		ndx = -1;
-		ndy = 0;
-	}
-	else if (dir == Up) {
-		ndx = 0;
-		ndy = -1;
-	}
-	else if (dir == Down) {
-		ndx = 0;
-		ndy = 1;
-	}
-	else if (dir == Right) {
-		ndx = 1;
-		ndy = 0;
-	}
-	else if (dir == None) {
-		ndx = 0;
-		ndy = 0;
-	}
-}
+
 void Ghost::mueve() {
 	dirs.clear();
 	//Vamos a guardar las direcciones posibles, de donde luego cogeremos una
@@ -85,7 +64,7 @@ void Ghost::mueve() {
 	//Si hay mas de una posicion donde moverse
 	if (dirs.size() > 1) {
 		int i = 0;
-		Direction back = backDir(dir);
+		Direction back = Utilities::backDir(dir);
 		//Buscamos a ver si esta la contraria a nuestro movimiento actual
 		while (i < dirs.size() && dirs[i] != back )
 			i++;
@@ -102,18 +81,7 @@ void Ghost::mueve() {
 	x = nx;
 	y = ny;
 }
-Direction Ghost::backDir(Direction currDir) { //DADA UNA DIRECCION DIR, DEVOLVEMOS LA INVERSA
-	if (currDir == Up)
-		return Down;
-	else if (currDir == Down)
-		return Up;
-	else if (currDir == Left)
-		return Right;
-	else if (currDir == Right)
-		return Left;
-	else
-		return None;
-}
+
 
 void Ghost::init(int iniPosX, int iniPosY, uint W, uint H) {
 	iniX = iniPosX;

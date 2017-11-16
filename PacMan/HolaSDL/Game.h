@@ -4,17 +4,23 @@
 #include "GameObject.h"
 #include <vector>
 #include <iostream>
+#include <sstream>
 #include "Pac_Man.h"
 #include "Ghost.h"
+#include "Text.h"
 
 //Nombre de las texturas 
-enum TextureName {Characters, Background, FoodText, PowerUpText};
+enum TextureName {Characters, Background, FoodTexture, PowerUpTexture,SpriteFont};
+enum TextName{ScoreText,MaxScoreText, UserText, LevelText, TitleText};
+
+//CONSTANTES DE ARRAYS 
+const int NUM_TEXTURES = 5;
+const int NUM_GHOST = 4;
+const int NUM_TEXTS = 1;
 
 class Game {
 private:
 	//CONSTANTES
-	const int NUM_TXTS = 4;
-	const int NUM_GHOST = 4;
 	const string TEXT_PATH = "..\\images\\";
 	const string LEVEL_PATH = "..\\levels\\";
 	const uint32_t POWERTIME = 5000; // Tiempo que Pac Man esta OP (En ms)
@@ -25,27 +31,19 @@ private:
 	int MAP_COLS;
 	int TILE_H, TILE_W;
 	
-	// Estructura para las texturas
-	typedef struct {
-		string filename;
-		int numRows;
-		int numCols;
-	} TextureAtributes; 
+	const TextureAtributes TEXTURE_ATRIBUTES[NUM_TEXTURES]
+	{ {"characters1.png", 4, 14}, {"wall2.png", 1, 1} ,{"food2.png",1,1},{ "cereza.png",1,1 },{"spritefont.png",5,13} };
 	
-	const TextureAtributes TEXTURE_ATRIBUTES[4]
-	{ {"characters1.png", 4, 14}, {"wall2.png", 1, 1} ,{"food2.png",1,1},{ "cereza.png",1,1 } };
 
 	//PROPIEDADES Y VARIABLES DE LA VENTANA
 	SDL_Window*	window = nullptr;
 	SDL_Renderer* renderer = nullptr;
-	uint winWidth = 900;
-	uint winHeight = 750;
 
-	uint canvasWidth = 0;
-	uint canvasHeight = 0;
+	Region windowReg{ 1000, 750};
 
-	uint GUIWidth = 0;
-	uint GUIHeight = 0;
+	Region canvas{ 0,0 };
+
+	Region GUI{ 0,0 };
 
 	int winX, winY; // Posición de la ventana
 
@@ -59,17 +57,19 @@ private:
 	bool powered = false;
 	uint32_t auxTime = 0;
 
-	GameMap* gameMap;
-	Texture* textures[4]; // | PERSONAJES | MURO | COMIDA | BONUS
-	Ghost* ghosts[4];
-	Pac_Man* pacMan;
-	//Direction dir;
+	int score = 0;
+	int level = 1;
 
-	//GAMEMAP 
+	GameMap* gameMap;
+	Texture* textures[NUM_TEXTURES]; // | PERSONAJES | MURO | COMIDA | BONUS
+	Text* texts[NUM_TEXTS];
+	Ghost* ghosts[NUM_GHOST];
+	Pac_Man* pacMan;
 
 	//METODOS AUXILIARES
 	void loadTextures();
 	void loadCharacters();
+	void loadText();
 	bool loadMap(string filename);
 	void screenRatioConfig();
 
@@ -84,7 +84,7 @@ public:
 	//METODOS DEL CICLO DE JUEGO PARA LOS COMPONENTES
 	void collision();
 	void powerUp();
-	void eat() { foodCount -= 1; cout << foodCount << endl; }
+	void eat() { foodCount -= 1; score++; }
 
 	//GETS Y SETS
 	MapCell getCell(int row, int col) { return gameMap->getCell(row,col); }

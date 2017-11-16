@@ -1,28 +1,21 @@
 #include "Game.h"         
 
 
-
 Game::Game()
 {
 	// Inicialización del sistema, ventana y renderer
 	SDL_Init(SDL_INIT_EVERYTHING);
 	winX = winY = SDL_WINDOWPOS_CENTERED;
-	window = SDL_CreateWindow("Pac-Man", winX, winY, winWidth, winHeight, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Pac-Man", winX, winY, windowReg.w, windowReg.h, SDL_WINDOW_SHOWN);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
 	//Notificamos que todo ha ido bien
 	cout << "Window created"<<endl;
 
-	
-
 	//Y cargamos texturas y creamos los objetos y personajes
 	loadTextures();
 	loadCharacters();
-	gameMap = new GameMap(textures[Background], textures[FoodText], textures[PowerUpText]);
-	if(!error)
-		if(loadMap("..\\levels\\level01.dat"))error=true;
-
-
+	gameMap = new GameMap(textures[Background], textures[FoodTexture], textures[PowerUpTexture]);
 }
 
 
@@ -38,54 +31,54 @@ void Game::run() {
 
 		uint32_t startTime, frameTime;
 		//BUCLE PRINCIPAL DEL JUEGO
-		while (!exit && !gameOver && foodCount > 0) {
-			// Gestion del tiempo
-			startTime = SDL_GetTicks();
+		while (!exit && !gameOver) {
 
-			handleEvents();
-			update();
-			render();
-			
-			frameTime = SDL_GetTicks() - startTime;
-			if (frameTime < FRAME_RATE)
-				SDL_Delay(FRAME_RATE - frameTime);
+			//CARGAMOS EL NIVEL Y ACTUALIZAMOS LAS DIMENSIONES
+			string levelStr = LEVEL_PATH + "level0" + Utilities::intToStr(level) + ".dat";
+			if (loadMap(levelStr)) error = true;
+			loadText();
+
+			//BUCLE PRINCIPAL DEL NIVEL
+			while (!exit && !gameOver && !error && foodCount > 0)
+			{
+				// Gestion del tiempo
+				startTime = SDL_GetTicks();
+
+				handleEvents();
+				update();
+				render();
+
+				frameTime = SDL_GetTicks() - startTime;
+				if (frameTime < FRAME_RATE)
+					SDL_Delay(FRAME_RATE - frameTime);
+			}
+			level++;
 		}
 	}
 	// Finalización
-	//SDL_RenderClear(renderer);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 }
 
 void Game::loadTextures() {
-	// | PERSONAJES | MURO | COMIDA | BONUS |i
 
-	for (uint i = 0; i < NUM_TXTS; i++) {
+	for (uint i = 0; i < NUM_TEXTURES; i++) {
 		textures[i] = new Texture(renderer, TEXT_PATH);
 		const TextureAtributes atributes = TEXTURE_ATRIBUTES[i];
 		textures[i]->load(atributes.filename, atributes.numRows, atributes.numCols);
 	}
-
-	/*
-	//Creamos las Texturas	
-	for(int i=0;i<NUM_TXTS;i++)
-		textures[i] = new Texture(renderer, TEXT_PATH);
-
-	//Cargamos las texturas
-	if(textures[0]->load("characters1.png", 4, 14)) error = true;
-	else if(textures[1]->load("wall2.png")) error = true;
-	else if(textures[2]->load("food2.png")) error = true;
-	else if(textures[3]->load("cereza.png"))error = true;
-	*/
 }
 void Game::loadCharacters() {
+
 	for (int i = 0; i < NUM_GHOST; i++) {
 		ghosts[i] = new Ghost(textures[Characters], this,i * 2, 0);
 	}
 	pacMan = new Pac_Man(textures[Characters], this, 10, 0); //Cargamos a PACMAN
 }
-
+void Game::loadText() {
+	texts[0] = new Text(textures[SpriteFont], "score 000", canvas.w, 50, 20 * 10, 20);
+}
 void Game::render() {
 	//AQUI LLAMAMOS AL RENDER DE CADA ENTIDAD
 	SDL_RenderClear(renderer);
@@ -97,6 +90,7 @@ void Game::render() {
 	{
 		ghosts[i]->render();
 	}
+	texts[0]->render();
 	pacMan->render();
 	SDL_RenderPresent(renderer);
 }
@@ -111,6 +105,9 @@ void Game::update() {
 	collision();
 	pacMan->update();
 	collision();
+
+	texts[0]->setText("Score " + Utilities::intToStr(score));
+
 	cout << "Update"<<endl;
 }
 void Game::handleEvents() {
@@ -130,28 +127,8 @@ void Game::handleEvents() {
 				pacMan->setDir(Up);
 			else if (event.key.keysym.sym == SDLK_DOWN)
 				pacMan->setDir(Down);
-			
-
-				/*
-			switch (event.key.keysym.sym) {
-			case SDLK_LEFT:
-				dir = Left;
-				break;
-			case SDLK_RIGHT:
-				dir = Right;
-				break;
-			case SDLK_UP:
-				dir = Up;
-				break;
-			case SDLK_DOWN:
-				dir = Down;
-				break;
-			default:
-				break;
-			}
-			
-			pacMan->setDir(dir);
-			*/
+			else if (event.key.keysym.sym == SDLK_ESCAPE)
+				exit = true;
 		}
 	}
 
@@ -167,7 +144,7 @@ bool Game::loadMap(string filename){
 	// >>>>>>>>> AQUI AJUSTAMOS LA PANTALLA EN FUNCION DEL MAPA
 	screenRatioConfig();
 
-	TILE_H = canvasHeight / MAP_ROWS; TILE_W = canvasWidth / MAP_COLS;  //VAMOS A DIBUJAR EL MAPA EN FUNCION DEL CANVAS
+	TILE_H = canvas.h / MAP_ROWS; TILE_W = canvas.w / MAP_COLS;  //VAMOS A DIBUJAR EL MAPA EN FUNCION DEL CANVAS
 	//Las asignamos
 	gameMap->setCols(MAP_COLS);
 	gameMap->setRows(MAP_ROWS);
@@ -192,7 +169,7 @@ bool Game::loadMap(string filename){
 			//CARGA FANTASMAS
 			else if (num>4 && num<9) {
 				gameMap->setCell(i, j, Empty);
-				ghosts[num - 5]->init(j, i, TILE_W, TILE_H); //Ponemos las posiciones iniciales del Fant
+				ghosts[num - 5]->init(j, i, TILE_W, TILE_H); //Ponemos las posiciones iniciales del Fantasma
 			}
 			//PACMAN
 			else if (num == 9) {
@@ -206,6 +183,7 @@ bool Game::loadMap(string filename){
 }
 
 void Game::powerUp() {
+	score += 10;
 	powered = true;
 	auxTime = SDL_GetTicks();
 }
@@ -213,8 +191,10 @@ void Game::powerUp() {
 void Game::collision() {
 	for (int i = 0; i < NUM_GHOST; i++) {
 		bool collision = pacMan->getX() == ghosts[i]->getX() && pacMan->getY() == ghosts[i]->getY();
-		if (collision && powered)
+		if (collision && powered) {
 			ghosts[i]->Die();
+			score += 20;
+		}
 		else if (collision && !gameOver) {
 			if (pacMan->die())
 				gameOver = true;
@@ -226,45 +206,35 @@ void Game::screenRatioConfig() {
 	//VAMOS A CONFIGURAR EL TAMAÑO DEL CANVAS EN FUNCION DEL GUI
 	//DE TAL MODO QUE LOS TILES DEL MAPA SIEMPRE SEAN CUADRADOS Y OCUPEN LA MAXIMA PANTALLA POSIBLE
 	
-	GUIWidth = winWidth * ((float) GUI_Ratio /(float) 100);
+	GUI.w = windowReg.w * ((float) GUI_Ratio /(float) 100);
 
-	canvasWidth = winWidth - GUIWidth;
-	canvasHeight = winHeight;
+	canvas.w = windowReg.w - GUI.w;
+	canvas.h = windowReg.h;
 	//AHORA VAMOS A ADAPTAR EL CANVAS PARA QUE MANTENGA LA RELACION DEL MAPA
 	float mapRatio = (float)MAP_ROWS / (float)MAP_COLS; //Cuantas veces es mayor el alto que el ancho
 
-	if (((float)canvasHeight / mapRatio) <= canvasWidth)
-		canvasWidth = (float)canvasHeight / mapRatio;
+	if (((float)canvas.h / mapRatio) <= canvas.w)
+		canvas.w= (float)canvas.h/ mapRatio;
 	else 
-		canvasHeight = (float)canvasWidth * mapRatio;
-	GUIHeight = canvasHeight;
+		canvas.h= (float)canvas.w* mapRatio;
+	GUI.h = canvas.h;
 
 }
 
 Game::~Game()
-{ /*
-	//Borramos Personajes
-	for (int i = 0; i < 4; i++)
-		delete(ghosts[i]);
-	delete(PacMan);
-	//Borramos MApa
-	delete gameMap;
-	//Borramos texturas
-	for (int i = 0; i < NUM_TXTS; i++)
-		delete(textures[i]);*/
-}
+{ 
+	//Borramos textos
+	for (int i = 0; i < NUM_TEXTS; i++)
+		delete(texts[i]);
 
-/*void Game::renderMap() {
-	SDL_Rect destRect;
-	for (int i = 0; i<MAP_ROWS; i++)
-		for (int j = 0; j < MAP_COLS; j++) {
-			destRect.h = TILE_H;
-			destRect.w = TILE_W;
-			destRect.x = j*TILE_W;
-			destRect.y = i*TILE_H;
-			//Y RENDERIZAMOS
-			int celltype = (int)(gameMap->getCell(i, j));
-			if (celltype > 0 )
-				textures[celltype]->render(destRect);
-		}
-}*/
+	//Borramos Mapa
+	delete gameMap;
+	//Borramos Personajes
+	for (int i = 0; i < NUM_GHOST; i++)
+		delete(ghosts[i]);
+	delete(pacMan);
+
+	//Borramos texturas
+	for (int i = 0; i < NUM_TEXTURES; i++)
+		delete(textures[i]);
+}
