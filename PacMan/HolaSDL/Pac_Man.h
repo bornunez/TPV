@@ -35,9 +35,13 @@ public:
 	void render();
 	void setDir(Direction dir);
 	void update();
+	//GETS y SETS
 	void init(int iniPosX, int iniPosY, uint W, uint H);
+	void set(int X, int Y) { x = X; y = Y; }
 	int getX() { return x; }
 	int getY() { return y; }
+	int getIniX() { return iniX; }
+	int getiniY() { return iniY; }
 	bool die();
 };
 

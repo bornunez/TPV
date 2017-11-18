@@ -70,8 +70,9 @@ private:
 	void loadTextures();
 	void loadCharacters();
 	void loadText();
-	bool loadMap(string filename);
+	bool loadMap(string filename, bool saved = false);
 	void screenRatioConfig();
+	bool is_Ghost(int& rows, int& cols, int& ghost_num);
 
 public:
 	Game();
@@ -85,6 +86,8 @@ public:
 	void collision();
 	void powerUp();
 	void eat() { foodCount -= 1; score++; }
+	bool save(string filename);
+
 
 	//GETS Y SETS
 	MapCell getCell(int row, int col) { return gameMap->getCell(row,col); }
