@@ -8,6 +8,7 @@
 #include "Pac_Man.h"
 #include "Ghost.h"
 #include "Text.h"
+#include "Score.h"
 
 //Nombre de las texturas 
 enum TextureName {Characters, Background, FoodTexture, PowerUpTexture,SpriteFont};
@@ -23,10 +24,13 @@ private:
 	//CONSTANTES
 	const string TEXT_PATH = "..\\images\\";
 	const string LEVEL_PATH = "..\\levels\\";
+	const string SCORETABLE_PATH = "..\\users\\scoretable.txt";
 	const uint32_t POWERTIME = 5000; // Tiempo que Pac Man esta OP (En ms)
 	const int GUI_Ratio = 20; //Porcentaje de la pantalla que ocupa el GUI a la derecha
 
 	const int FRAME_RATE = 100;
+	const int NUM_SCORES_TOP = 10;
+
 	int MAP_ROWS;
 	int MAP_COLS;
 	int TILE_H, TILE_W;
@@ -57,8 +61,12 @@ private:
 	bool powered = false;
 	uint32_t auxTime = 0;
 
+	// Registro de puntuacion
+	Score scoreTable;
 	int score = 0;
 	int level = 1;
+	string userName;
+	bool validateUser = false;		// Sera true si el jugador ya tiene un usuario registrado en el juego
 
 	GameMap* gameMap;
 	Texture* textures[NUM_TEXTURES]; // | PERSONAJES | MURO | COMIDA | BONUS
@@ -72,6 +80,8 @@ private:
 	void loadText();
 	bool loadMap(string filename);
 	void screenRatioConfig();
+	void login();
+	void manageScoreTable();
 
 public:
 	Game();

@@ -12,6 +12,7 @@ Texture::Texture(SDL_Renderer* r,const string path)
 Texture::~Texture()
 {
 }
+
 bool Texture:: load(string filename, uint numRows, uint numCols) {
 	//Carga de textura en la estructura auxiliar
 	string name = PATH + filename;//Hay que hacer la concatenacion aqui

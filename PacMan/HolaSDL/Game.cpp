@@ -3,6 +3,9 @@
 
 Game::Game()
 {
+	//Se pide usuario para el juego antes de crearlo
+	login();
+
 	// Inicialización del sistema, ventana y renderer
 	SDL_Init(SDL_INIT_EVERYTHING);
 	winX = winY = SDL_WINDOWPOS_CENTERED;
@@ -16,10 +19,12 @@ Game::Game()
 	loadTextures();
 	loadCharacters();
 	gameMap = new GameMap(textures[Background], textures[FoodTexture], textures[PowerUpTexture]);
+	//scoreTable.load(SCORETABLE_PATH);
 }
 
 
 void Game::run() {
+
 	//AQUI SUCEDE EL BUCLE PRINCIPAL DEL JUEGO. 
 	if (window == nullptr || renderer == nullptr)
 		cout << "Error initializing SDL\n";
@@ -54,15 +59,16 @@ void Game::run() {
 			}
 			level++;
 		}
+
+		//Finalización
+		SDL_DestroyRenderer(renderer);
+		SDL_DestroyWindow(window);
+		SDL_Quit();
+		manageScoreTable();
 	}
-	// Finalización
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
-	SDL_Quit();
 }
 
 void Game::loadTextures() {
-
 	for (uint i = 0; i < NUM_TEXTURES; i++) {
 		textures[i] = new Texture(renderer, TEXT_PATH);
 		const TextureAtributes atributes = TEXTURE_ATRIBUTES[i];
@@ -70,7 +76,6 @@ void Game::loadTextures() {
 	}
 }
 void Game::loadCharacters() {
-
 	for (int i = 0; i < NUM_GHOST; i++) {
 		ghosts[i] = new Ghost(textures[Characters], this,i * 2, 0);
 	}
@@ -85,7 +90,6 @@ void Game::render() {
 
 	gameMap->render(TILE_W, TILE_H);
 
-	cout << "Render" << endl;
 	for (int i = 0; i < NUM_GHOST; i++)
 	{
 		ghosts[i]->render();
@@ -107,13 +111,10 @@ void Game::update() {
 	collision();
 
 	texts[0]->setText("Score " + Utilities::intToStr(score));
-
-	cout << "Update"<<endl;
 }
 void Game::handleEvents() {
 
 	SDL_Event event;
-	cout << "Events" << endl;
 	//CONTROL DE EVENTOS / ACTIVAMOS FLAGS
 	while (SDL_PollEvent(&event)) {
 		if (event.type == SDL_QUIT)
@@ -219,6 +220,51 @@ void Game::screenRatioConfig() {
 		canvas.h= (float)canvas.w* mapRatio;
 	GUI.h = canvas.h;
 
+}
+
+void Game::login() {
+
+	cout << "Introduce tu nombre";
+	getline(cin, userName);
+	
+	//Se carga la tabla
+	scoreTable.load(SCORETABLE_PATH);
+
+	for (int i = 0; (i < scoreTable.getScoreReg().size()) && !validateUser; i++) {
+		if (scoreTable.getScoreReg()[i].nameReg == userName) {
+			validateUser = true;
+		}
+	}
+
+	if (!validateUser) 
+		cout << "El usuario no existe, se creara un nuevo registro con tu nombre de usuario";
+}
+
+//Administra la tabla de puntaciones, pidiendo al jugador su nombre para incluirlo en ella y mostrando el top 10.
+void Game::manageScoreTable() {
+
+	system("cls");
+
+	//Si el usuario existe se edita el score de su antiguo registro
+	if (validateUser) {
+		for (int i = 0; i < scoreTable.getScoreReg().size() ; i++) {
+			if (scoreTable.getScoreReg()[i].nameReg == userName && scoreTable.getScoreReg()[i].score < score)
+				scoreTable.changeScoreReg(i, scoreTable.getScoreReg()[i], score);		
+		}
+	}
+	else {
+		// Si el usuario no existe se crea un nuevo registro para el
+		scoreTable.addScore(userName, score);
+	}
+
+	scoreTable.save(SCORETABLE_PATH);
+	
+	//Pinta la tabla de puntuaciones
+	system("cls");
+	scoreTable.printTopNScores(NUM_SCORES_TOP);
+
+	cout << "Pulsa Enter para salir";
+	cin.get();
 }
 
 Game::~Game()
