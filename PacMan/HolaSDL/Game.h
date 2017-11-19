@@ -67,6 +67,7 @@ private:
 	int level = 1;
 	string userName;
 	bool validateUser = false;		// Sera true si el jugador ya tiene un usuario registrado en el juego
+	ScoreReg actualUserReg;			// Registro que se asigna si un usuario inicia sesion y ya estaba registrado previamente
 
 	GameMap* gameMap;
 	Texture* textures[NUM_TEXTURES]; // | PERSONAJES | MURO | COMIDA | BONUS

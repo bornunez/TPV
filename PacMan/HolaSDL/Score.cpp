@@ -67,10 +67,13 @@ void Score::addScore(const string& name, int score) {
 }
 
 //Borra un registro y lo crea con un nuevo score conservando el nombre y colocandolo en la posicion adecuada de la tabla
-void Score::changeScoreReg(int regPosition, ScoreReg scoreToChange, int score) {
-	scores.erase(scores.begin() + regPosition);
-	scoreToChange.score = score;
-	addScore(scoreToChange.nameReg, scoreToChange.score);
+void Score::changeScoreReg(ScoreReg scoreToChange, int score) {
+	for (int i = 0; i < scores.size(); i++) {
+		if (scores[i].nameReg == scoreToChange.nameReg)
+			scores.erase(scores.begin() + i);
+	}
+	// Se crea un usuario con el mismo nombre que el que se cambio pero con un nuevo score
+	addScore(scoreToChange.nameReg, score);
 }
 
 bool Score::save(const string& filename) {

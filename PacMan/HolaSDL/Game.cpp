@@ -230,12 +230,13 @@ void Game::login() {
 	//Se carga la tabla
 	scoreTable.load(SCORETABLE_PATH);
 
+	// Si el nombre de usuario ya existe se guarda en actualUserReg el registro que le corresponde segun la DB
 	for (int i = 0; (i < scoreTable.getScoreReg().size()) && !validateUser; i++) {
 		if (scoreTable.getScoreReg()[i].nameReg == userName) {
+			actualUserReg = scoreTable.getScoreReg()[i];
 			validateUser = true;
 		}
 	}
-
 	if (!validateUser) 
 		cout << "El usuario no existe, se creara un nuevo registro con tu nombre de usuario";
 }
@@ -247,9 +248,8 @@ void Game::manageScoreTable() {
 
 	//Si el usuario existe se edita el score de su antiguo registro
 	if (validateUser) {
-		for (int i = 0; i < scoreTable.getScoreReg().size() ; i++) {
-			if (scoreTable.getScoreReg()[i].nameReg == userName && scoreTable.getScoreReg()[i].score < score)
-				scoreTable.changeScoreReg(i, scoreTable.getScoreReg()[i], score);		
+		if (actualUserReg.score < score) {
+			scoreTable.changeScoreReg(actualUserReg, score);
 		}
 	}
 	else {

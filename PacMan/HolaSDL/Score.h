@@ -20,7 +20,7 @@ public:
 	bool load(const string& filename);
 	bool save(const string& filename);
 	vector <ScoreReg> getScoreReg() { return scores; }
-	void changeScoreReg(int regPosition, ScoreReg scoreToChange, int score);
+	void changeScoreReg(ScoreReg scoreToChange, int score);
 	void printTopNScores(int n);
 	void addScore(const string& name, int score);
 
