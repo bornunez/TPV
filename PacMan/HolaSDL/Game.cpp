@@ -216,6 +216,7 @@ void Game::powerUp() {
 	auxTime = SDL_GetTicks();
 }
 
+     
 bool Game::save(string filename)
 {
 	ofstream file(LEVEL_PATH + filename+".dat");

@@ -2,13 +2,13 @@
   Game.cpp
 c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(53): warning C4018: '<': no coinciden signed/unsigned
 c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(103): warning C4018: '>': no coinciden signed/unsigned
-c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(289): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
-c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(297): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
-c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(299): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(290): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(298): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(300): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
   Generando código...
   Omitiendo... (no se detectaron cambios relevantes)
   main.cpp
+  Texture.cpp
+  Text.cpp
   Pac_Man.cpp
-  Ghost.cpp
-  GameObject.cpp
   HolaSDL.vcxproj -> C:\Users\Miniman\Desktop\Cosas de la uni\TPV_GIT\PacMan\bin\PacManDebug.exe
