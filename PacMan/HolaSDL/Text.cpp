@@ -17,6 +17,13 @@ Text::Text(Texture* TEX, string TEXT, int boxX, int boxY, int boxW, int boxH) {
 Text::~Text() {
 
 }
+void Text::set(string newText, int boxX, int boxY, int boxW, int boxH)
+{
+	text = newText;
+	box.x = boxX; box.y = boxY;
+	box.w = boxW; box.h = boxH;
+	charW = boxW / text.size(); charH = boxH;
+}
 void Text::drawChar(char c,int n) {
 	SDL_Rect destRect;
 	//RECT DEL CARACTER A PINTAR
@@ -26,16 +33,19 @@ void Text::drawChar(char c,int n) {
 	int row, col;
 	bool draw = true;
 
+	//NUMEROS 0 - 9
 	if (c >= '0' && c <= '9') {
 		row = 0;
 		col = c - '0';
 	}
+	//MAYUSCULAS
 	else if (c >= 'A' && c <= 'Z') {
-		row = 1 + (c - 'A') / (('Z' - 'A') / 2);
+		row = 1 + (c - 'A') / (('Z' - 'A' + 1) / 2);
 		col = ((c - 'A') % ((('Z' - 'A') / 2) + 1));
 	}
+	//MINUSCULAS
 	else if (c >= 'a' && c <= 'z') {
-		row = 3 + ((c - 'a') / (('z' - 'a') / 2));
+		row = 3 + ((c - 'a') / (('z' - 'a' + 1) / 2));
 		col = ((c - 'a') % ((('z' - 'a') / 2) + 1));
 	}
 	else

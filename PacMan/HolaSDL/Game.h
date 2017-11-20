@@ -17,7 +17,7 @@ enum TextName{ScoreText,MaxScoreText, UserText, LevelText, TitleText};
 //CONSTANTES DE ARRAYS 
 const int NUM_TEXTURES = 5;
 const int NUM_GHOST = 4;
-const int NUM_TEXTS = 1;
+const int NUM_TEXTS = 3;
 
 class Game {
 private:
@@ -67,8 +67,10 @@ private:
 	int level = 1;
 	string userName;
 	bool validateUser = false;		// Sera true si el jugador ya tiene un usuario registrado en el juego
+	bool hasSaveFile = false; //Será true si existe un archivo de guardado
 	ScoreReg actualUserReg;			// Registro que se asigna si un usuario inicia sesion y ya estaba registrado previamente
 
+	//VARIABLES DEL JUEGO
 	GameMap* gameMap;
 	Texture* textures[NUM_TEXTURES]; // | PERSONAJES | MURO | COMIDA | BONUS
 	Text* texts[NUM_TEXTS];
@@ -79,11 +81,12 @@ private:
 	void loadTextures();
 	void loadCharacters();
 	void loadText();
-	bool loadMap(string filename);
+	bool loadMap(string filename, bool saved);
 	void screenRatioConfig();
 	void login();
 	void manageScoreTable();
-
+	bool is_Ghost(int& rows, int& cols, int& ghost_num);
+	void adjustTexts(); //Ajusta los textos en funcion del GUI
 public:
 	Game();
 	~Game();
@@ -96,6 +99,8 @@ public:
 	void collision();
 	void powerUp();
 	void eat() { foodCount -= 1; score++; }
+	bool save(string filename);
+
 
 	//GETS Y SETS
 	MapCell getCell(int row, int col) { return gameMap->getCell(row,col); }

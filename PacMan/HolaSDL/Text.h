@@ -24,7 +24,8 @@ public:
 	Text();
 	Text(Texture* TEX, string TEXT,int boxX,int boxY, int boxW, int boxH);
 	~Text();
-	void setText(string newText) { text = newText; }
+	void set(string newText, int boxX, int boxY, int boxW, int boxH);
+	void setText(string newText) { text = newText;	charW = box.w / text.size(); charH = box.h;}
 	void scaleBox(int newWidth, int newHeight) { box.h = newHeight; box.w = newWidth; }
 	void render();
 };

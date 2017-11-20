@@ -13,6 +13,8 @@ typedef struct {
 	int numCols;
 } TextureAtributes;
 
+//
+
 // Estructura para las regiones del juego
 typedef struct {
 	int w;

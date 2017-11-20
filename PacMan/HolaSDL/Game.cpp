@@ -19,6 +19,7 @@ Game::Game()
 	loadTextures();
 	loadCharacters();
 	gameMap = new GameMap(textures[Background], textures[FoodTexture], textures[PowerUpTexture]);
+	loadText();
 	//scoreTable.load(SCORETABLE_PATH);
 }
 
@@ -39,9 +40,20 @@ void Game::run() {
 		while (!exit && !gameOver) {
 
 			//CARGAMOS EL NIVEL Y ACTUALIZAMOS LAS DIMENSIONES
-			string levelStr = LEVEL_PATH + "level0" + Utilities::intToStr(level) + ".dat";
-			if (loadMap(levelStr)) error = true;
-			loadText();
+			string levelStr;
+			//Si no hay un nivel guardado, cargamos el del nivel actual
+			if (!hasSaveFile) 
+				levelStr = LEVEL_PATH + "level0" + Utilities::intToStr(level) + ".dat";
+			else  // Si lo hay, lo cargaremos
+				levelStr = LEVEL_PATH + userName + ".dat";
+			if (loadMap(levelStr,hasSaveFile)) error = true;
+			//Actualizamos los textos al nuevo canvas
+			adjustTexts();
+
+			//Si hubiera cargado el mapa, hay que indicar que no vamos a volver a cargar el mismo
+			hasSaveFile = false;
+			//Guardamos el progreso del jugador
+			save(userName);
 
 			//BUCLE PRINCIPAL DEL NIVEL
 			while (!exit && !gameOver && !error && foodCount > 0)
@@ -57,15 +69,15 @@ void Game::run() {
 				if (frameTime < FRAME_RATE)
 					SDL_Delay(FRAME_RATE - frameTime);
 			}
-			level++;
+			if(!exit && !gameOver && !error) level++;
 		}
-
-		//Finalización
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		manageScoreTable();
 	}
+	if (!gameOver && !error) save(userName);
+	// Finalización
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	SDL_Quit();
+	manageScoreTable();
 }
 
 void Game::loadTextures() {
@@ -82,7 +94,8 @@ void Game::loadCharacters() {
 	pacMan = new Pac_Man(textures[Characters], this, 10, 0); //Cargamos a PACMAN
 }
 void Game::loadText() {
-	texts[0] = new Text(textures[SpriteFont], "score 000", canvas.w, 50, 20 * 10, 20);
+	for(int i=0;i< NUM_TEXTS; i++)
+		texts[i] = new Text(textures[SpriteFont], "SampleText", 0, 0, 0, 0);
 }
 void Game::render() {
 	//AQUI LLAMAMOS AL RENDER DE CADA ENTIDAD
@@ -94,10 +107,11 @@ void Game::render() {
 	{
 		ghosts[i]->render();
 	}
-	texts[0]->render();
+	for(int i=0; i< NUM_TEXTS; i++)
+		texts[i]->render();
 	pacMan->render();
 	SDL_RenderPresent(renderer);
-}
+	}
 void Game::update() {
 	//AQUI SE LLAMA AL UPDATE DE CADA ENTIDAD
 	int tickTime = SDL_GetTicks();
@@ -134,13 +148,29 @@ void Game::handleEvents() {
 	}
 
 }
-bool Game::loadMap(string filename){
+bool Game::loadMap(string filename, bool saved){
 	ifstream file(filename);
 	if (!file.is_open())
 		return true;
 	//LAS DOS PRIMERAS FILAS SON EL NUMERO DE FILAS Y COLUMNAS
 	file >> MAP_ROWS;
 	file >> MAP_COLS;
+	//SI ES UN MAPA CARGADO AQUI SE CONTIENE LA INFORMACION DEL ESTADO
+	struct IniPos { int x; int y; };
+	//LAS POSICIONES INICIALES DEL MAPA ORIGINAL
+	IniPos iniGhost[NUM_GHOST];
+	IniPos iniPacman;
+	if (saved) {
+		file >> level;
+		file >> score;
+		for (int i = 0; i < NUM_GHOST; i++) {
+			file >> iniGhost[i].x;
+			file >> iniGhost[i].y;
+		}
+		file >> iniPacman.x;
+		file >> iniPacman.y;
+	}
+	
 
 	// >>>>>>>>> AQUI AJUSTAMOS LA PANTALLA EN FUNCION DEL MAPA
 	screenRatioConfig();
@@ -170,12 +200,22 @@ bool Game::loadMap(string filename){
 			//CARGA FANTASMAS
 			else if (num>4 && num<9) {
 				gameMap->setCell(i, j, Empty);
-				ghosts[num - 5]->init(j, i, TILE_W, TILE_H); //Ponemos las posiciones iniciales del Fantasma
+				if(!saved)
+					ghosts[num - 5]->init(j, i, TILE_W, TILE_H); //Ponemos las posiciones iniciales del Fantasma
+				else {
+					ghosts[num - 5]->init(iniGhost[num - 5].x, iniGhost[num - 5].y, TILE_W, TILE_H); //Ponemos las posiciones iniciales del Fantasma
+					ghosts[num - 5]->set(j, i);
+				}
 			}
 			//PACMAN
 			else if (num == 9) {
 				gameMap->setCell(i, j, Empty);
-				pacMan ->init(j, i, TILE_W, TILE_H); //Cargamos a PACMAN
+				if(!saved)
+					pacMan ->init(j, i, TILE_W, TILE_H); //Cargamos a PACMAN
+				else {
+					pacMan->init(iniPacman.x, iniPacman.y, TILE_W, TILE_H); //Cargamos a PACMAN
+					pacMan->set(j, i);
+				}
 			}
 		}
 	}
@@ -187,6 +227,67 @@ void Game::powerUp() {
 	score += 10;
 	powered = true;
 	auxTime = SDL_GetTicks();
+}
+
+     
+bool Game::save(string filename)
+{
+	ofstream file(LEVEL_PATH + filename+".dat");
+	 
+	if (!file.is_open())
+		return true;
+	file << MAP_ROWS << " " << MAP_COLS << endl << level << endl << score << endl;
+	for (int i = 0; i < NUM_GHOST; i++) {
+		file << ghosts[i]->getIniX() << " ";
+		file << ghosts[i]->getiniY() << endl;
+	}
+	file << pacMan->getIniX() << " " << pacMan->getiniY() << endl;
+	for (int i = 0; i < MAP_ROWS; i++) {
+		for (int j = 0; j < MAP_COLS; j++)
+		{
+			int data = 0;
+			if (gameMap->getCell(i, j) == Wall)
+				data = 1;
+			else if (is_Ghost(i, j, data))
+				data = 5 + data;
+			else if (pacMan->getX() == j && pacMan->getY() == i)
+				data = 9;
+			else if (gameMap->getCell(i, j) == Empty)
+				data = 0;
+			else if (gameMap->getCell(i, j) == Food)
+				data = 2;
+			else if (gameMap->getCell(i, j) == PowerUp)
+				data = 3;
+			file << data;
+			if(j<MAP_COLS-1)
+				file << " ";
+		}
+		file << endl;
+	}
+	file.close();
+
+	return false;
+}
+
+bool Game:: is_Ghost(int& rows, int& cols, int& ghost_num) {
+	bool exit = false;
+	ghost_num = 0;
+	while (ghost_num < NUM_GHOST && !exit)
+	{
+		exit = (ghosts[ghost_num]->getX() == cols) && (ghosts[ghost_num]->getY() == rows);
+		if(!exit) ghost_num++;
+	}
+	if (exit)
+		cout << "hola";
+	return ghost_num < NUM_GHOST;
+}
+
+void Game::adjustTexts()
+{
+	int charSize = 20;
+	texts[0]->set("Score", canvas.w, 50, charSize * 10, charSize);
+	texts[1]->set(userName, canvas.w, 100, charSize * 10, charSize);
+	texts[2]->set("Level - " + Utilities::intToStr(level) , canvas.w, 150, charSize * 9, charSize);
 }
 
 void Game::collision() {
@@ -239,6 +340,10 @@ void Game::login() {
 	}
 	if (!validateUser) 
 		cout << "El usuario no existe, se creara un nuevo registro con tu nombre de usuario";
+	if (validateUser) {
+		ifstream infile(LEVEL_PATH + userName + ".dat");
+		hasSaveFile = infile.good();
+	}
 }
 
 //Administra la tabla de puntaciones, pidiendo al jugador su nombre para incluirlo en ella y mostrando el top 10.

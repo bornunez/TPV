@@ -36,9 +36,12 @@ public:
 	Ghost(Texture* text,Game* GAME, uint iniCol = 0, uint iniRow = 0);
 	~Ghost();
 	void init(int iniPosX, int iniPosY, uint W, uint H);
+	void set(int X, int Y) { x = X; y = Y; }
 	void render();
 	void update();
 	void Die() { x = iniX; y = iniY; }
 	int getX() { return x; }
 	int getY() { return y; }
+	int getIniX() { return iniX; }
+	int getiniY() { return iniY; }
 };
