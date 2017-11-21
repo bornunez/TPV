@@ -87,6 +87,7 @@ bool Pac_Man::die() {
 	else {
 		x = iniX;
 		y = iniY;
+		dead = true;
 		return false;
 	}
 }

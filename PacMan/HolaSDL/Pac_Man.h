@@ -23,6 +23,8 @@ private:
 	Direction buffer = None;
 	int dirX = 1; int dirY = 0;
 	int life = 3;
+	uint dieLapse = 2000 ; //Tiempo de espera cuando muero hasta que vuelve a mover (En ms)
+	bool dead = false;
 
 	//Metodos auxiliares
 	bool next(int& nx, int& ny,Direction dir); //Dada unadireccion, decimos si se puede mover a la siguiente casilla. nx y ny contienen la nueva casilla
@@ -43,5 +45,8 @@ public:
 	int getIniX() { return iniX; }
 	int getiniY() { return iniY; }
 	bool die();
+	int lifes() { return life; }
+	void setLifes(int lifes) { life = lifes; }
+	void isDead() { if (dead) { SDL_Delay(dieLapse); dead = false; } }
 };
 

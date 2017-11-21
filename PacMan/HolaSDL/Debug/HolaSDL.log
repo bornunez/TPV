@@ -4,10 +4,10 @@ c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\score.h(2): warn
 c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\score.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
 c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\score.h(4): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
 c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\score.h(5): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(69): warning C4018: '<': no coinciden signed/unsigned
-c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(119): warning C4018: '>': no coinciden signed/unsigned
-c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(311): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
-c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(319): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
-c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(321): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
-c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(335): warning C4018: '<': no coinciden signed/unsigned
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(70): warning C4018: '<': no coinciden signed/unsigned
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(137): warning C4018: '>': no coinciden signed/unsigned
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(344): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(352): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(354): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(368): warning C4018: '<': no coinciden signed/unsigned
   HolaSDL.vcxproj -> C:\Users\Miniman\Desktop\Cosas de la uni\TPV_GIT\PacMan\bin\PacManDebug.exe

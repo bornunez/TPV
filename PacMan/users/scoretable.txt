@@ -20,3 +20,5 @@ nuevo
 94
 mINIMAN
 0
+Minima
+0

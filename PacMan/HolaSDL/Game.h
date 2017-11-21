@@ -12,12 +12,12 @@
 
 //Nombre de las texturas 
 enum TextureName {Characters, Background, FoodTexture, PowerUpTexture,SpriteFont};
-enum TextName{ScoreText,MaxScoreText, UserText, LevelText, TitleText};
+enum TextName{ScoreText, UserText, LevelText, LifeText};
 
 //CONSTANTES DE ARRAYS 
 const int NUM_TEXTURES = 5;
 const int NUM_GHOST = 4;
-const int NUM_TEXTS = 3;
+const int NUM_TEXTS = 4;
 
 class Game {
 private:

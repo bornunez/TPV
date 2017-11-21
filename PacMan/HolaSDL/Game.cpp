@@ -12,24 +12,27 @@ Game::Game()
 	window = SDL_CreateWindow("Pac-Man", winX, winY, windowReg.w, windowReg.h, SDL_WINDOW_SHOWN);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-	//Notificamos que todo ha ido bien
-	cout << "Window created"<<endl;
+	if (window == nullptr || renderer == nullptr) {
+		cout << "Error initializing SDL\n";
+		error = true;
+	}
+	else {
+		//Notificamos que todo ha ido bien
+		cout << "Window created" << endl;
 
-	//Y cargamos texturas y creamos los objetos y personajes
-	loadTextures();
-	loadCharacters();
-	gameMap = new GameMap(textures[Background], textures[FoodTexture], textures[PowerUpTexture]);
-	loadText();
-	//scoreTable.load(SCORETABLE_PATH);
+		//Y cargamos texturas y creamos los objetos y personajes
+		loadTextures();
+		loadCharacters();
+		gameMap = new GameMap(textures[Background], textures[FoodTexture], textures[PowerUpTexture]);
+		loadText();
+	}
 }
 
 
 void Game::run() {
 
 	//AQUI SUCEDE EL BUCLE PRINCIPAL DEL JUEGO. 
-	if (window == nullptr || renderer == nullptr)
-		cout << "Error initializing SDL\n";
-	else { // Programa que usa SDL
+	if (!error){
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // RGB y alpha
 		SDL_RenderClear(renderer); // Borra la pantalla
 		SDL_RenderPresent(renderer); // Muestra la escena
@@ -52,8 +55,6 @@ void Game::run() {
 
 			//Si hubiera cargado el mapa, hay que indicar que no vamos a volver a cargar el mismo
 			hasSaveFile = false;
-			//Guardamos el progreso del jugador
-			save(userName);
 
 			//BUCLE PRINCIPAL DEL NIVEL
 			while (!exit && !gameOver && !error && foodCount > 0)
@@ -73,26 +74,39 @@ void Game::run() {
 		}
 	}
 	if (!gameOver && !error) save(userName);
+	
 	// Finalización
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 	manageScoreTable();
+
+	if (gameOver) {
+		if (remove((LEVEL_PATH + userName + ".dat").c_str()) != 0)
+			cout << "Error deleting file";
+		else
+			cout << "File successfully deleted";
+	}
 }
 
-void Game::loadTextures() {
+//INICIALIZAMOS LAS TEXTURAS
+void Game::loadTextures() { 
 	for (uint i = 0; i < NUM_TEXTURES; i++) {
 		textures[i] = new Texture(renderer, TEXT_PATH);
 		const TextureAtributes atributes = TEXTURE_ATRIBUTES[i];
 		textures[i]->load(atributes.filename, atributes.numRows, atributes.numCols);
 	}
 }
+
+//INICIALIZAMOS LOS PERSONAJES, SE LES COLOCARA EN LA LECTURA DEL MAPA
 void Game::loadCharacters() {
 	for (int i = 0; i < NUM_GHOST; i++) {
 		ghosts[i] = new Ghost(textures[Characters], this,i * 2, 0);
 	}
 	pacMan = new Pac_Man(textures[Characters], this, 10, 0); //Cargamos a PACMAN
 }
+
+//INICIALIZAMOS TODOS LOS TEXTOS
 void Game::loadText() {
 	for(int i=0;i< NUM_TEXTS; i++)
 		texts[i] = new Text(textures[SpriteFont], "SampleText", 0, 0, 0, 0);
@@ -111,6 +125,10 @@ void Game::render() {
 		texts[i]->render();
 	pacMan->render();
 	SDL_RenderPresent(renderer);
+
+	//Decorativo: Tiempo de pacman muerto
+	pacMan->isDead();
+
 	}
 void Game::update() {
 	//AQUI SE LLAMA AL UPDATE DE CADA ENTIDAD
@@ -160,15 +178,22 @@ bool Game::loadMap(string filename, bool saved){
 	//LAS POSICIONES INICIALES DEL MAPA ORIGINAL
 	IniPos iniGhost[NUM_GHOST];
 	IniPos iniPacman;
+	//SI LEEMOS DE ARCHIVO HAY INFORMACION ADICIONAL
 	if (saved) {
+		//Info mapa
 		file >> level;
 		file >> score;
+		//Info fantasmas
 		for (int i = 0; i < NUM_GHOST; i++) {
 			file >> iniGhost[i].x;
 			file >> iniGhost[i].y;
 		}
+		//InfoPacman
 		file >> iniPacman.x;
 		file >> iniPacman.y;
+		int lifes;
+		file >> lifes;
+		pacMan->setLifes(lifes);
 	}
 	
 
@@ -229,19 +254,24 @@ void Game::powerUp() {
 	auxTime = SDL_GetTicks();
 }
 
-     
+//GUARDAMOS EL ESTADO ACTUAL EN UN FICHERO CON EL NOMBRE DEL JUGADOR
 bool Game::save(string filename)
 {
 	ofstream file(LEVEL_PATH + filename+".dat");
 	 
 	if (!file.is_open())
 		return true;
+	//INFO DEL MAPA
 	file << MAP_ROWS << " " << MAP_COLS << endl << level << endl << score << endl;
+	//INFO DE LOS FANTASMAS (Su pos inicial)
 	for (int i = 0; i < NUM_GHOST; i++) {
 		file << ghosts[i]->getIniX() << " ";
 		file << ghosts[i]->getiniY() << endl;
 	}
+	//INFO PACMAN (Pos inicial)
 	file << pacMan->getIniX() << " " << pacMan->getiniY() << endl;
+	file << pacMan->lifes() << endl;
+	//GUARDAMOS EL MAPA
 	for (int i = 0; i < MAP_ROWS; i++) {
 		for (int j = 0; j < MAP_COLS; j++)
 		{
@@ -269,6 +299,7 @@ bool Game::save(string filename)
 	return false;
 }
 
+//HAY FANTASMA EN LA POSICION? SI LO HAY, DEVOLVEMOS CUAL
 bool Game:: is_Ghost(int& rows, int& cols, int& ghost_num) {
 	bool exit = false;
 	ghost_num = 0;
@@ -277,19 +308,20 @@ bool Game:: is_Ghost(int& rows, int& cols, int& ghost_num) {
 		exit = (ghosts[ghost_num]->getX() == cols) && (ghosts[ghost_num]->getY() == rows);
 		if(!exit) ghost_num++;
 	}
-	if (exit)
-		cout << "hola";
 	return ghost_num < NUM_GHOST;
 }
 
+//AJUSTAMOS LAS DIMENSIONES DE LOS TEXTOS AL GUI NUEVO
 void Game::adjustTexts()
 {
-	int charSize = 20;
-	texts[0]->set("Score", canvas.w, 50, charSize * 10, charSize);
-	texts[1]->set(userName, canvas.w, 100, charSize * 10, charSize);
-	texts[2]->set("Level - " + Utilities::intToStr(level) , canvas.w, 150, charSize * 9, charSize);
+	int charSize = 20;    //TEXTO      X      Y     W             H
+	texts[ScoreText]->set("Score", canvas.w, 50, charSize * 10, charSize);
+	texts[UserText]->set(userName, canvas.w, 100, charSize * 10, charSize);
+	texts[LevelText]->set("Level - " + Utilities::intToStr(level) , canvas.w, 150, charSize * 9, charSize);
+	texts[LifeText]->set("Lives - " + Utilities::intToStr(pacMan->lifes()), canvas.w, 200 , charSize * 9, charSize);
 }
 
+//"MOTOR" DE COLISIONES >>>> ACTIVA FLAGS
 void Game::collision() {
 	for (int i = 0; i < NUM_GHOST; i++) {
 		bool collision = pacMan->getX() == ghosts[i]->getX() && pacMan->getY() == ghosts[i]->getY();
@@ -300,6 +332,7 @@ void Game::collision() {
 		else if (collision && !gameOver) {
 			if (pacMan->die())
 				gameOver = true;
+			texts[LifeText]->setText("Lives - " + Utilities::intToStr(pacMan->lifes()));
 		}
 	}
 }
@@ -325,7 +358,7 @@ void Game::screenRatioConfig() {
 
 void Game::login() {
 
-	cout << "Introduce tu nombre";
+	cout << "Introduce tu nombre: ";
 	getline(cin, userName);
 	
 	//Se carga la tabla
