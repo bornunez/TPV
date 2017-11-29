@@ -26,21 +26,22 @@ Game::Game()
 		gameMap = new GameMap(textures[Background], textures[FoodTexture], textures[PowerUpTexture]);
 		loadText();
 	}
+
+	//AQUI SUCEDE EL BUCLE PRINCIPAL DEL JUEGO. 
+	if (!error) {
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // RGB y alpha
+		SDL_RenderClear(renderer); // Borra la pantalla
+		SDL_RenderPresent(renderer); // Muestra la escena
+		cout << "SDL Sucesfully initializated, running game..." << endl;
+
 }
 
 
 void Game::run() {
 
-	//AQUI SUCEDE EL BUCLE PRINCIPAL DEL JUEGO. 
-	if (!error){
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // RGB y alpha
-		SDL_RenderClear(renderer); // Borra la pantalla
-		SDL_RenderPresent(renderer); // Muestra la escena
-		cout << "SDL Sucesfully initializated, running game..."<<endl;
-
 		uint32_t startTime, frameTime;
 		//BUCLE PRINCIPAL DEL JUEGO
-		while (!exit && !gameOver) {
+		while (!exit && !gameOver && level <= MAX_LEVEL) {
 
 			//CARGAMOS EL NIVEL Y ACTUALIZAMOS LAS DIMENSIONES
 			string levelStr;
@@ -79,14 +80,20 @@ void Game::run() {
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
-	manageScoreTable();
+	//HAYAS PERDIDO O HAYAS GANADO
+	if (!exit && !error) {
 
-	if (gameOver) {
+		system("cls");
+		if (!gameOver)
+			cout << "YOU WIN, " + userName + " !!!!";
+		else
+			cout << "YOU DIED :( ";
+		cin.get();
+
 		if (remove((LEVEL_PATH + userName + ".dat").c_str()) != 0)
 			cout << "Error deleting file";
-		else
-			cout << "File successfully deleted";
 	}
+	manageScoreTable();
 }
 
 //INICIALIZAMOS LAS TEXTURAS
@@ -332,6 +339,8 @@ void Game::collision() {
 		else if (collision && !gameOver) {
 			if (pacMan->die())
 				gameOver = true;
+			for (int i = 0; i < NUM_GHOST; i++)
+				ghosts[i]->Die();
 			texts[LifeText]->setText("Lives - " + Utilities::intToStr(pacMan->lifes()));
 		}
 	}

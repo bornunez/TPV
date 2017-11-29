@@ -1,7 +1,6 @@
 #pragma once
 #include "SDL.h"
 #include "GameMap.h"
-#include "GameObject.h"
 #include <vector>
 #include <iostream>
 #include <sstream>
@@ -27,6 +26,7 @@ private:
 	const string SCORETABLE_PATH = "..\\users\\scoretable.txt";
 	const uint32_t POWERTIME = 5000; // Tiempo que Pac Man esta OP (En ms)
 	const int GUI_Ratio = 20; //Porcentaje de la pantalla que ocupa el GUI a la derecha
+	const int MAX_LEVEL = 2;
 
 	const int FRAME_RATE = 100;
 	const int NUM_SCORES_TOP = 10;

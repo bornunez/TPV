@@ -1,13 +1,31 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(387,5): warning MSB8028: El directorio intermedio (Debug\) contiene archivos compartidos de otro proyecto (HolaSDL.vcxproj). Esto puede dar lugar a un comportamiento incorrecto de limpieza y recompilación.
+  main.cpp
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\score.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\score.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\score.h(4): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\score.h(5): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+  Pac_Man.cpp
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\score.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\score.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\score.h(4): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\score.h(5): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+  Ghost.cpp
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\score.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\score.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\score.h(4): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\score.h(5): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\ghost.cpp(69): warning C4018: '<': no coinciden signed/unsigned
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\ghost.cpp(71): warning C4018: '<': no coinciden signed/unsigned
   Game.cpp
 c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\score.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
 c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\score.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
 c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\score.h(4): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
 c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\score.h(5): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
 c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(70): warning C4018: '<': no coinciden signed/unsigned
-c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(137): warning C4018: '>': no coinciden signed/unsigned
-c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(344): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(143): warning C4018: '>': no coinciden signed/unsigned
 c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(352): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
-c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(354): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
-c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(368): warning C4018: '<': no coinciden signed/unsigned
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(360): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(362): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+c:\users\miniman\desktop\cosas de la uni\tpv_git\pacman\holasdl\game.cpp(376): warning C4018: '<': no coinciden signed/unsigned
+  Generando código...
   HolaSDL.vcxproj -> C:\Users\Miniman\Desktop\Cosas de la uni\TPV_GIT\PacMan\bin\PacManDebug.exe
