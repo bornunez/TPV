@@ -1,17 +1,20 @@
 #pragma once
 #include "SDL.h"
-#include "GameMap.h"
 #include <vector>
 #include <iostream>
 #include <sstream>
-#include "Pac_Man.h"
-#include "Ghost.h"
 #include "Text.h"
 #include "Score.h"
+#include "Utilities.h"
+
+class PacMan;
+class Ghost;
+class GameMap;
 
 //Nombre de las texturas 
-enum TextureName {Characters, Background, FoodTexture, PowerUpTexture,SpriteFont};
+enum TextureName {Characters, Background, FoodTexture, PowerUpTexture, SpriteFont};
 enum TextName{ScoreText, UserText, LevelText, LifeText};
+enum MapCell { Empty, Wall, Food, PowerUp }; //Aqui o en GameMap? En GameMap hace que no sea accesible desde pacman
 
 //CONSTANTES DE ARRAYS 
 const int NUM_TEXTURES = 5;
@@ -75,7 +78,7 @@ private:
 	Texture* textures[NUM_TEXTURES]; // | PERSONAJES | MURO | COMIDA | BONUS
 	Text* texts[NUM_TEXTS];
 	Ghost* ghosts[NUM_GHOST];
-	Pac_Man* pacMan;
+	PacMan* pacMan;
 
 	//METODOS AUXILIARES
 	void loadTextures();
@@ -87,6 +90,7 @@ private:
 	void manageScoreTable();
 	bool is_Ghost(int& rows, int& cols, int& ghost_num);
 	void adjustTexts(); //Ajusta los textos en funcion del GUI
+
 public:
 	Game();
 	~Game();
@@ -103,9 +107,11 @@ public:
 
 
 	//GETS Y SETS
-	MapCell getCell(int row, int col) { return gameMap->getCell(row,col); }
+	MapCell getCell(int row, int col);
 	int getRows() { return MAP_ROWS; }
 	int getCols() { return MAP_COLS; }
-	void setCell(int row, int col, MapCell type) { gameMap->setCell(row, col, type); }
+	int getTileWidth() { return TILE_W; }
+	int getTileHeight() { return TILE_H; }
+	void setCell(int row, int col, MapCell type);
 	bool isPowered() { return powered; }
 };

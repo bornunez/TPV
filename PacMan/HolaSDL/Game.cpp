@@ -1,5 +1,7 @@
 #include "Game.h"         
-
+#include "PacMan.h"        
+#include "Ghost.h" 
+#include "GameMap.h"
 
 Game::Game()
 {
@@ -23,21 +25,20 @@ Game::Game()
 		//Y cargamos texturas y creamos los objetos y personajes
 		loadTextures();
 		loadCharacters();
-		gameMap = new GameMap(textures[Background], textures[FoodTexture], textures[PowerUpTexture]);
+		gameMap = new GameMap(this, textures[Background], textures[FoodTexture], textures[PowerUpTexture]);
 		loadText();
 	}
-
-	//AQUI SUCEDE EL BUCLE PRINCIPAL DEL JUEGO. 
-	if (!error) {
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // RGB y alpha
-		SDL_RenderClear(renderer); // Borra la pantalla
-		SDL_RenderPresent(renderer); // Muestra la escena
-		cout << "SDL Sucesfully initializated, running game..." << endl;
-
 }
 
 
 void Game::run() {
+
+	//AQUI SUCEDE EL BUCLE PRINCIPAL DEL JUEGO. 
+	if (!error){
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // RGB y alpha
+		SDL_RenderClear(renderer); // Borra la pantalla
+		SDL_RenderPresent(renderer); // Muestra la escena
+		cout << "SDL Sucesfully initializated, running game..."<<endl;
 
 		uint32_t startTime, frameTime;
 		//BUCLE PRINCIPAL DEL JUEGO
@@ -110,7 +111,7 @@ void Game::loadCharacters() {
 	for (int i = 0; i < NUM_GHOST; i++) {
 		ghosts[i] = new Ghost(textures[Characters], this,i * 2, 0);
 	}
-	pacMan = new Pac_Man(textures[Characters], this, 10, 0); //Cargamos a PACMAN
+	pacMan = new PacMan(textures[Characters], this, 10, 0); //Cargamos a PACMAN
 }
 
 //INICIALIZAMOS TODOS LOS TEXTOS
@@ -122,7 +123,7 @@ void Game::render() {
 	//AQUI LLAMAMOS AL RENDER DE CADA ENTIDAD
 	SDL_RenderClear(renderer);
 
-	gameMap->render(TILE_W, TILE_H);
+	gameMap->render();
 
 	for (int i = 0; i < NUM_GHOST; i++)
 	{
@@ -130,7 +131,7 @@ void Game::render() {
 	}
 	for(int i=0; i< NUM_TEXTS; i++)
 		texts[i]->render();
-	pacMan->render();
+	pacMan->GameCharacter::render();
 	SDL_RenderPresent(renderer);
 
 	//Decorativo: Tiempo de pacman muerto
@@ -306,6 +307,17 @@ bool Game::save(string filename)
 	return false;
 }
 
+MapCell Game::getCell(int row, int col)
+{
+	return gameMap->getCell(row, col);
+}
+
+void Game::setCell(int row, int col, MapCell type)
+{
+	gameMap->setCell(row, col, type);
+}
+
+
 //HAY FANTASMA EN LA POSICION? SI LO HAY, DEVOLVEMOS CUAL
 bool Game:: is_Ghost(int& rows, int& cols, int& ghost_num) {
 	bool exit = false;
@@ -333,14 +345,14 @@ void Game::collision() {
 	for (int i = 0; i < NUM_GHOST; i++) {
 		bool collision = pacMan->getX() == ghosts[i]->getX() && pacMan->getY() == ghosts[i]->getY();
 		if (collision && powered) {
-			ghosts[i]->Die();
+			ghosts[i]->die();
 			score += 20;
 		}
 		else if (collision && !gameOver) {
 			if (pacMan->die())
 				gameOver = true;
 			for (int i = 0; i < NUM_GHOST; i++)
-				ghosts[i]->Die();
+				ghosts[i]->die();
 			texts[LifeText]->setText("Lives - " + Utilities::intToStr(pacMan->lifes()));
 		}
 	}
