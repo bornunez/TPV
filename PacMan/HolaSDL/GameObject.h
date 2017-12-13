@@ -11,7 +11,7 @@ public:
 	~GameObject();
 	virtual void render() = 0;
 	virtual void update() = 0;
-	virtual void loadFromFile() = 0;
-	virtual void saveToFile() = 0;
+	virtual void loadFromFile(ifstream& file) = 0;
+	virtual void saveToFile(ofstream& file) = 0;
 };
 

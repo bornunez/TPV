@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
-class GameCharacter : protected GameObject
+class GameCharacter : public GameObject
 {
 
 protected:
@@ -23,7 +23,7 @@ protected:
 
 public:
 	GameCharacter();
-	GameCharacter(Texture* text, Game* GAME, uint iniCol, uint iniRow);
+	GameCharacter(Texture* text, Game* game, uint iniCol, uint iniRow, uint w, uint h);
 	~GameCharacter();
 
 	void set(int X, int Y) { x = X; y = Y; }
@@ -34,7 +34,7 @@ public:
 	void init(int iniPosX, int iniPosY, uint W, uint H);
 
 	void render();
-	void loadFromFile();
-	void saveToFile();
+	void loadFromFile(ifstream& file);
+	void saveToFile(ofstream& file);
 };
 

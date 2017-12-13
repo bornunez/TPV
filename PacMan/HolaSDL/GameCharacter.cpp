@@ -6,11 +6,12 @@ GameCharacter::GameCharacter()
 {
 }
 
-GameCharacter::GameCharacter(Texture * text, Game * GAME, uint iniCol, uint iniRow)
+GameCharacter::GameCharacter(Texture * text, Game * game, uint texCol, uint texRow, uint w, uint h)
 {
-	texture = text;
-	texRow = iniRow; texCol = iniCol;
-	game = GAME;
+	this->texture = text;
+	this->game = game;
+	this->texRow = texRow; this->texCol = texCol;
+	this->w = w; this->h = h;
 }
 
 
@@ -26,12 +27,12 @@ void GameCharacter::render() {
 	texture->renderFrame(destRect, texRow + ((int)dir % 4), texCol + (frame % 2));
 }
 
-void GameCharacter::loadFromFile() {
-
+void GameCharacter::loadFromFile(ifstream& file) {
+	file >> x >> y >> iniX >> iniY >> dirX >> dirY;
 }
 
-void GameCharacter::saveToFile() {
-
+void GameCharacter::saveToFile(ofstream& file) {
+	file << x << " " << y << " " << iniX << " " << iniY << " " << dirX << " " << dirY;
 }
 
 bool GameCharacter::next(int & nx, int & ny, Direction ndir)

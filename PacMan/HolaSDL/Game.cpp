@@ -1,6 +1,6 @@
 #include "Game.h"         
 #include "PacMan.h"        
-#include "Ghost.h" 
+#include "SmartGhost.h" 
 #include "GameMap.h"
 
 Game::Game()
@@ -22,79 +22,48 @@ Game::Game()
 		//Notificamos que todo ha ido bien
 		cout << "Window created" << endl;
 
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // RGB y alpha
+		SDL_RenderClear(renderer); // Borra la pantalla
+		SDL_RenderPresent(renderer); // Muestra la escena
+		cout << "SDL Sucesfully initializated, running game..." << endl;
+
 		//Y cargamos texturas y creamos los objetos y personajes
 		loadTextures();
-		loadCharacters();
+		//loadCharacters();
 		gameMap = new GameMap(this, textures[Background], textures[FoodTexture], textures[PowerUpTexture]);
+		//pacMan = new PacMan();		//NEW PACMAN DE PRUEBA
 		loadText();
 	}
 }
 
-
+//AQUI SUCEDE EL BUCLE PRINCIPAL DEL JUEGO. 
 void Game::run() {
 
-	//AQUI SUCEDE EL BUCLE PRINCIPAL DEL JUEGO. 
-	if (!error){
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // RGB y alpha
-		SDL_RenderClear(renderer); // Borra la pantalla
-		SDL_RenderPresent(renderer); // Muestra la escena
-		cout << "SDL Sucesfully initializated, running game..."<<endl;
+	uint32_t startTime, frameTime;
+	//BUCLE PRINCIPAL DEL JUEGO
+	while (!exit && !gameOver && level <= MAX_LEVEL) {
+		checkLevel();
 
-		uint32_t startTime, frameTime;
-		//BUCLE PRINCIPAL DEL JUEGO
-		while (!exit && !gameOver && level <= MAX_LEVEL) {
+		//BUCLE PRINCIPAL DEL NIVEL
+		while (!exit && !gameOver && !error && foodCount > 0)
+		{
+			// Gestion del tiempo
+			startTime = SDL_GetTicks();
 
-			//CARGAMOS EL NIVEL Y ACTUALIZAMOS LAS DIMENSIONES
-			string levelStr;
-			//Si no hay un nivel guardado, cargamos el del nivel actual
-			if (!hasSaveFile) 
-				levelStr = LEVEL_PATH + "level0" + Utilities::intToStr(level) + ".dat";
-			else  // Si lo hay, lo cargaremos
-				levelStr = LEVEL_PATH + userName + ".dat";
-			if (loadMap(levelStr,hasSaveFile)) error = true;
-			//Actualizamos los textos al nuevo canvas
-			adjustTexts();
+			handleEvents();
+			update();
+			render();
 
-			//Si hubiera cargado el mapa, hay que indicar que no vamos a volver a cargar el mismo
-			hasSaveFile = false;
-
-			//BUCLE PRINCIPAL DEL NIVEL
-			while (!exit && !gameOver && !error && foodCount > 0)
-			{
-				// Gestion del tiempo
-				startTime = SDL_GetTicks();
-
-				handleEvents();
-				update();
-				render();
-
-				frameTime = SDL_GetTicks() - startTime;
-				if (frameTime < FRAME_RATE)
-					SDL_Delay(FRAME_RATE - frameTime);
-			}
-			if(!exit && !gameOver && !error) level++;
+			frameTime = SDL_GetTicks() - startTime;
+			if (frameTime < FRAME_RATE)
+				SDL_Delay(FRAME_RATE - frameTime);
+		}
+		if (!exit && !gameOver && !error) {
+			destroyGhosts();
+			level++;
 		}
 	}
-	if (!gameOver && !error) save(userName);
-	
-	// Finalización
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
-	SDL_Quit();
-	//HAYAS PERDIDO O HAYAS GANADO
-	if (!exit && !error) {
-
-		system("cls");
-		if (!gameOver)
-			cout << "YOU WIN, " + userName + " !!!!";
-		else
-			cout << "YOU DIED :( ";
-		cin.get();
-
-		if (remove((LEVEL_PATH + userName + ".dat").c_str()) != 0)
-			cout << "Error deleting file";
-	}
-	manageScoreTable();
+	endGame();
 }
 
 //INICIALIZAMOS LAS TEXTURAS
@@ -106,50 +75,41 @@ void Game::loadTextures() {
 	}
 }
 
-//INICIALIZAMOS LOS PERSONAJES, SE LES COLOCARA EN LA LECTURA DEL MAPA
-void Game::loadCharacters() {
-	for (int i = 0; i < NUM_GHOST; i++) {
-		ghosts[i] = new Ghost(textures[Characters], this,i * 2, 0);
-	}
-	pacMan = new PacMan(textures[Characters], this, 10, 0); //Cargamos a PACMAN
-}
-
 //INICIALIZAMOS TODOS LOS TEXTOS
 void Game::loadText() {
-	for(int i=0;i< NUM_TEXTS; i++)
+	for(int i = 0; i < NUM_TEXTS; i++)
 		texts[i] = new Text(textures[SpriteFont], "SampleText", 0, 0, 0, 0);
 }
+
+//LLAMA AL RENDER DE CADA ENTIDAD
 void Game::render() {
-	//AQUI LLAMAMOS AL RENDER DE CADA ENTIDAD
+
 	SDL_RenderClear(renderer);
 
 	gameMap->render();
 
-	for (int i = 0; i < NUM_GHOST; i++)
-	{
-		ghosts[i]->render();
+	for (GameCharacter* c : characters) {
+		c->render();
 	}
 	for(int i=0; i< NUM_TEXTS; i++)
 		texts[i]->render();
-	pacMan->GameCharacter::render();
+
 	SDL_RenderPresent(renderer);
 
 	//Decorativo: Tiempo de pacman muerto
 	pacMan->isDead();
+}
 
-	}
 void Game::update() {
 	//AQUI SE LLAMA AL UPDATE DE CADA ENTIDAD
 	int tickTime = SDL_GetTicks();
 	if(powered)
 		powered = (auxTime + POWERTIME) > tickTime;
-	for (int i = 0; i < NUM_GHOST; i++) {
-		ghosts[i]->update();
-	}
-	collision();
-	pacMan->update();
-	collision();
 
+	for (GameCharacter* c : characters) {
+		c->update();
+		collision();
+	}
 	texts[0]->setText("Score " + Utilities::intToStr(score));
 }
 void Game::handleEvents() {
@@ -172,89 +132,8 @@ void Game::handleEvents() {
 				exit = true;
 		}
 	}
-
 }
-bool Game::loadMap(string filename, bool saved){
-	ifstream file(filename);
-	if (!file.is_open())
-		return true;
-	//LAS DOS PRIMERAS FILAS SON EL NUMERO DE FILAS Y COLUMNAS
-	file >> MAP_ROWS;
-	file >> MAP_COLS;
-	//SI ES UN MAPA CARGADO AQUI SE CONTIENE LA INFORMACION DEL ESTADO
-	struct IniPos { int x; int y; };
-	//LAS POSICIONES INICIALES DEL MAPA ORIGINAL
-	IniPos iniGhost[NUM_GHOST];
-	IniPos iniPacman;
-	//SI LEEMOS DE ARCHIVO HAY INFORMACION ADICIONAL
-	if (saved) {
-		//Info mapa
-		file >> level;
-		file >> score;
-		//Info fantasmas
-		for (int i = 0; i < NUM_GHOST; i++) {
-			file >> iniGhost[i].x;
-			file >> iniGhost[i].y;
-		}
-		//InfoPacman
-		file >> iniPacman.x;
-		file >> iniPacman.y;
-		int lifes;
-		file >> lifes;
-		pacMan->setLifes(lifes);
-	}
-	
 
-	// >>>>>>>>> AQUI AJUSTAMOS LA PANTALLA EN FUNCION DEL MAPA
-	screenRatioConfig();
-
-	TILE_H = canvas.h / MAP_ROWS; TILE_W = canvas.w / MAP_COLS;  //VAMOS A DIBUJAR EL MAPA EN FUNCION DEL CANVAS
-	//Las asignamos
-	gameMap->setCols(MAP_COLS);
-	gameMap->setRows(MAP_ROWS);
-	//E iniciamos el mapa
-	gameMap->initMap();
-	//Y EMPEZAMOS LA LECTURA
-	int num;
-	foodCount = 0;
-
-	for (int i = 0; i < MAP_ROWS; i++) {
-		for (int j = 0; j < MAP_COLS; j++) {
-			//MAPA: 0 -> VACIO || 1 -> MURO || 2 -> COMIDA || 3 -> VITAMINA || 5,6,7,8 -> FANTASMAS || 9 -> PACMAN
-			file >> num;
-
-			//CARGA MAPA
-			if (num < 4) {
-				gameMap->setCell(i, j, (MapCell)num);
-				if (num == 2)
-					foodCount+=1;
-			}
-
-			//CARGA FANTASMAS
-			else if (num>4 && num<9) {
-				gameMap->setCell(i, j, Empty);
-				if(!saved)
-					ghosts[num - 5]->init(j, i, TILE_W, TILE_H); //Ponemos las posiciones iniciales del Fantasma
-				else {
-					ghosts[num - 5]->init(iniGhost[num - 5].x, iniGhost[num - 5].y, TILE_W, TILE_H); //Ponemos las posiciones iniciales del Fantasma
-					ghosts[num - 5]->set(j, i);
-				}
-			}
-			//PACMAN
-			else if (num == 9) {
-				gameMap->setCell(i, j, Empty);
-				if(!saved)
-					pacMan ->init(j, i, TILE_W, TILE_H); //Cargamos a PACMAN
-				else {
-					pacMan->init(iniPacman.x, iniPacman.y, TILE_W, TILE_H); //Cargamos a PACMAN
-					pacMan->set(j, i);
-				}
-			}
-		}
-	}
-	file.close();
-	return false;
-}
 
 void Game::powerUp() {
 	score += 10;
@@ -262,72 +141,69 @@ void Game::powerUp() {
 	auxTime = SDL_GetTicks();
 }
 
+//CARGA EL NIVEL Y ACTUALIZA LAS DIMENSIONES
+void Game::checkLevel() {
+
+	string levelStr;
+	//Si no hay un nivel guardado, cargamos el del nivel actual
+	if (!hasSaveFile)
+		levelStr = LEVEL_PATH + "level0" + Utilities::intToStr(level) + ".dat";
+	else  // Si lo hay, lo cargaremos
+		levelStr = LEVEL_PATH + userName + ".dat";
+	if (!loadLevel(levelStr, hasSaveFile)) error = true;
+	//Actualizamos los textos al nuevo canvas
+		adjustTexts();
+	//Si hubiera cargado el mapa, hay que indicar que no vamos a volver a cargar el mismo
+	hasSaveFile = false;
+}
+
+void Game::endGame() {
+	if (!gameOver && !error)
+		save(userName);
+
+	// Finalización
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	SDL_Quit();
+	//HAYAS PERDIDO O HAYAS GANADO
+	if (!exit && !error) {
+
+		system("cls");
+		if (!gameOver)
+			cout << "YOU WIN, " + userName + " !!!!";
+		else
+			cout << "YOU DIED :( ";
+		cin.get();
+
+		if (remove((LEVEL_PATH + userName + ".dat").c_str()) != 0)
+			cout << "Error deleting file";
+	}
+	manageScoreTable();
+}
+
 //GUARDAMOS EL ESTADO ACTUAL EN UN FICHERO CON EL NOMBRE DEL JUGADOR
 bool Game::save(string filename)
 {
-	ofstream file(LEVEL_PATH + filename+".dat");
+	ofstream file(LEVEL_PATH + filename + ".dat");
 	 
 	if (!file.is_open())
 		return true;
 	//INFO DEL MAPA
-	file << MAP_ROWS << " " << MAP_COLS << endl << level << endl << score << endl;
-	//INFO DE LOS FANTASMAS (Su pos inicial)
-	for (int i = 0; i < NUM_GHOST; i++) {
-		file << ghosts[i]->getIniX() << " ";
-		file << ghosts[i]->getiniY() << endl;
-	}
-	//INFO PACMAN (Pos inicial)
-	file << pacMan->getIniX() << " " << pacMan->getiniY() << endl;
-	file << pacMan->lifes() << endl;
+	file << level << " " << score << endl;;
 	//GUARDAMOS EL MAPA
-	for (int i = 0; i < MAP_ROWS; i++) {
-		for (int j = 0; j < MAP_COLS; j++)
-		{
-			int data = 0;
-			if (gameMap->getCell(i, j) == Wall)
-				data = 1;
-			else if (is_Ghost(i, j, data))
-				data = 5 + data;
-			else if (pacMan->getX() == j && pacMan->getY() == i)
-				data = 9;
-			else if (gameMap->getCell(i, j) == Empty)
-				data = 0;
-			else if (gameMap->getCell(i, j) == Food)
-				data = 2;
-			else if (gameMap->getCell(i, j) == PowerUp)
-				data = 3;
-			file << data;
-			if(j<MAP_COLS-1)
-				file << " ";
-		}
+	gameMap->saveToFile(file);
+
+	file << numGhost << endl;;
+
+	//Se guardan los fantasmas y PacMan
+	list<GameCharacter*>::reverse_iterator it;
+	for (it = characters.rbegin(); it != characters.rend(); ++it) {
+		(*it)->saveToFile(file);
 		file << endl;
 	}
 	file.close();
 
 	return false;
-}
-
-MapCell Game::getCell(int row, int col)
-{
-	return gameMap->getCell(row, col);
-}
-
-void Game::setCell(int row, int col, MapCell type)
-{
-	gameMap->setCell(row, col, type);
-}
-
-
-//HAY FANTASMA EN LA POSICION? SI LO HAY, DEVOLVEMOS CUAL
-bool Game:: is_Ghost(int& rows, int& cols, int& ghost_num) {
-	bool exit = false;
-	ghost_num = 0;
-	while (ghost_num < NUM_GHOST && !exit)
-	{
-		exit = (ghosts[ghost_num]->getX() == cols) && (ghosts[ghost_num]->getY() == rows);
-		if(!exit) ghost_num++;
-	}
-	return ghost_num < NUM_GHOST;
 }
 
 //AJUSTAMOS LAS DIMENSIONES DE LOS TEXTOS AL GUI NUEVO
@@ -340,34 +216,36 @@ void Game::adjustTexts()
 	texts[LifeText]->set("Lives - " + Utilities::intToStr(pacMan->lifes()), canvas.w, 200 , charSize * 9, charSize);
 }
 
-//"MOTOR" DE COLISIONES >>>> ACTIVA FLAGS
 void Game::collision() {
-	for (int i = 0; i < NUM_GHOST; i++) {
-		bool collision = pacMan->getX() == ghosts[i]->getX() && pacMan->getY() == ghosts[i]->getY();
+	list<GameCharacter*>::iterator it = characters.begin();
+	for (it++; it != characters.end(); ++it) {
+		bool collision = pacMan->getX() == (*it)->getX() && pacMan->getY() == (*it)->getY();
 		if (collision && powered) {
-			ghosts[i]->die();
+			static_cast<Ghost*>(*it)->die();
 			score += 20;
 		}
 		else if (collision && !gameOver) {
+			list<GameCharacter*>::iterator it2 = characters.begin();
 			if (pacMan->die())
 				gameOver = true;
-			for (int i = 0; i < NUM_GHOST; i++)
-				ghosts[i]->die();
+			for (it2++; it2 != characters.end(); ++it2)
+				static_cast<Ghost*>(*it2)->die();
+
 			texts[LifeText]->setText("Lives - " + Utilities::intToStr(pacMan->lifes()));
 		}
 	}
 }
 
+//CONFIGURA EL TAMAÑO DEL CANVAS EN FUNCION DEL GUI
+//DE MODO QUE LOS TILES DEL MAPA SIEMPRE SEAN CUADRADOS Y OCUPEN LA MAXIMA PANTALLA POSIBLE
 void Game::screenRatioConfig() {
-	//VAMOS A CONFIGURAR EL TAMAÑO DEL CANVAS EN FUNCION DEL GUI
-	//DE TAL MODO QUE LOS TILES DEL MAPA SIEMPRE SEAN CUADRADOS Y OCUPEN LA MAXIMA PANTALLA POSIBLE
-	
+
 	GUI.w = windowReg.w * ((float) GUI_Ratio /(float) 100);
 
 	canvas.w = windowReg.w - GUI.w;
 	canvas.h = windowReg.h;
 	//AHORA VAMOS A ADAPTAR EL CANVAS PARA QUE MANTENGA LA RELACION DEL MAPA
-	float mapRatio = (float)MAP_ROWS / (float)MAP_COLS; //Cuantas veces es mayor el alto que el ancho
+	float mapRatio = (float)gameMap->getRows() / (float)gameMap->getCols(); //Cuantas veces es mayor el alto que el ancho
 
 	if (((float)canvas.h / mapRatio) <= canvas.w)
 		canvas.w= (float)canvas.h/ mapRatio;
@@ -428,18 +306,82 @@ void Game::manageScoreTable() {
 
 Game::~Game()
 { 
+	delete(pacMan);
+
+	list<GameCharacter*>::iterator it = characters.begin();
+	for (it++; it != characters.end(); ++it)
+		delete(static_cast<Ghost*>(*it));			//Los SmartGhost se liberan de otra forma
+
+
+	//Borramos Personajes
+	//for (GameCharacter* c : characters) 
+		//delete(c);
+	
+
 	//Borramos textos
 	for (int i = 0; i < NUM_TEXTS; i++)
 		delete(texts[i]);
 
 	//Borramos Mapa
 	delete gameMap;
-	//Borramos Personajes
-	for (int i = 0; i < NUM_GHOST; i++)
-		delete(ghosts[i]);
-	delete(pacMan);
+
 
 	//Borramos texturas
 	for (int i = 0; i < NUM_TEXTURES; i++)
 		delete(textures[i]);
+
 }
+
+// Destruye los fantasmas, se utiliza cada vez que se supera un nivel.
+void Game::destroyGhosts() {
+	list<GameCharacter*>::iterator it = characters.begin();
+	for (it++; it != characters.end(); ++it) 
+		delete(*it);
+}
+
+bool Game::loadLevel(string filename, bool saved) {
+	//Estas lo mismo van al .h
+	uint typeGhost;
+	Ghost* ghost;
+
+	ifstream file(LEVEL_PATH + filename);
+	if (!file.is_open())
+		return false;
+
+	//Si existe partida guardada la carga
+	if (saved) {
+		file >> level >> score;
+	}
+
+	gameMap->loadFromFile(file);
+
+	screenRatioConfig();
+	TILE_H = canvas.h / gameMap->getRows(); TILE_W = canvas.w / gameMap->getCols();  //VAMOS A DIBUJAR EL MAPA EN FUNCION DEL CANVAS
+
+	file >> numGhost;
+
+	for (uint i = 0; i < numGhost; i++) {
+		file >> typeGhost;
+		if (typeGhost == 0)
+			ghost = new Ghost(textures[Characters], this, i * 2, 0, TILE_W, TILE_H);
+		else
+			ghost = new SmartGhost(textures[Characters], this, i * 2, 0, TILE_W, TILE_H);
+
+		ghost->loadFromFile(file);
+		characters.push_back(ghost);
+	}
+	pacMan = new PacMan(textures[Characters], this, 10, 0, TILE_W, TILE_H);		//Hay que cambiarlo de sitio ya que se crea PacMan y luego solo debe sobreescribirse
+	//*pacMan = PacMan(textures[Characters], this, 10, 0, TILE_W, TILE_H);
+	pacMan->loadFromFile(file);
+	characters.insert(characters.begin(), pacMan);			//Se lee el ultimo pero se inserta el primero para evitar el iterador inverso
+	return true;
+}
+
+
+MapCell Game::getCell(int row, int col) { return gameMap->getCell(row, col); }
+
+void Game::setCell(int row, int col, MapCell type) { gameMap->setCell(row, col, type); }
+
+int Game::getRows() { return gameMap->getRows(); }
+
+int Game::getCols() { return gameMap->getCols(); }

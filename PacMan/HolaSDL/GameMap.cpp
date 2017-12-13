@@ -33,17 +33,59 @@ void GameMap::update()
 {
 }
 
-void GameMap::loadFromFile()
+
+void GameMap::loadFromFile(ifstream& file)
 {
+	//Las asignamos
+	file >> rows >> cols;
+
+	//E iniciamos el mapa
+	initMap();
+	//Y EMPEZAMOS LA LECTURA
+	int num;
+
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			//MAPA: 0 -> VACIO || 1 -> MURO || 2 -> COMIDA || 3 -> VITAMINA || 5,6,7,8 -> FANTASMAS || 9 -> PACMAN
+			file >> num;
+
+			//CARGA MAPA
+			if (num < 4) {
+				setCell(i, j, (MapCell)num);
+				if (num == 2)
+					game->addFood();
+			}
+		}
+	}
 }
 
-void GameMap::saveToFile()
-{
+//GUARDA EL MAPA
+void GameMap::saveToFile(ofstream& file)
+{	
+	int data;
+	file << rows << " " << cols << endl;
+
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			if (getCell(i, j) == Wall)
+				data = 1;
+			else if (getCell(i, j) == Empty)
+				data = 0;
+			else if (getCell(i, j) == Food)
+				data = 2;
+			else if (getCell(i, j) == PowerUp)
+				data = 3;
+			file << data;
+			if (j < cols - 1)
+				file << " ";
+		}
+		file << endl;
+	}
 }
 
 void GameMap:: render(){
 	SDL_Rect destRect;
-	for(int i=0; i < rows;i++)
+	for(int i=0; i < rows; i++)
 		for (int j = 0; j < cols; j++) {
 			destRect.h = game->getTileHeight();
 			destRect.w = game->getTileWidth();

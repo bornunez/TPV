@@ -3,10 +3,12 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
+#include <list>
 #include "Text.h"
 #include "Score.h"
 #include "Utilities.h"
 
+class GameCharacter;
 class PacMan;
 class Ghost;
 class GameMap;
@@ -18,7 +20,6 @@ enum MapCell { Empty, Wall, Food, PowerUp }; //Aqui o en GameMap? En GameMap hac
 
 //CONSTANTES DE ARRAYS 
 const int NUM_TEXTURES = 5;
-const int NUM_GHOST = 4;
 const int NUM_TEXTS = 4;
 
 class Game {
@@ -67,7 +68,7 @@ private:
 	// Registro de puntuacion
 	Score scoreTable;
 	int score = 0;
-	int level = 1;
+	int level = 0;
 	string userName;
 	bool validateUser = false;		// Sera true si el jugador ya tiene un usuario registrado en el juego
 	bool hasSaveFile = false; //Será true si existe un archivo de guardado
@@ -77,20 +78,23 @@ private:
 	GameMap* gameMap;
 	Texture* textures[NUM_TEXTURES]; // | PERSONAJES | MURO | COMIDA | BONUS
 	Text* texts[NUM_TEXTS];
-	Ghost* ghosts[NUM_GHOST];
+	uint numGhost;
 	PacMan* pacMan;
+	list<GameCharacter*> characters;
 
 	//METODOS AUXILIARES
 	void loadTextures();
-	void loadCharacters();
+	//void loadCharacters();
 	void loadText();
-	bool loadMap(string filename, bool saved);
+	//bool loadMap(string filename, bool saved);
+	bool loadLevel(string filename, bool saved);
 	void screenRatioConfig();
 	void login();
 	void manageScoreTable();
-	bool is_Ghost(int& rows, int& cols, int& ghost_num);
 	void adjustTexts(); //Ajusta los textos en funcion del GUI
-
+	void destroyGhosts();
+	void checkLevel();
+	void endGame();
 public:
 	Game();
 	~Game();
@@ -108,10 +112,11 @@ public:
 
 	//GETS Y SETS
 	MapCell getCell(int row, int col);
-	int getRows() { return MAP_ROWS; }
-	int getCols() { return MAP_COLS; }
+	int getRows();
+	int getCols();
 	int getTileWidth() { return TILE_W; }
 	int getTileHeight() { return TILE_H; }
 	void setCell(int row, int col, MapCell type);
+	void addFood() { foodCount++; }				//Quiza hay que llevarse foodCount a GameMap
 	bool isPowered() { return powered; }
 };

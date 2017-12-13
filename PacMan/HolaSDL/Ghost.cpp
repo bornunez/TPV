@@ -8,20 +8,24 @@ Ghost::Ghost(Texture* text)
 	texture = text;
 	//game = GAME;
 }
-Ghost::Ghost(Texture* text, Game* GAME,uint iniCol, uint iniRow) : GameCharacter(text, GAME, iniCol, iniRow) 
+Ghost::Ghost(Texture* text, Game* game,uint iniCol, uint iniRow, uint w, uint h) : GameCharacter(text, game, iniCol, iniRow, w, h) 
 {
+	type = 0;
 }
 
 Ghost::~Ghost()
 {
 }
 
-void Ghost::loadFromFile()
+void Ghost::loadFromFile(ifstream& file)
 {
+	GameCharacter::loadFromFile(file);
 }
 
-void Ghost::saveToFile()
+void Ghost::saveToFile(ofstream& file)
 {
+	file << type << " ";
+	GameCharacter::saveToFile(file);
 }
 
 
