@@ -29,9 +29,8 @@ Game::Game()
 
 		//Y cargamos texturas y creamos los objetos y personajes
 		loadTextures();
-		//loadCharacters();
 		gameMap = new GameMap(this, textures[Background], textures[FoodTexture], textures[PowerUpTexture]);
-		//pacMan = new PacMan();		//NEW PACMAN DE PRUEBA
+		pacMan = new PacMan(textures[Characters], this, 10, 0, 0,0);		//NEW PACMAN DE PRUEBA
 		loadText();
 	}
 }
@@ -155,6 +154,7 @@ void Game::checkLevel() {
 		adjustTexts();
 	//Si hubiera cargado el mapa, hay que indicar que no vamos a volver a cargar el mismo
 	hasSaveFile = false;
+	pacMan->init(TILE_W, TILE_H);
 }
 
 void Game::endGame() {
@@ -221,15 +221,15 @@ void Game::collision() {
 	for (it++; it != characters.end(); ++it) {
 		bool collision = pacMan->getX() == (*it)->getX() && pacMan->getY() == (*it)->getY();
 		if (collision && powered) {
-			static_cast<Ghost*>(*it)->die();
+			(*it)->die();
 			score += 20;
 		}
 		else if (collision && !gameOver) {
-			list<GameCharacter*>::iterator it2 = characters.begin();
-			if (pacMan->die())
+			for (GameCharacter* c : characters) 
+				c->die();
+			
+			if (pacMan->isDead())
 				gameOver = true;
-			for (it2++; it2 != characters.end(); ++it2)
-				static_cast<Ghost*>(*it2)->die();
 
 			texts[LifeText]->setText("Lives - " + Utilities::intToStr(pacMan->lifes()));
 		}
@@ -306,16 +306,9 @@ void Game::manageScoreTable() {
 
 Game::~Game()
 { 
-	delete(pacMan);
-
-	list<GameCharacter*>::iterator it = characters.begin();
-	for (it++; it != characters.end(); ++it)
-		delete(static_cast<Ghost*>(*it));			//Los SmartGhost se liberan de otra forma
-
-
 	//Borramos Personajes
-	//for (GameCharacter* c : characters) 
-		//delete(c);
+	for (GameCharacter* c : characters) 
+		delete(c);
 	
 
 	//Borramos textos
@@ -370,8 +363,6 @@ bool Game::loadLevel(string filename, bool saved) {
 		ghost->loadFromFile(file);
 		characters.push_back(ghost);
 	}
-	pacMan = new PacMan(textures[Characters], this, 10, 0, TILE_W, TILE_H);		//Hay que cambiarlo de sitio ya que se crea PacMan y luego solo debe sobreescribirse
-	//*pacMan = PacMan(textures[Characters], this, 10, 0, TILE_W, TILE_H);
 	pacMan->loadFromFile(file);
 	characters.insert(characters.begin(), pacMan);			//Se lee el ultimo pero se inserta el primero para evitar el iterador inverso
 	return true;

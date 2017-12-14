@@ -19,8 +19,8 @@ public:
 	void update();
 	void loadFromFile(ifstream& file);
 	void saveToFile(ofstream& file);
-	bool die();
-	void isDead() { if (dead) { SDL_Delay(dieLapse); dead = false; }}
+	void die();
+	bool isDead() { return dead; }
 	void setDir(Direction ndir) { buffer = ndir; }
 	void setLifes(int lifes) { life = lifes; }
 	int lifes() { return life; }

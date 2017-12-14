@@ -40,18 +40,18 @@ void PacMan::update()
 }
 
 
-bool PacMan::die() {
+void PacMan::die() {
 	life--;
-	if (life == 0)
-		return true;
+	if (life == 0) {
+		SDL_Delay(dieLapse);
+		dead = true;
+	}
 	else {
 		x = iniX;
 		y = iniY;
-		dead = true;
-		return false;
+		dead = false;
 	}
 }
-
 
 void PacMan::loadFromFile(ifstream& file)
 {	
@@ -74,3 +74,4 @@ void PacMan::saveToFile(ofstream& file)
 	//Falta añadir energy
 
 }
+

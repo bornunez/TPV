@@ -31,10 +31,11 @@ public:
 	int getY() { return y; }
 	int getIniX() { return iniX; }
 	int getiniY() { return iniY; }
-	void init(int iniPosX, int iniPosY, uint W, uint H);
+	void init(uint W, uint H);
 
 	void render();
 	void loadFromFile(ifstream& file);
 	void saveToFile(ofstream& file);
+	virtual void die() = 0;
 };
 

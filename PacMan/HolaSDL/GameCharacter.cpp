@@ -23,7 +23,6 @@ void GameCharacter::render() {
 	SDL_Rect destRect;
 	destRect.x = x*w; destRect.y = y*h;
 	destRect.w = w; destRect.h = h;
-	//texture->renderFrame(destRect, texRow, texCol);
 	texture->renderFrame(destRect, texRow + ((int)dir % 4), texCol + (frame % 2));
 }
 
@@ -56,11 +55,7 @@ bool GameCharacter::next(int & nx, int & ny, Direction ndir)
 	return game->getCell(ny, nx) != Wall;
 }
 
-void GameCharacter::init(int iniPosX, int iniPosY, uint W, uint H) {
-	iniX = iniPosX;
-	iniY = iniPosY;
-	x = iniX;
-	y = iniY;
+void GameCharacter::init(uint W, uint H) {
 	w = W;
 	h = H;
 }

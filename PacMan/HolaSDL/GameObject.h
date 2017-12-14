@@ -8,7 +8,7 @@ protected:
 
 public:
 	GameObject();
-	~GameObject();
+	virtual ~GameObject() = 0;
 	virtual void render() = 0;
 	virtual void update() = 0;
 	virtual void loadFromFile(ifstream& file) = 0;
