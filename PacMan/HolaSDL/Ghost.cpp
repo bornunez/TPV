@@ -1,5 +1,6 @@
 #include "Ghost.h"
-#include "Game.h"
+
+
 Ghost::Ghost() {}
 
 Ghost::Ghost(Texture* text)
@@ -7,53 +8,34 @@ Ghost::Ghost(Texture* text)
 	texture = text;
 	//game = GAME;
 }
-Ghost::Ghost(Texture* text, Game* GAME,uint iniCol, uint iniRow) {
-	texture = text;
-	texRow = iniRow; texCol = iniCol;
-	game = GAME;
+Ghost::Ghost(Texture* text, Game* game,uint iniCol, uint iniRow, uint w, uint h) : GameCharacter(text, game, iniCol, iniRow, w, h) 
+{
+	type = 0;
 }
 
 Ghost::~Ghost()
 {
 }
 
-void Ghost::render() {
-	SDL_Rect destRect;
-	destRect.x = x*w; destRect.y = y*h;
-	destRect.w = w; destRect.h = h;
-
-	if (game->isPowered())
-		texture->renderFrame(destRect, frame % 2, 12 + (frame % 2));
-	else
-		texture->renderFrame(destRect, texRow + ((int)dir % 4), texCol + (frame % 2));
-
+void Ghost::loadFromFile(ifstream& file)
+{
+	GameCharacter::loadFromFile(file);
 }
+
+void Ghost::saveToFile(ofstream& file)
+{
+	file << type << " ";
+	GameCharacter::saveToFile(file);
+}
+
 
 void Ghost::update() {
-	mueve();
+	move();
 	frame++;
 }
-bool Ghost::next(int& nx, int&ny, Direction ndir) { //DADA UNA DIRECCION DIR, DECIMOS SI SE PUEDE MOVER, Y DEVOLVEMOS EL SIGUIENTE PUNTO
-	//Asignamos las variables
-	int ndx, ndy;
-	Utilities::enumToDir(ndir, ndx, ndy);
-	nx = x + ndx;
-	ny = y + ndy;
-	int rows = game->getRows();
-	int cols = game->getCols();
-	//Aplicamos la forma toroidal
-	if (nx < 0)
-		nx = cols - 1;
-	else if (nx >= cols)
-		nx = 0;
-	if (ny < 0)
-		ny = rows - 1;
-	else if (ny >= rows)
-		ny = 0;
-	return game->getCell(ny, nx) != Wall;
-}
 
-void Ghost::mueve() {
+
+void Ghost::move() {
 	dirs.clear();
 	//Vamos a guardar las direcciones posibles, de donde luego cogeremos una
 	int nx, ny;
@@ -80,14 +62,4 @@ void Ghost::mueve() {
 	next(nx, ny, dir);
 	x = nx;
 	y = ny;
-}
-
-
-void Ghost::init(int iniPosX, int iniPosY, uint W, uint H) {
-	iniX = iniPosX;
-	iniY = iniPosY;
-	x = iniX;
-	y = iniY;
-	w = W;
-	h = H;
 }

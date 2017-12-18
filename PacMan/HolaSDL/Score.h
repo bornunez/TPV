@@ -13,6 +13,9 @@ struct ScoreReg {
 
 class Score
 {
+private:
+	vector <ScoreReg> scores;
+
 public:
 	Score();
 	Score(const string& filename);
@@ -23,9 +26,5 @@ public:
 	void changeScoreReg(ScoreReg scoreToChange, int score);
 	void printTopNScores(int n);
 	void addScore(const string& name, int score);
-
-private:
-	vector <ScoreReg> scores;
-	
 };
 
