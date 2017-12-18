@@ -118,6 +118,8 @@ public:
 
 	//GETS Y SETS
 	MapCell getCell(int row, int col);
+	int getPacPosX();
+	int getPacPosY();
 	int getRows();
 	int getCols();
 	int getTileWidth() { return TILE_W; }

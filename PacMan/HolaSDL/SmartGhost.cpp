@@ -1,8 +1,7 @@
 #include "SmartGhost.h"
 
 
-
-SmartGhost::SmartGhost(Texture* text, Game* game, uint iniCol, uint iniRow, uint w, uint h) : Ghost(text, game, iniCol, iniRow, w ,h)
+SmartGhost::SmartGhost(Texture* text, Game* game, uint iniCol, uint iniRow, uint w, uint h) : Ghost(text, game, iniCol, iniRow, w, h)
 {
 	Ghost::type = 1;
 	auxAge = SDL_GetTicks();
@@ -20,14 +19,14 @@ void SmartGhost::update()
 	age = tickTime - auxAge;
 
 	//Y dependiendo de la edad, haremos cosas distitas
-	if (age < (maxAge / 2) )
+	if (age < (maxAge / 2))
 		Ghost::update();
 	else if (age < maxAge) {
 		cout << "ADULTO" << endl;
 		smartMove();
 		frame++;
 	}
-	else  {
+	else {
 		frame++;
 		Ghost::die();
 	}
@@ -59,9 +58,9 @@ void SmartGhost::smartMove() {
 		}
 		dir = dirs[minDir]; //Cogemos la direccion "optima"
 	}
-	else if(dirs.size()>0)
+	else if (dirs.size()>0)
 		dir = dirs[0]; //Si no es trivial
-	//Y si no tiene donde moverse se queda quieto
+					   //Y si no tiene donde moverse se queda quieto
 	else
 		dir = None;
 	//Y nos movemos
