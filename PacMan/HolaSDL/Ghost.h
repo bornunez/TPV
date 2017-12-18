@@ -9,7 +9,7 @@ protected:
 	vector<Direction> dirs;
 	uint type;
 	void move();
-
+	void getNearDirs(vector<Direction>& dirs);
 public:
 	Ghost();
 	Ghost(Texture* text);

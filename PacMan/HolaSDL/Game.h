@@ -30,7 +30,7 @@ private:
 	const string SCORETABLE_PATH = "..\\users\\scoretable.txt";
 	const uint32_t POWERTIME = 5000; // Tiempo que Pac Man esta OP (En ms)
 	const int GUI_Ratio = 20; //Porcentaje de la pantalla que ocupa el GUI a la derecha
-	const int MAX_LEVEL = 2;
+	const int MAX_LEVEL = 67;
 
 	const int FRAME_RATE = 100;
 	const int NUM_SCORES_TOP = 10;
@@ -68,7 +68,7 @@ private:
 	// Registro de puntuacion
 	Score scoreTable;
 	int score = 0;
-	int level = 0;
+	int level = 1;
 	string userName;
 	bool validateUser = false;		// Sera true si el jugador ya tiene un usuario registrado en el juego
 	bool hasSaveFile = false; //Será true si existe un archivo de guardado
@@ -112,6 +112,8 @@ public:
 
 	//GETS Y SETS
 	MapCell getCell(int row, int col);
+	int getPacPosX();
+	int getPacPosY();
 	int getRows();
 	int getCols();
 	int getTileWidth() { return TILE_W; }

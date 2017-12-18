@@ -226,7 +226,7 @@ void Game::collision() {
 		}
 		else if (collision && !gameOver) {
 			for (GameCharacter* c : characters) 
-				c->die();
+					c->die();
 			
 			if (pacMan->isDead())
 				gameOver = true;
@@ -370,6 +370,16 @@ bool Game::loadLevel(string filename, bool saved) {
 
 
 MapCell Game::getCell(int row, int col) { return gameMap->getCell(row, col); }
+
+int Game::getPacPosX()
+{
+	return pacMan->getX();
+}
+
+int Game::getPacPosY()
+{
+	return pacMan->getY();
+}
 
 void Game::setCell(int row, int col, MapCell type) { gameMap->setCell(row, col, type); }
 
