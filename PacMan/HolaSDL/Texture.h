@@ -3,6 +3,7 @@
 #include "SDL_image.h"
 #include <string>
 #include <iostream>
+#include "Font.h"
 
 using namespace std;
 typedef unsigned int uint;
@@ -24,5 +25,6 @@ public:
 	bool load(string filename, uint numRows = 1, uint numCols = 1);
 	void render(const SDL_Rect&	rect, SDL_RendererFlip	flip = SDL_FLIP_NONE);
 	void renderFrame(const SDL_Rect& destRect, int row, int col, SDL_RendererFlip flip = SDL_FLIP_NONE);
+	bool loadFromText(string	text, const	Font&	font, SDL_Color	color);
 };
 

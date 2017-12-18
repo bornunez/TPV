@@ -7,6 +7,7 @@
 #include "Text.h"
 #include "Score.h"
 #include "Utilities.h"
+#include "SDL_ttf.h"
 
 class GameCharacter;
 class PacMan;
@@ -21,6 +22,7 @@ enum MapCell { Empty, Wall, Food, PowerUp }; //Aqui o en GameMap? En GameMap hac
 //CONSTANTES DE ARRAYS 
 const int NUM_TEXTURES = 5;
 const int NUM_TEXTS = 4;
+const int NUM_TEXTOS = 4;
 
 class Game {
 private:
@@ -30,7 +32,7 @@ private:
 	const string SCORETABLE_PATH = "..\\users\\scoretable.txt";
 	const uint32_t POWERTIME = 5000; // Tiempo que Pac Man esta OP (En ms)
 	const int GUI_Ratio = 20; //Porcentaje de la pantalla que ocupa el GUI a la derecha
-	const int MAX_LEVEL = 67;
+	const int MAX_LEVEL = 2;
 
 	const int FRAME_RATE = 100;
 	const int NUM_SCORES_TOP = 10;
@@ -60,6 +62,7 @@ private:
 	bool error = false;
 	bool win = false;
 	bool gameOver = false;
+	bool saveSt = false;
 	int foodCount = 0;
 
 	bool powered = false;
@@ -68,15 +71,18 @@ private:
 	// Registro de puntuacion
 	Score scoreTable;
 	int score = 0;
-	int level = 1;
+	int level = 0;
 	string userName;
 	bool validateUser = false;		// Sera true si el jugador ya tiene un usuario registrado en el juego
 	bool hasSaveFile = false; //Será true si existe un archivo de guardado
 	ScoreReg actualUserReg;			// Registro que se asigna si un usuario inicia sesion y ya estaba registrado previamente
+	Font* gameFont;
+
 
 	//VARIABLES DEL JUEGO
 	GameMap* gameMap;
 	Texture* textures[NUM_TEXTURES]; // | PERSONAJES | MURO | COMIDA | BONUS
+	Texture* textos[NUM_TEXTOS];
 	Text* texts[NUM_TEXTS];
 	uint numGhost;
 	PacMan* pacMan;
@@ -108,12 +114,10 @@ public:
 	void powerUp();
 	void eat() { foodCount -= 1; score++; }
 	bool save(string filename);
-
+	void saveState();
 
 	//GETS Y SETS
 	MapCell getCell(int row, int col);
-	int getPacPosX();
-	int getPacPosY();
 	int getRows();
 	int getCols();
 	int getTileWidth() { return TILE_W; }

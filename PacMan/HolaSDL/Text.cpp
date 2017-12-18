@@ -28,7 +28,7 @@ void Text::drawChar(char c,int n) {
 	SDL_Rect destRect;
 	//RECT DEL CARACTER A PINTAR
 	destRect.w = charW; destRect.h = charH;
-	destRect.x = box.x + n * charW; destRect.y = box.y;
+	destRect.x = box.x + n * charW; destRect.y = box.y; 
 
 	int row, col;
 	bool draw = true;

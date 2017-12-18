@@ -7,7 +7,6 @@ Game::Game()
 {
 	//Se pide usuario para el juego antes de crearlo
 	login();
-
 	// Inicialización del sistema, ventana y renderer
 	SDL_Init(SDL_INIT_EVERYTHING);
 	winX = winY = SDL_WINDOWPOS_CENTERED;
@@ -18,6 +17,11 @@ Game::Game()
 		cout << "Error initializing SDL\n";
 		error = true;
 	}
+	if (TTF_Init() < 0) {
+		cout << "Error initializing TTF\n";
+		error = true;
+	}
+
 	else {
 		//Notificamos que todo ha ido bien
 		cout << "Window created" << endl;
@@ -28,6 +32,7 @@ Game::Game()
 		cout << "SDL Sucesfully initializated, running game..." << endl;
 
 		//Y cargamos texturas y creamos los objetos y personajes
+		gameFont = new Font(TEXT_PATH + "ARCADECLASSIC.TTF", 20);
 		loadTextures();
 		gameMap = new GameMap(this, textures[Background], textures[FoodTexture], textures[PowerUpTexture]);
 		pacMan = new PacMan(textures[Characters], this, 10, 0, 0,0);		//NEW PACMAN DE PRUEBA
@@ -53,6 +58,9 @@ void Game::run() {
 			update();
 			render();
 
+			if (saveSt)
+				saveState();
+
 			frameTime = SDL_GetTicks() - startTime;
 			if (frameTime < FRAME_RATE)
 				SDL_Delay(FRAME_RATE - frameTime);
@@ -72,6 +80,14 @@ void Game::loadTextures() {
 		const TextureAtributes atributes = TEXTURE_ATRIBUTES[i];
 		textures[i]->load(atributes.filename, atributes.numRows, atributes.numCols);
 	}
+
+	for (uint i = 0; i < NUM_TEXTOS; i++) 
+		textos[i] = new Texture(renderer, "");
+	
+
+	textos[0]->loadFromText(userName, *gameFont, { 255,255,255 }); //Se carga aqui porque no cambia, asi no consume recursos en el update
+
+
 }
 
 //INICIALIZAMOS TODOS LOS TEXTOS
@@ -90,8 +106,15 @@ void Game::render() {
 	for (GameCharacter* c : characters) {
 		c->render();
 	}
+
 	for(int i=0; i< NUM_TEXTS; i++)
 		texts[i]->render();
+
+	for(int i = 0; i< NUM_TEXTOS; i++)
+		textos[i]->render({ canvas.w, i*110, GUI.w, 100 });
+
+	//textos[0]->render({ canvas.w, 10, GUI.w, 100 });		//ver como poner el size de altura y ancho
+	//textos[1]->render({ canvas.w, 110, GUI.w, 100 });
 
 	SDL_RenderPresent(renderer);
 
@@ -109,8 +132,16 @@ void Game::update() {
 		c->update();
 		collision();
 	}
+
+
+	textos[1]->loadFromText(Utilities::intToStr(score), *gameFont, { 255,255,255 });
+	textos[2]->loadFromText(Utilities::intToStr(level), *gameFont, { 255,255,255 });
+
+
+
 	texts[0]->setText("Score " + Utilities::intToStr(score));
 }
+
 void Game::handleEvents() {
 
 	SDL_Event event;
@@ -129,6 +160,9 @@ void Game::handleEvents() {
 				pacMan->setDir(Down);
 			else if (event.key.keysym.sym == SDLK_ESCAPE)
 				exit = true;
+			else if (event.key.keysym.sym == SDLK_s) {
+				saveSt = true;
+			}
 		}
 	}
 }
@@ -158,13 +192,17 @@ void Game::checkLevel() {
 }
 
 void Game::endGame() {
-	if (!gameOver && !error)
-		save(userName);
+	//if (!gameOver && !error)
+	//	save(userName);
 
 	// Finalización
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
+
+	//if (saveSt)				//Si se pulsa S sera true y se hara el saveState
+		//saveState();
+
 	//HAYAS PERDIDO O HAYAS GANADO
 	if (!exit && !error) {
 
@@ -226,7 +264,7 @@ void Game::collision() {
 		}
 		else if (collision && !gameOver) {
 			for (GameCharacter* c : characters) 
-					c->die();
+				c->die();
 			
 			if (pacMan->isDead())
 				gameOver = true;
@@ -309,7 +347,6 @@ Game::~Game()
 	//Borramos Personajes
 	for (GameCharacter* c : characters) 
 		delete(c);
-	
 
 	//Borramos textos
 	for (int i = 0; i < NUM_TEXTS; i++)
@@ -318,10 +355,14 @@ Game::~Game()
 	//Borramos Mapa
 	delete gameMap;
 
+	for (int i = 0; i < NUM_TEXTOS; i++)
+		delete(textos[i]);
 
 	//Borramos texturas
 	for (int i = 0; i < NUM_TEXTURES; i++)
 		delete(textures[i]);
+
+	delete(gameFont);
 
 }
 
@@ -368,18 +409,27 @@ bool Game::loadLevel(string filename, bool saved) {
 	return true;
 }
 
+void Game::saveState() {
+	SDL_Event event;
+	uint code = 0;
+
+	cout << "Introduce el codigo numerico: ";
+
+	while (saveSt && !exit) {
+		SDL_WaitEvent(&event);
+		if (event.key.keysym.sym == SDLK_RETURN)
+			saveSt = false;
+		else if (event.type == SDL_KEYDOWN) {
+			if (event.key.keysym.sym >= SDLK_0 && event.key.keysym.sym  <= SDLK_9) {
+				code = 10 * code + (event.key.keysym.sym  - SDLK_0);
+				textos[3]->loadFromText(Utilities::intToStr(code), *gameFont, { 255,255,255 });
+			}
+		}
+	}
+	save(Utilities::intToStr(code));
+}
 
 MapCell Game::getCell(int row, int col) { return gameMap->getCell(row, col); }
-
-int Game::getPacPosX()
-{
-	return pacMan->getX();
-}
-
-int Game::getPacPosY()
-{
-	return pacMan->getY();
-}
 
 void Game::setCell(int row, int col, MapCell type) { gameMap->setCell(row, col, type); }
 
