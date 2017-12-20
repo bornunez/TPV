@@ -249,11 +249,10 @@ void Game::pacCollision()
 		}
 	}
 	if (destroy) {
-
 		GameCharacter* aux = *smartIt;
 		characters.erase(smartIt);
 		delete(aux);
-		SDL_Delay(10);
+		SDL_Delay(100);
 	}
 }
 
@@ -288,6 +287,11 @@ void Game::fantCollision()
 		}
 	}
 }
+
+
+
+
+
 
 //GUARDAMOS EL ESTADO ACTUAL EN UN FICHERO CON EL NOMBRE DEL JUGADOR
 bool Game::save(string filename)
@@ -451,7 +455,7 @@ bool Game::loadLevel(string filename, bool saved) {
 		if (typeGhost == 0)
 			ghost = new Ghost(textures[Characters], this, i * 2, 0, TILE_W, TILE_H);
 		else
-			ghost = new SmartGhost(textures[Characters], this, i * 2, 0, TILE_W, TILE_H);
+			ghost = new SmartGhost(textures[Characters], this,4 * 2, 0, TILE_W, TILE_H);
 
 		ghost->loadFromFile(file);
 		characters.push_back(ghost);

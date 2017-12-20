@@ -12,6 +12,7 @@ protected:
 	uint frame = 0;
 	uint w = 100; uint h = 100;
 	uint x = 0; uint y = 0;
+	int iniW, iniH;
 	uint iniX = 0; uint iniY = 0;
 
 	//PROPIEDADES DEL PERSONAJE

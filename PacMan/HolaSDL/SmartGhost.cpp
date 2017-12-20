@@ -20,9 +20,14 @@ void SmartGhost::update()
 	age = tickTime - auxAge;
 
 	//Y dependiendo de la edad, haremos cosas distitas
-	if (age < (maxAge / 2) )
+	if (age < (maxAge / 2)) {
 		Ghost::update();
+		h = iniH / 2;
+		w = iniW / 2;
+	}
 	else if (age < maxAge) {
+		h = iniH ;
+		w = iniW ;
 		cout << "ADULTO" << endl;
 		smartMove();
 		frame++;

@@ -11,7 +11,7 @@ GameCharacter::GameCharacter(Texture * text, Game * game, uint texCol, uint texR
 	this->texture = text;
 	this->game = game;
 	this->texRow = texRow; this->texCol = texCol;
-	this->w = w; this->h = h;
+	this->w = w; this->h = h; iniW = w; iniH = h;
 }
 
 
@@ -21,7 +21,7 @@ GameCharacter::~GameCharacter()
 
 void GameCharacter::render() {
 	SDL_Rect destRect;
-	destRect.x = x*w; destRect.y = y*h;
+	destRect.x = x*iniW; destRect.y = y*iniH;
 	destRect.w = w; destRect.h = h;
 	texture->renderFrame(destRect, texRow + ((int)dir % 4), texCol + (frame % 2));
 }
@@ -58,6 +58,7 @@ bool GameCharacter::next(int & nx, int & ny, Direction ndir)
 void GameCharacter::init(uint W, uint H) {
 	w = W;
 	h = H;
+	iniW = w; iniH = h;
 }
 
 void GameCharacter::init(int X, int Y,Direction DIR)
