@@ -1,7 +1,6 @@
 #pragma once
 #include "Ghost.h"
 
-const int ADULT = 150;
 const int MAX_AGE = 300;
 
 class SmartGhost : public Ghost

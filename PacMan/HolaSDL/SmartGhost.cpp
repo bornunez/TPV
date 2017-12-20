@@ -40,7 +40,6 @@ void SmartGhost::update()
 	}
 	else {
 		old = true;
-		//Ghost::die();
 	}
 	frame++;
 }

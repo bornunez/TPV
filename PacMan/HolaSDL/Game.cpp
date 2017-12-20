@@ -416,7 +416,6 @@ uint Game::writeCode() {
 		else if (event.type == SDL_KEYDOWN) {
 			if (event.key.keysym.sym >= SDLK_0 && event.key.keysym.sym <= SDLK_9) {
 				code = 10 * code + (event.key.keysym.sym - SDLK_0);
-				//textos[3]->loadFromText(Utilities::intToStr(code), *gameFont, { 255,255,255 });
 			}
 		}
 	}
@@ -489,14 +488,11 @@ void Game::pacCollision()
 		}
 	}
 	if (destroy) {
-		GameCharacter* aux = *smartIt;
+		delete(*smartIt);
 		characters.erase(smartIt);
-		delete(aux);
 		numGhost--;
-		SDL_Delay(100);
 	}
 }
-
 
 void Game::fantCollision()
 {
@@ -522,6 +518,7 @@ void Game::fantCollision()
 							SmartGhost* ghost = new SmartGhost(textures[Characters], this, 4 * 2, 0, TILE_W, TILE_H);
 							ghost->init(nx, ny, None);
 							characters.push_back(ghost);
+							numGhost++;
 						}
 					}
 				}
