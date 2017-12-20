@@ -74,6 +74,42 @@ void Game::loadTextures() {
 	}
 }
 
+bool Game::freeSpace(int x, int y, int& nx, int& ny) //Dados dos fantasmas, devolvera true si hay espacio libre alrededor de los fantasmas
+{
+	vector<pair<int, int>> cardinals; //Las posiciones adyacentes a los fantasmas
+	Utilities::getCardinals(x, y, cardinals);
+	//Ya tenemos listo nuestro vector de las casillas adyacentes, ahora vamos a cribarlo: Si hay muro o fantasma -> Lo eliminamos
+	vector<pair<int, int>>::iterator it;
+	for (it = cardinals.begin(); it != cardinals.end();) {
+		int actX = (*it).first;
+		int actY = (*it).second;
+		//Si esta ocupada, la quitamos
+		if (getCell(actX, actY) == Wall || isGhost(actX, actY))
+			it = cardinals.erase(it);
+		else
+			it++;
+	}
+	//Ahora acabamos escogiendo uno aleatorio, en caso de que haya
+	if (cardinals.size() > 0) {
+		int rdn = rand() % cardinals.size();
+		nx = cardinals[rdn].first;
+		ny = cardinals[rdn].second;
+		return true;
+	}
+	else
+		return false;
+}
+
+bool Game::isGhost(int x, int y)
+{
+	list<GameCharacter*>::iterator it = characters.begin();
+	it++; //Nos saltamos a pacman
+	while ( (it != characters.end()) && ( (x != (*it)->getX()) || (y != (*it)->getY()) ) )
+		it++;
+
+	return it !=characters.end();
+}
+
 //INICIALIZAMOS TODOS LOS TEXTOS
 void Game::loadText() {
 	for(int i = 0; i < NUM_TEXTS; i++)
@@ -181,6 +217,78 @@ void Game::endGame() {
 	manageScoreTable();
 }
 
+void Game::pacCollision()
+{
+	list<GameCharacter*>::iterator it = characters.begin();
+	bool destroy = false;
+	list<GameCharacter*>::iterator smartIt; //It auxiliar para saber donde esta el smartghost
+
+	for (it++; it != characters.end(); it++) {
+		//Flag de que han colisionado
+		bool col = pacMan->getX() == (*it)->getX() && pacMan->getY() == (*it)->getY();
+
+		SmartGhost* smart = dynamic_cast<SmartGhost*>(*it); //Vemos el tipo de fant que es
+
+		if (col && (powered || (smart != nullptr && smart->isOld()))) {
+			if (smart == nullptr) // si es fant normal
+				(*it)->die();
+			else {
+				smartIt = it;
+				destroy = true;
+			}
+			score += 20;
+		}
+		else if (col && !gameOver) {
+			for (GameCharacter* c : characters)
+				c->die();
+
+			if (pacMan->isDead())
+				gameOver = true;
+
+			texts[LifeText]->setText("Lives - " + Utilities::intToStr(pacMan->lifes()));
+		}
+	}
+	if (destroy) {
+
+		GameCharacter* aux = *smartIt;
+		characters.erase(smartIt);
+		delete(aux);
+		SDL_Delay(10);
+	}
+}
+
+void Game::fantCollision()
+{
+	list<GameCharacter*>::iterator me = characters.begin(); //Me es el fantasma que evaluamos a - b  a - c  a - d // b - c b - d  // c - d 
+	for (me++; me != characters.end(); me++) {
+
+		SmartGhost* smartMe = dynamic_cast<SmartGhost*>(*me); //Soy inteligente?
+		//Si soy inteligente, adulto y puedo tener hijos me tengo que preocupar de colisionar
+		if (smartMe != nullptr && smartMe->isAdult() && !smartMe->hasChild()) {
+			list<GameCharacter*>::iterator other = me; //Iterador de los fant a colisionar
+			for (other++; other != characters.end(); other++) {
+
+				SmartGhost* smartOther = dynamic_cast<SmartGhost*>(*other); //Es el otro fantasma inteligente?+
+				//Si el otro es inteligente, adulto y puede tener hijos, paso a ver si colisionamos
+				if (smartOther != nullptr && smartOther->isAdult() && !smartOther->hasChild()) {
+					bool coll = (smartMe->getX() == smartOther->getX()) && (smartMe->getY() == smartOther->getY());
+					if (coll) {
+						//Si ha llegado hasta aqui es porque pueden tener hijos. Falta ver si hay espacio
+						int nx, ny;
+						if (freeSpace(smartMe->getX(), smartMe->getY(), nx, ny)) {
+							cout << "HIJO" << endl;
+							smartMe->isFather(); smartOther->isFather();
+							SmartGhost* ghost = new SmartGhost(textures[Characters], this, 4 * 2, 0, TILE_W, TILE_H);
+							ghost->init(nx, ny,None);
+							characters.push_back(ghost);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 //GUARDAMOS EL ESTADO ACTUAL EN UN FICHERO CON EL NOMBRE DEL JUGADOR
 bool Game::save(string filename)
 {
@@ -217,23 +325,8 @@ void Game::adjustTexts()
 }
 
 void Game::collision() {
-	list<GameCharacter*>::iterator it = characters.begin();
-	for (it++; it != characters.end(); ++it) {
-		bool collision = pacMan->getX() == (*it)->getX() && pacMan->getY() == (*it)->getY();
-		if (collision && powered) {
-			(*it)->die();
-			score += 20;
-		}
-		else if (collision && !gameOver) {
-			for (GameCharacter* c : characters) 
-					c->die();
-			
-			if (pacMan->isDead())
-				gameOver = true;
-
-			texts[LifeText]->setText("Lives - " + Utilities::intToStr(pacMan->lifes()));
-		}
-	}
+	pacCollision();
+	fantCollision();
 }
 
 //CONFIGURA EL TAMAÑO DEL CANVAS EN FUNCION DEL GUI

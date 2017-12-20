@@ -43,3 +43,17 @@ Direction Utilities::backDir(Direction currDir) { //DADA UNA DIRECCION DIR, DEVO
 	else
 		return None;
 }
+
+void Utilities::getCardinals(int x, int y, vector<pair<int, int>>& cardinals)
+{
+	pair<int, int> actCard;
+	for (int i = 0; i < 4; i++) {
+		int nx, ny;
+		enumToDir((Direction)i, nx, ny);
+		//Ya tenemos las direcciones
+		actCard.first = x + nx;
+		actCard.second = y + ny;
+		//Y ahora lo guardamos en el vector
+		cardinals.push_back(actCard);
+	}
+}

@@ -28,8 +28,9 @@ void SmartGhost::update()
 		frame++;
 	}
 	else  {
+		old = true;
 		frame++;
-		Ghost::die();
+		//Ghost::die();
 	}
 }
 void SmartGhost::smartMove() {
@@ -38,26 +39,7 @@ void SmartGhost::smartMove() {
 	getNearDirs(dirs);
 	//Si hay mas de 2 direcciones es una interseccion -> """"PATHFINDING""""
 	if (dirs.size() > 1) {
-		//Pos de pacman
-		int pacX = game->getPacPosX();
-		int pacY = game->getPacPosY();
-		//Distancia minima
-		int minDist = 10000000;
-		int minDir = 0;
-		//Para cada casilla vacia adyacente, vamos a ver su ""coste"". Si es menor que el minimo actual, guardamos esa pos como prometedora.
-		for (int i = 0; i < dirs.size(); i++) {
-			//Primero hace falta saber la pos de esa direccion
-			int dx, dy;
-			next(dx, dy, dirs[i]);
-			int distX = pacX - dx;
-			int distY = pacY - dy;
-			int actDist = abs(distX) + abs(distY);
-			if (actDist < minDist) {
-				minDist = actDist;
-				minDir = i;
-			}
-		}
-		dir = dirs[minDir]; //Cogemos la direccion "optima"
+		closestDir();
 	}
 	else if(dirs.size()>0)
 		dir = dirs[0]; //Si no es trivial
@@ -68,6 +50,31 @@ void SmartGhost::smartMove() {
 	next(nx, ny, dir);
 	x = nx;
 	y = ny;
+}
+void SmartGhost::closestDir()
+{
+	//Pos de pacman
+	int pacX = game->getPacPosX();
+	int pacY = game->getPacPosY();
+	//Distancia minima
+	int minDist = 10000000;
+	int minDir = 0;
+	//Para cada casilla vacia adyacente, vamos a ver su ""coste"". Si es menor que el minimo actual, guardamos esa pos como prometedora.
+	for (int i = 0; i < dirs.size(); i++) {
+		//Primero hace falta saber la pos de esa direccion
+		int dx, dy;
+		next(dx, dy, dirs[i]);
+		//Y ahora la distancia hasta el target
+		int distX = pacX - dx;
+		int distY = pacY - dy;
+		int actDist = abs(distX) + abs(distY); //Asi calculamos la distancia absoluta
+		//Y nos quedamos con la menor
+		if (actDist < minDist) {
+			minDist = actDist;
+			minDir = i;
+		}
+	}
+	dir = dirs[minDir]; //Cogemos la direccion "optima"
 }
 void SmartGhost::loadFromFile(ifstream& file)
 {

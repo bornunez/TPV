@@ -59,3 +59,12 @@ void GameCharacter::init(uint W, uint H) {
 	w = W;
 	h = H;
 }
+
+void GameCharacter::init(int X, int Y,Direction DIR)
+{
+	x = X;
+	y = Y;
+	iniX = X;
+	iniY = Y;
+	dir = None;
+}

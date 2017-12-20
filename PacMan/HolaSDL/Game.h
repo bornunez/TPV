@@ -84,6 +84,8 @@ private:
 
 	//METODOS AUXILIARES
 	void loadTextures();
+	bool freeSpace(int x, int y, int& nx, int& ny);
+	bool isGhost(int x, int y);
 	//void loadCharacters();
 	void loadText();
 	//bool loadMap(string filename, bool saved);
@@ -95,6 +97,8 @@ private:
 	void destroyGhosts();
 	void checkLevel();
 	void endGame();
+	void pacCollision();
+	void fantCollision();
 public:
 	Game();
 	~Game();
