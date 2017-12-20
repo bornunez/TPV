@@ -34,12 +34,16 @@ void PacMan::update()
 		else if (cell == PowerUp) {
 			game->setCell(ny, nx, Empty);
 			game->powerUp();
+			energy = MAX_ENERGY;
 		}
 	}
 	frame++;
+
+	if (hasEnergy())
+		energy--;
 }
 
-
+//RESTA UNA VIDA A PACMAN Y SI SU VIDA LLEGA A CERO SE CONSIDERA DEAD
 void PacMan::die() {
 	life--;
 	if (life == 0) {
@@ -53,25 +57,24 @@ void PacMan::die() {
 	}
 }
 
+//CARGA DE FICHERO LOS ARCHIVOS NECESARIOS PARA PACMAN
 void PacMan::loadFromFile(ifstream& file)
 {	
 	GameCharacter::loadFromFile(file);
 	int aux;
+	energy = 0;
 	file >> aux;
 	if (file.fail())
 		file.clear();
 	else {
-		//remEnergy = aux;
+		energy = aux;
 		file >> life;
 	}
 }
 
+//GUARDA EN FICHERO LOS ARCHIVOS DE PACMAN NECESARIOS
 void PacMan::saveToFile(ofstream& file)
 {
 	GameCharacter::saveToFile(file);
-	file << " " << life;
-	//file << x << y << iniX << iniY << dirX << dirY << energy << life;
-	//Falta añadir energy
-
+	file << " " << energy << " " << life;
 }
-

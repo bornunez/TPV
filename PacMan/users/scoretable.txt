@@ -24,6 +24,8 @@ fewfew
 93
 g
 90
+123
+86
 sgsgeg
 85
 grege
@@ -33,6 +35,8 @@ gjege
 kjhk
 39
 12
+36
+lala
 36
 gworgwignwgijwr
 33
@@ -68,8 +72,6 @@ fjiewofjwi
 0
 efew
 0
-lala
-0
 SFSAFA
 0
 jejeje
@@ -85,4 +87,8 @@ awawe
 DQWDWQ
 0
 FEWF
+0
+dede
+0
+99
 0

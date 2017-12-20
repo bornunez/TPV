@@ -18,6 +18,7 @@ public:
 	void loadFromFile(ifstream& file);
 	void saveToFile(ofstream& file);
 	void update();
+	void render();
 	void set(int X, int Y) { x = X; y = Y; }
 	void die() { x = iniX; y = iniY; }
 };

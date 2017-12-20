@@ -33,14 +33,15 @@ void GameMap::update()
 {
 }
 
-
+//CARGA DE FICHERO LOS ARCHIVOS NECESARIOS PARA EL MAPA
 void GameMap::loadFromFile(ifstream& file)
 {
 	//Las asignamos
 	file >> rows >> cols;
 
 	//E iniciamos el mapa
-	initMap();
+	if (mapCell == nullptr)
+		initMap();
 	//Y EMPEZAMOS LA LECTURA
 	int num;
 
@@ -59,7 +60,7 @@ void GameMap::loadFromFile(ifstream& file)
 	}
 }
 
-//GUARDA EL MAPA
+//GUARDA EN FICHERO LOS ARCHIVOS DEL MAPA NECESARIOS
 void GameMap::saveToFile(ofstream& file)
 {	
 	int data;
@@ -83,6 +84,7 @@ void GameMap::saveToFile(ofstream& file)
 	}
 }
 
+//PINTA EL MAPA EN PANTALLA
 void GameMap:: render(){
 	SDL_Rect destRect;
 	for(int i=0; i < rows; i++)

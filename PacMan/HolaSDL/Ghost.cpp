@@ -6,8 +6,8 @@ Ghost::Ghost() {}
 Ghost::Ghost(Texture* text)
 {
 	texture = text;
-	//game = GAME;
 }
+
 Ghost::Ghost(Texture* text, Game* game,uint iniCol, uint iniRow, uint w, uint h) : GameCharacter(text, game, iniCol, iniRow, w, h) 
 {
 	type = 0;
@@ -17,24 +17,38 @@ Ghost::~Ghost()
 {
 }
 
+//PINTA GHOST EN PANTALLA
+void Ghost::render()
+{
+	destRect.x = x*iniW; destRect.y = y*iniH;
+	destRect.w = w; destRect.h = h;
+
+	if (game->isPowered())
+		texture->renderFrame(destRect, frame % 2, 12 + (frame % 2));
+	else
+		GameCharacter::render();
+}
+
+//ACTUALIZA EL MOVIMIENTO Y ANIMACIONES
+void Ghost::update() {
+	move();
+	frame++;
+}
+
+//CARGA DE FICHERO LOS ARCHIVOS NECESARIOS PARA GHOST
 void Ghost::loadFromFile(ifstream& file)
 {
 	GameCharacter::loadFromFile(file);
 }
 
+//GUARDA EN FICHERO LOS ARCHIVOS DE GHOST NECESARIOS
 void Ghost::saveToFile(ofstream& file)
 {
 	file << type << " ";
 	GameCharacter::saveToFile(file);
 }
 
-
-void Ghost::update() {
-	move();
-	frame++;
-}
-
-
+//CALCULA UNA DIRECCION Y MUEVE AL FANTASMA
 void Ghost::move() {
 	getNearDirs(dirs);
 	int nx, ny;

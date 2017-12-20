@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <sstream>
+#include <vector>
 
 using namespace std;
 
@@ -27,5 +28,6 @@ public:
 	static string intToStr(int number);
 	static void enumToDir(Direction dir, int&ndx, int& ndy);
 	static Direction backDir(Direction currDir);
+	static void getCardinals(int x, int y, vector<pair<int, int>>& cardinals);
 };
 

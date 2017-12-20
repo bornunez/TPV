@@ -1,13 +1,11 @@
 #include "Texture.h"
 
 
-
 Texture::Texture(SDL_Renderer* r,const string path)
 {
 	renderer = r;
 	PATH = path;
 }
-
 
 Texture::~Texture()
 {
@@ -35,9 +33,11 @@ bool Texture:: load(string filename, uint numRows, uint numCols) {
 	SDL_FreeSurface(surface); // Se borra la estructura auxiliar
 	return false;
 }
+
 void Texture::render(const SDL_Rect&	rect, SDL_RendererFlip	flip) {
 	SDL_RenderCopy(renderer, texture, nullptr, &rect);
 }
+
 void Texture:: renderFrame(const SDL_Rect&	destRect, int	row, int	col, SDL_RendererFlip	flip) {
 	//CREAMOS EL RECT DEL FRAME
 	SDL_Rect srcRect;
@@ -49,6 +49,7 @@ void Texture:: renderFrame(const SDL_Rect&	destRect, int	row, int	col, SDL_Rende
 	SDL_RenderCopy(renderer, texture, &srcRect, &destRect);
 }
 
+//CARGA LA TEXTURA A PARTIR DE UNA FUENTE DE LETRA
 bool Texture::loadFromText(string	text, const	Font&	font, SDL_Color	color) {
 	SDL_Surface*	textSurface = font.generateSurface(text, color);
 	if (textSurface == nullptr)
