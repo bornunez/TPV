@@ -1,7 +1,7 @@
 #pragma once
-#include "GameObject.h"
+#include "PacManObject.h"
 
-class GameCharacter : public GameObject
+class GameCharacter : public PacManObject
 {
 
 protected:
@@ -25,7 +25,7 @@ protected:
 
 public:
 	GameCharacter();
-	GameCharacter(Texture* text, Game* game, uint iniCol, uint iniRow, uint w, uint h);
+	GameCharacter(Texture* text, PlayState* playState, Game* game, uint iniCol, uint iniRow, uint w, uint h);
 	~GameCharacter();
 
 	void set(int X, int Y) { x = X; y = Y; }
@@ -39,6 +39,8 @@ public:
 	void render();
 	void loadFromFile(ifstream& file);
 	void saveToFile(ofstream& file);
+	bool handleEvent(SDL_Event& event);
+
 	virtual void die() = 0;
 };
 

@@ -1,7 +1,7 @@
 #include "SmartGhost.h"
 
 
-SmartGhost::SmartGhost(Texture* text, Game* game, uint iniCol, uint iniRow, uint w, uint h) : Ghost(text, game, iniCol, iniRow, w, h)
+SmartGhost::SmartGhost(Texture* text, PlayState* playState, Game* game, uint iniCol, uint iniRow, uint w, uint h) : Ghost(text, playState, game, iniCol, iniRow, w, h)
 {
 	Ghost::type = 1;
 	//auxAge = SDL_GetTicks();
@@ -66,8 +66,8 @@ void SmartGhost::smartMove() {
 void SmartGhost::closestDir()
 {
 	//Pos de pacman
-	int pacX = game->getPacPosX();
-	int pacY = game->getPacPosY();
+	int pacX = playState->getPacPosX();
+	int pacY = playState->getPacPosY();
 	//Distancia minima
 	int minDist = 10000000;
 	int minDir = 0;

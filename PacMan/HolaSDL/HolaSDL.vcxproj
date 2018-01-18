@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -13,18 +13,19 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{28A4C5CD-307A-4FE6-81E4-4CE1F1E49AB4}</ProjectGuid>
     <RootNamespace>HolaSDL</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -66,29 +67,53 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="EndState.cpp" />
+    <ClCompile Include="FileFormatError.cpp" />
+    <ClCompile Include="FileNotFoundError.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCharacter.cpp" />
     <ClCompile Include="GameMap.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="GameStateMachine.cpp" />
     <ClCompile Include="Ghost.cpp" />
+    <ClCompile Include="PauseState.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainMenuState.cpp" />
+    <ClCompile Include="MenuButton.cpp" />
     <ClCompile Include="PacMan.cpp" />
+    <ClCompile Include="PacManError.cpp" />
+    <ClCompile Include="PacManObject.cpp" />
+    <ClCompile Include="PlayState.cpp" />
     <ClCompile Include="Score.cpp" />
+    <ClCompile Include="SDLError.cpp" />
     <ClCompile Include="SmartGhost.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EndState.h" />
+    <ClInclude Include="FileFormatError.h" />
+    <ClInclude Include="FileNotFoundError.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCharacter.h" />
     <ClInclude Include="GameMap.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameState.h" />
+    <ClInclude Include="GameStateMachine.h" />
     <ClInclude Include="Ghost.h" />
+    <ClInclude Include="PauseState.h" />
+    <ClInclude Include="MainMenuState.h" />
+    <ClInclude Include="MenuButton.h" />
     <ClInclude Include="PacMan.h" />
+    <ClInclude Include="PacManError.h" />
+    <ClInclude Include="PacManObject.h" />
+    <ClInclude Include="PlayState.h" />
     <ClInclude Include="Score.h" />
+    <ClInclude Include="SDLError.h" />
     <ClInclude Include="SmartGhost.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Texture.h" />

@@ -13,7 +13,7 @@ protected:
 public:
 	Ghost();
 	Ghost(Texture* text);
-	Ghost(Texture* text, Game* GAME, uint iniCol, uint iniRow, uint w, uint h);
+	Ghost(Texture* text, PlayState* playState, Game* GAME, uint iniCol, uint iniRow, uint w, uint h);
 	~Ghost();
 	void loadFromFile(ifstream& file);
 	void saveToFile(ofstream& file);

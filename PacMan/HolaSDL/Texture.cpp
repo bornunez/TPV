@@ -17,21 +17,29 @@ bool Texture:: load(string filename, uint numRows, uint numCols) {
 	SDL_Surface* surface = IMG_Load(name.c_str()); 
 	texture = SDL_CreateTextureFromSurface(renderer, surface);
 
-	if (texture == nullptr) {
-		SDL_FreeSurface(surface); 
-		cout << "Fallo cargando textura " << filename << endl;
-		return true; //SI NO SE CARGA SALIMOS
-
-	}
-	else {
+	try {
+		if (texture == nullptr)
+			//El mensaje Fallo cargando textura se pasa por constructor o lo pongo automatico?
+			throw  FileNotFoundError("Fallo cargando textura: ", filename);
+		
 		//Cuando tengamos seguro que hay textura, actualizamos nuestros datos
 		w = surface->w;
 		h = surface->h;
 		fw = w / numCols;
 		fh = h / numRows;
+	
+		SDL_FreeSurface(surface); // Se borra la estructura auxiliar
+		//return false;
+		return true;
+			
 	}
-	SDL_FreeSurface(surface); // Se borra la estructura auxiliar
-	return false;
+	catch (exception &e)
+	{
+		cerr << "Caught: " << e.what() << endl;
+		cerr << "Type: " << typeid(e).name() << endl;
+		SDL_FreeSurface(surface);
+		return false;
+	};
 }
 
 void Texture::render(const SDL_Rect&	rect, SDL_RendererFlip	flip) {

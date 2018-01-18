@@ -1,13 +1,6 @@
-﻿  Game.cpp
-d:\usuarios\borj\escritorio\proyectossdl\holasdl\score.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-d:\usuarios\borj\escritorio\proyectossdl\holasdl\score.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-d:\usuarios\borj\escritorio\proyectossdl\holasdl\score.h(4): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-d:\usuarios\borj\escritorio\proyectossdl\holasdl\score.h(5): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-d:\usuarios\borj\escritorio\proyectossdl\holasdl\game.cpp(102): warning C4018: '<': no coinciden signed/unsigned
-d:\usuarios\borj\escritorio\proyectossdl\holasdl\game.cpp(280): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
-d:\usuarios\borj\escritorio\proyectossdl\holasdl\game.cpp(288): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
-d:\usuarios\borj\escritorio\proyectossdl\holasdl\game.cpp(290): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
-d:\usuarios\borj\escritorio\proyectossdl\holasdl\game.cpp(300): warning C4018: '<': no coinciden signed/unsigned
-d:\usuarios\borj\escritorio\proyectossdl\holasdl\game.cpp(399): warning C4101: 'event': variable local sin referencia
-  HolaSDL.vcxproj -> D:\Usuarios\Borj\Escritorio\ProyectosSDL\bin\HolaSDLDebug.exe
-  HolaSDL.vcxproj -> D:\Usuarios\Borj\Escritorio\ProyectosSDL\bin\HolaSDLDebug.pdb (Full PDB)
+﻿  PacMan.cpp
+c:\users\miniman\desktop\cosas de la uni\tpv_git\tpv\pacman\holasdl\score.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\miniman\desktop\cosas de la uni\tpv_git\tpv\pacman\holasdl\score.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\miniman\desktop\cosas de la uni\tpv_git\tpv\pacman\holasdl\score.h(4): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\miniman\desktop\cosas de la uni\tpv_git\tpv\pacman\holasdl\score.h(5): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+  HolaSDL.vcxproj -> C:\Users\Miniman\Desktop\Cosas de la uni\TPV_GIT\TPV\PacMan\bin\HolaSDLDebug.exe

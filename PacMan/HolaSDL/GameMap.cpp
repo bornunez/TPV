@@ -5,12 +5,13 @@ GameMap::GameMap() {
 
 }
 
-GameMap::GameMap(Game* game, Texture* cellTex, Texture* food, Texture* powerUp)
+GameMap::GameMap(PlayState* playState, Game* game, Texture* cellTex, Texture* food, Texture* powerUp)
 {
 	this->game = game;
 	CellTex = cellTex;
 	FoodTex = food;
 	PowerUpTex = powerUp;
+	this->playState = playState; //moverlo a pacmanobject
 }
 
 GameMap::~GameMap()
@@ -38,26 +39,38 @@ void GameMap::loadFromFile(ifstream& file)
 {
 	//Las asignamos
 	file >> rows >> cols;
+	try {
+		if (rows <= 0 || cols <= 0)
+			throw FileFormatError("Tamaño de mapa incorrecto");
 
-	//E iniciamos el mapa
-	if (mapCell == nullptr)
-		initMap();
-	//Y EMPEZAMOS LA LECTURA
-	int num;
+		//E iniciamos el mapa
+		if (mapCell == nullptr)
+			initMap();
+	
+		//Y EMPEZAMOS LA LECTURA
+		int num;
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				//MAPA: 0 -> VACIO || 1 -> MURO || 2 -> COMIDA || 3 -> VITAMINA || 5,6,7,8 -> FANTASMAS || 9 -> PACMAN
+					file >> num;
+					if (num > 9)
+						throw FileFormatError("Valor de celda incorrecto: " + num);
 
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < cols; j++) {
-			//MAPA: 0 -> VACIO || 1 -> MURO || 2 -> COMIDA || 3 -> VITAMINA || 5,6,7,8 -> FANTASMAS || 9 -> PACMAN
-			file >> num;
-
-			//CARGA MAPA
-			if (num < 4) {
-				setCell(i, j, (MapCell)num);
-				if (num == 2)
-					game->addFood();
+					//CARGA MAPA
+					if (num < 4) {
+						setCell(i, j, (MapCell)num);
+						if (num == 2)
+							playState->addFood();
+					}
 			}
 		}
 	}
+	catch (exception &e)
+	{
+		cerr << "Caught: " << e.what() << endl;
+		cerr << "Type: " << typeid(e).name() << endl;
+		this->game->endGame();
+	};
 }
 
 //GUARDA EN FICHERO LOS ARCHIVOS DEL MAPA NECESARIOS
@@ -84,15 +97,20 @@ void GameMap::saveToFile(ofstream& file)
 	}
 }
 
+bool GameMap::handleEvent(SDL_Event & e)
+{
+	return false;
+}
+
 //PINTA EL MAPA EN PANTALLA
 void GameMap:: render(){
 	SDL_Rect destRect;
 	for(int i=0; i < rows; i++)
 		for (int j = 0; j < cols; j++) {
-			destRect.h = game->getTileHeight();
-			destRect.w = game->getTileWidth();
-			destRect.x = j*game->getTileWidth();
-			destRect.y = i*game->getTileHeight();
+			destRect.h = playState->getTileHeight();
+			destRect.w = playState->getTileWidth();
+			destRect.x = j*playState->getTileWidth();
+			destRect.y = i*playState->getTileHeight();
 			//Y RENDERIZAMOS
 			if (mapCell[i][j] == Wall)
 				CellTex->render(destRect);

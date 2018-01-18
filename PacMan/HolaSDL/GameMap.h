@@ -1,5 +1,6 @@
 #pragma once
-#include "GameObject.h"
+#include "PacManObject.h"
+#include "FileFormatError.h"
 
 using namespace std;
 
@@ -10,7 +11,7 @@ struct Position
 	int X, Y;
 };
 
-class GameMap : public GameObject
+class GameMap : public PacManObject
 {
 private:
 	int rows, cols;
@@ -21,7 +22,7 @@ private:
 
 public:
 	GameMap();
-	GameMap(Game* game, Texture* cellTex, Texture* food, Texture* powerUp);
+	GameMap(PlayState* playState, Game* game, Texture* cellTex, Texture* food, Texture* powerUp);
 	~GameMap();
 	void initMap();
 
@@ -35,5 +36,6 @@ public:
 	void update();
 	void loadFromFile(ifstream& file);
 	void saveToFile(ofstream& file);
+	bool handleEvent(SDL_Event& e);
 };
 

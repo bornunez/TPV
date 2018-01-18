@@ -8,7 +8,7 @@ Ghost::Ghost(Texture* text)
 	texture = text;
 }
 
-Ghost::Ghost(Texture* text, Game* game,uint iniCol, uint iniRow, uint w, uint h) : GameCharacter(text, game, iniCol, iniRow, w, h) 
+Ghost::Ghost(Texture* text, PlayState* playState, Game* game,uint iniCol, uint iniRow, uint w, uint h) : GameCharacter(text, playState, game, iniCol, iniRow, w, h)
 {
 	type = 0;
 }
@@ -23,7 +23,7 @@ void Ghost::render()
 	destRect.x = x*iniW; destRect.y = y*iniH;
 	destRect.w = w; destRect.h = h;
 
-	if (game->isPowered())
+	if (playState->isPowered())
 		texture->renderFrame(destRect, frame % 2, 12 + (frame % 2));
 	else
 		GameCharacter::render();

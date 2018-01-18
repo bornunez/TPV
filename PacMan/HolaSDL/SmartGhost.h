@@ -16,7 +16,7 @@ private:
 	void closestDir();
 
 public:
-	SmartGhost(Texture* text, Game* game, uint iniCol, uint iniRow, uint w, uint h);
+	SmartGhost(Texture* text, PlayState* playState, Game* game, uint iniCol, uint iniRow, uint w, uint h);
 	~SmartGhost();
 
 	bool hasChild() { return child; }

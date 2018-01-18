@@ -1,17 +1,18 @@
 #include "GameCharacter.h"
-
+#include "GameStateMachine.h"
 
 
 GameCharacter::GameCharacter()
 {
 }
 
-GameCharacter::GameCharacter(Texture * text, Game * game, uint texCol, uint texRow, uint w, uint h)
+GameCharacter::GameCharacter(Texture * text, PlayState* playState, Game * game, uint texCol, uint texRow, uint w, uint h)
 {
 	this->texture = text;
 	this->game = game;
 	this->texRow = texRow; this->texCol = texCol;
 	this->w = w; this->h = h; iniW = w; iniH = h;
+	this->playState = playState;
 }
 
 GameCharacter::~GameCharacter()
@@ -28,7 +29,7 @@ void GameCharacter::render() {
 
 //CARGA DE FICHERO
 void GameCharacter::loadFromFile(ifstream& file) {
-	file >> y >> x >> iniY >> iniX >> dirX >> dirY;
+		file >> y >> x >> iniY >> iniX >> dirX >> dirY;
 }
 
 //GUARDA EN EL FICHERO
@@ -36,6 +37,12 @@ void GameCharacter::saveToFile(ofstream& file) {
 	file << y << " " << x << " " << iniY << " " << iniX << " " << dirX << " " << dirY;
 }
 
+bool GameCharacter::handleEvent(SDL_Event & e)
+{
+	return false;
+}
+
+//DADA UNA DIRECCION, DEVOLVERA TRUE SI SE PUEDE MOVER, EN CUYO CASO ESTARÁN SE DEVUELVE EN NX NY
 bool GameCharacter::next(int & nx, int & ny, Direction ndir)
 {
 	//Asignamos las variables
@@ -43,8 +50,8 @@ bool GameCharacter::next(int & nx, int & ny, Direction ndir)
 	Utilities::enumToDir(ndir, ndx, ndy);
 	nx = x + ndx;
 	ny = y + ndy;
-	int rows = game->getRows();
-	int cols = game->getCols();
+	int rows = playState->getRows();
+	int cols = playState->getCols();
 	//Aplicamos la forma toroidal
 	if (nx < 0)
 		nx = cols - 1;
@@ -54,7 +61,7 @@ bool GameCharacter::next(int & nx, int & ny, Direction ndir)
 		ny = rows - 1;
 	else if (ny >= rows)
 		ny = 0;
-	return game->getCell(ny, nx) != Wall;
+	return playState->getCell(ny, nx) != Wall;
 }
 
 void GameCharacter::init(uint W, uint H) {

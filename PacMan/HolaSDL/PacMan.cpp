@@ -5,7 +5,7 @@ PacMan::PacMan()
 {
 }
 
-PacMan::PacMan(Texture * text, Game * GAME, uint iniCol, uint iniRow, uint w, uint h) : GameCharacter(text,GAME, iniCol, iniRow, w, h)
+PacMan::PacMan(Texture * text, PlayState* playState, Game* game, uint iniCol, uint iniRow, uint w, uint h) : GameCharacter(text, playState, game, iniCol, iniRow, w, h)
 {
 }
 
@@ -13,6 +13,8 @@ PacMan::PacMan(Texture * text, Game * GAME, uint iniCol, uint iniRow, uint w, ui
 PacMan::~PacMan()
 {
 }
+
+
 
 void PacMan::update()
 {
@@ -25,15 +27,15 @@ void PacMan::update()
 		x = nx;
 		y = ny;
 		//Vemos nuestra siguiente casilla
-		MapCell cell = game->getCell(ny, nx);
+		MapCell cell = playState->getCell(ny, nx);
 		//Y nos movemos en consecuencia
 		if (cell == Food) {
-			game->eat();
-			game->setCell(ny, nx, Empty);
+			playState->eat();
+			playState->setCell(ny, nx, Empty);
 		}
 		else if (cell == PowerUp) {
-			game->setCell(ny, nx, Empty);
-			game->powerUp();
+			playState->setCell(ny, nx, Empty);
+			playState->powerUp();
 			energy = MAX_ENERGY;
 		}
 	}
@@ -67,7 +69,18 @@ void PacMan::loadFromFile(ifstream& file)
 	if (file.fail())
 		file.clear();
 	else {
-		energy = aux;
+		try
+		{
+			energy = aux;
+			if (aux < 0)
+				throw FileFormatError("Energia menor que 0, se recuperará el juego...");
+		}
+		catch (exception& e)
+		{
+			cerr << "Caught: " << e.what() << endl;
+			cerr << "Type: " << typeid(e).name() << endl;
+			energy = 0;
+		}
 		file >> life;
 	}
 }
@@ -77,4 +90,17 @@ void PacMan::saveToFile(ofstream& file)
 {
 	GameCharacter::saveToFile(file);
 	file << " " << energy << " " << life;
+}
+
+bool PacMan::handleEvent(SDL_Event & event)
+{
+	if (event.key.keysym.sym == SDLK_LEFT)
+		setDir(Left);
+	else if (event.key.keysym.sym == SDLK_RIGHT)
+		setDir(Right);
+	else if (event.key.keysym.sym == SDLK_UP)
+		setDir(Up);
+	else if (event.key.keysym.sym == SDLK_DOWN)
+		setDir(Down);
+	return true;
 }
