@@ -92,6 +92,7 @@ void Game::update() {
 	stateMachine->currentState()->update();
 }
 
+//CAPTURA LA PULSACION DE TECLAS NUMERICAS PARA GUARDAR UN CODIGO HASTA QUE EL USUARIO PULSA ENTER
 uint Game::writeCode()
 {
 	SDL_Event event;
@@ -137,15 +138,3 @@ Game::~Game()
 
 void Game::pushGameState(GameState* gameState) { stateMachine->pushState(gameState); }
 void Game::popGameState() { stateMachine->popState(); }
-
-
-/*
-void Game::menuToPlay()
-{
-
-	cout << "Play button clicked\n";
-
-	/game->pushGameState(new PlayState(game));
-
-}
-*/

@@ -4,8 +4,6 @@
 
 GameStateMachine::GameStateMachine()
 {
-	//PlayState* ps = new PlayState(game);
-	//pushState(ps);
 }
 
 
@@ -28,7 +26,6 @@ void GameStateMachine::changeState(GameState* state)
 {
 	popState();
 	pushState(state);
-
 }
 
 void GameStateMachine::exit()

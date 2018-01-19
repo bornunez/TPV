@@ -13,13 +13,16 @@ PlayState::PlayState(Game* game, string userCode) : GameState(game)
 {
 	this->userCode = userCode;
 	//Y cargamos texturas y creamos los objetos y personajes
-	gameFont = new Font(TEXT_PATH + "ARCADECLASSIC.TTF", 20);
 	gameMap = new GameMap(this, this->game, this->game->getTexture(Background), this->game->getTexture(FoodTexture), this->game->getTexture(PowerUpTexture));  //a lo mejor sobra pasarle gam
-	//login();
 
 	pacMan = new PacMan(this->game->getTexture(Characters), this, this->game, 10, 0, 0, 0);
 	stage.push_back(pacMan);
 	stage.push_back(gameMap);
+
+	if (userCode != " ") {
+		ifstream infile(LEVEL_PATH + userCode + ".pac");
+		hasSaveFile = infile.good();
+	}
 	checkLevel();
 }
 
@@ -29,7 +32,6 @@ PlayState::~PlayState() {
 
 //LLAMA AL RENDER DE CADA ENTIDAD
 void PlayState::render() {
-
 	GameState::render();
 	// Pinta los textos
 	for (int i = 0; i < NUM_TEXTS - NUM_MENUTEXTS; i++)
@@ -39,20 +41,24 @@ void PlayState::render() {
 //LLAMA AL UPDATE DE CADA ENTIDAD
 void PlayState::update() {
 
-	if (foodCount <= 0) {
-		destroyGhosts();
-		level++;
-		checkLevel();
+	if (level <= MAX_LEVEL) {
+		if (foodCount <= 0) {
+			destroyGhosts();
+			level++;
+			checkLevel();
+		}
+
+		powered = pacMan->hasEnergy();
+
+		pacMan->update();
+		updateGhosts();
+
+		adjustTexts();
 	}
 
-	powered = pacMan->hasEnergy();
 	
-	pacMan->update();
-	updateGhosts();
-
-	adjustTexts();
-	if(gameOver)
-		game->getStateMachine()->changeState(new EndState(this->game));
+	if(level > MAX_LEVEL || gameOver)
+		game->getStateMachine()->changeState(new EndState(this->game, gameOver));
 }
 
 void PlayState::updateGhosts() {
@@ -92,10 +98,6 @@ void PlayState::powerUp() {
 
 //CARGA EL NIVEL Y ACTUALIZA LAS DIMENSIONES
 void PlayState::checkLevel() {
-
-	ifstream infile(LEVEL_PATH + userCode + ".pac");
-	hasSaveFile = infile.good();
-
 	string levelStr;
 
 	//Si no hay un nivel guardado, cargamos el del nivel actual
@@ -192,8 +194,8 @@ bool PlayState::loadLevel(string filename, bool saved) {
 	};
 }
 
-
-bool PlayState::freeSpace(int x, int y, int& nx, int& ny) //Dados dos fantasmas, devolvera true si hay espacio libre alrededor de los fantasmas
+//Dados dos fantasmas, devolvera true si hay espacio libre alrededor de los fantasmas
+bool PlayState::freeSpace(int x, int y, int& nx, int& ny) 
 {
 	vector<pair<int, int>> cardinals; //Las posiciones adyacentes a los fantasmas
 	Utilities::getCardinals(x, y, cardinals);
@@ -219,6 +221,7 @@ bool PlayState::freeSpace(int x, int y, int& nx, int& ny) //Dados dos fantasmas,
 		return false;
 }
 
+//Comprueba si hay un fantasma en la casilla de coordenadas x, y
 bool PlayState::isGhost(int x, int y)
 {
 	list<GameObject*>::iterator it = stage.begin();
@@ -230,6 +233,7 @@ bool PlayState::isGhost(int x, int y)
 	return it != stage.end();
 }
 
+//
 void PlayState::pacCollision()
 {
 	list<GameObject*>::iterator it = stage.begin();
@@ -258,13 +262,10 @@ void PlayState::pacCollision()
 			list<GameObject*>::iterator it = stage.begin(); 
 			it++;
 			for (it++; it != stage.end(); it++) {
-				static_cast<GameCharacter*>(*it)->die();			//forma mas limpia de hacerlo?
-			}
-
-			//for (GameObject* c : stage)	//hay que saltar el mapa
-				//static_cast<GameCharacter*>(c)->die();						
+				static_cast<GameCharacter*>(*it)->die();			
+			}						
 			if (pacMan->isDead()) {
-				gameOver = true;  //no hace falta ya creo
+				gameOver = true; 
 			}
 		}
 			it++;
@@ -286,7 +287,7 @@ void PlayState::fantCollision()
 															  //Si soy inteligente, adulto y puedo tener hijos me tengo que preocupar de colisionar
 		if (smartMe != nullptr && smartMe->isAdult() && !smartMe->hasChild()) {
 			list<GameObject*>::iterator other = me; //Iterador de los fant a colisionar
-			//me++;
+
 			for (other++; other != stage.end(); other++) {
 
 				SmartGhost* smartOther = dynamic_cast<SmartGhost*>(*other); //Es el otro fantasma inteligente?+
@@ -311,6 +312,7 @@ void PlayState::fantCollision()
 	}
 }
 
+//Configura el canvas para que siempre se mantenga la relacion
 void PlayState::screenRatioConfig() {
 
 	GUI.w = windowReg.w * ((float)GUI_Ratio / (float)100);
@@ -327,6 +329,34 @@ void PlayState::screenRatioConfig() {
 	GUI.h = canvas.h;
 }
 
+//GUARDAMOS EL ESTADO ACTUAL EN UN FICHERO CON EL NOMBRE DEL JUGADOR
+void PlayState::saveToFile(string userCode)
+{
+	ofstream file(LEVEL_PATH + userCode + ".pac");
+
+	if (!file.is_open())
+		throw new FileNotFoundError("No se ha podido crear el archivo: ", userCode);
+	//INFO DEL MAPA
+	file << level << " " << score << endl;;
+	//GUARDAMOS EL MAPA
+	gameMap->saveToFile(file);
+
+	file << numGhost << endl;;
+
+	//Se guardan los fantasmas y PacMan
+	list<GameObject*>::iterator it = stage.begin();
+	it++;
+	for (it++; it != stage.end(); it++) {
+		static_cast<GameCharacter*> (*it)->saveToFile(file);
+		file << endl;
+	}
+	pacMan->saveToFile(file);
+	file.close();
+}
+
+int PlayState::getRows() { return gameMap->getRows(); }
+
+int PlayState::getCols() { return gameMap->getCols(); }
 
 int PlayState::getPacPosX() { return pacMan->getX(); }
 
@@ -335,33 +365,3 @@ int PlayState::getPacPosY() { return pacMan->getY(); }
 MapCell PlayState::getCell(int row, int col) { return gameMap->getCell(row, col); }
 
 void PlayState::setCell(int row, int col, MapCell type) { gameMap->setCell(row, col, type); }
-
-void PlayState::saveToFile(string userCode)
-{
-//GUARDAMOS EL ESTADO ACTUAL EN UN FICHERO CON EL NOMBRE DEL JUGADOR
-		ofstream file(LEVEL_PATH + userCode + ".pac");
-
-		if (!file.is_open())
-			throw new FileNotFoundError("No se ha podido crear el archivo: ", userCode);
-		//INFO DEL MAPA
-		file << level << " " << score << endl;;
-		//GUARDAMOS EL MAPA
-		gameMap->saveToFile(file);
-
-		file << numGhost << endl;;
-
-		//Se guardan los fantasmas y PacMan
-		list<GameObject*>::iterator it = stage.begin();
-		it++;
-		for (it++; it != stage.end(); it++) {
-			static_cast<GameCharacter*> (*it)->saveToFile(file);
-			file << endl;
-		}
-		pacMan->saveToFile(file);
-		file.close();
-}
-
-int PlayState::getRows() { return gameMap->getRows(); }
-
-int PlayState::getCols() { return gameMap->getCols(); }
-

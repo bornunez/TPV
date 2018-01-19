@@ -15,6 +15,7 @@ private:
 	string PATH;
 	SDL_Texture* texture = nullptr;
 	SDL_Renderer* renderer = nullptr;
+
 	//INFORMACION DE LA IMAGEN
 	uint w = 0;	//	Texture	width (pixels)
 	uint h = 0;	//	Texture	height (pixels)

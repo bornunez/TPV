@@ -31,6 +31,27 @@ void Utilities::enumToDir(Direction dir, int&ndx, int& ndy) {
 	}
 }
 
+Direction Utilities::dirToEnum(int dx, int dy) {
+	Direction dir;
+	if (dx == -1 && dy == 0)
+		dir = Left;
+
+	else if (dx == 0 && dy == -1)
+		dir = Up;
+
+	else if (dx == 0 && dy == 1)
+		dir = Down;
+
+	else if (dx == 1 && dy == 0)
+		dir = Right;
+
+	else if (dx == 0 && dy == 0)
+		dir = None;
+
+	return dir;
+}
+
+
 Direction Utilities::backDir(Direction currDir) { //DADA UNA DIRECCION DIR, DEVOLVEMOS LA INVERSA
 	if (currDir == Up)
 		return Down;

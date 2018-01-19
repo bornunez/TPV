@@ -4,8 +4,6 @@
 
 using namespace std;
 
-//enum MapCell { Empty, Wall, Food, PowerUp};
-
 struct Position
 {
 	int X, Y;

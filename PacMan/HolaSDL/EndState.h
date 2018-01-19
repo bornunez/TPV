@@ -6,14 +6,13 @@ const int END_BUTTONS = 2;
 class EndState : public GameState
 {
 private: 
-	Font* gameFont; //Cambiar nombre?
-
 	static void newGame(Game* game);
 	static void exit(Game* game);
 
 public:
-	EndState(Game* game);
+	EndState(Game* game, bool gameOver);
 	~EndState();
+	void render();
 	void handleEvent(SDL_Event event);
 };
 

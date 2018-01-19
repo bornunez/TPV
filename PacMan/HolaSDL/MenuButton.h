@@ -8,6 +8,7 @@ enum button_state
 	MOUSE_OVER = 1,
 	CLICKED = 2
 };
+
 class MenuButton : public GameObject
 {
 private:
@@ -18,8 +19,6 @@ private:
 	
 protected:
 	CallBackOnClick* cbOnClick;
-
-	//void CallBack();
 	bool click;
 
 public:
@@ -29,6 +28,5 @@ public:
 	void render();
 	void update();
 	bool handleEvent(SDL_Event& e);
-
 };
 

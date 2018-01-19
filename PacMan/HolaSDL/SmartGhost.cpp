@@ -34,7 +34,6 @@ void SmartGhost::update()
 	else if (age < maxAge) {
 		h = iniH;
 		w = iniW;
-		cout << "ADULTO" << endl;
 		smartMove();
 		age++;
 	}

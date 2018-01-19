@@ -14,8 +14,6 @@ PacMan::~PacMan()
 {
 }
 
-
-
 void PacMan::update()
 {
 	int nx, ny;
@@ -63,6 +61,8 @@ void PacMan::die() {
 void PacMan::loadFromFile(ifstream& file)
 {	
 	GameCharacter::loadFromFile(file);
+	dir = Utilities::dirToEnum(dirX, dirY);
+
 	int aux;
 	energy = 0;
 	file >> aux;
@@ -88,6 +88,7 @@ void PacMan::loadFromFile(ifstream& file)
 //GUARDA EN FICHERO LOS ARCHIVOS DE PACMAN NECESARIOS
 void PacMan::saveToFile(ofstream& file)
 {
+	Utilities::enumToDir(dir, dirX, dirY);
 	GameCharacter::saveToFile(file);
 	file << " " << energy << " " << life;
 }

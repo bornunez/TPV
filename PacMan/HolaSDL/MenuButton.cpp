@@ -24,28 +24,15 @@ MenuButton::~MenuButton()
 
 void MenuButton::render() {
 	texture->render(destRect);
-	//texture->renderFrame(destRect, 1, 1);
-
 }
 
 void MenuButton::update() { 
-	/*
-	int mouseX, mouseY;
-	SDL_GetMouseState(&mouseX, &mouseY);
-
-	if (mouseX < (x + width)
-		&& mouseX > x
-		&& mouseY < (y + height)
-		&& mouseY > y)
-	{
-		cbOnClick(game);
-		}*/
 }
 
 bool MenuButton::handleEvent(SDL_Event & event)
 {	
 	bool handled = false;
-	if (event.type = SDL_MOUSEBUTTONDOWN) //Es izquierdo del raton
+	if (event.type == SDL_MOUSEBUTTONDOWN) //Es izquierdo del raton
 	{
 		int mouseX, mouseY;
 		SDL_Point p;

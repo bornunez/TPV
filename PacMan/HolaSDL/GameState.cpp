@@ -6,6 +6,7 @@ GameState::GameState(Game* game)
 {
 	this->game = game;
 	MIDDLESCREEN = (windowReg.w - B_WIDTH) / 2;
+	gameFont = new Font(TEXT_PATH + "ARCADECLASSIC.TTF", 20);
 }
 
 GameState::~GameState()

@@ -27,6 +27,7 @@ class Utilities
 public:
 	static string intToStr(int number);
 	static void enumToDir(Direction dir, int&ndx, int& ndy);
+	static Direction dirToEnum(int dx, int dy);
 	static Direction backDir(Direction currDir);
 	static void getCardinals(int x, int y, vector<pair<int, int>>& cardinals);
 };

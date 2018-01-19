@@ -29,7 +29,17 @@ void GameCharacter::render() {
 
 //CARGA DE FICHERO
 void GameCharacter::loadFromFile(ifstream& file) {
+	try {
 		file >> y >> x >> iniY >> iniX >> dirX >> dirY;
+		if(dirX < -1 || dirX > 1 || dirY < -1 || dirY > 1)
+			throw FileFormatError("Direccion incorrecta, se establecera a 0.");
+	}
+	catch (exception& e)
+	{
+		cerr << "Caught: " << e.what() << endl;
+		cerr << "Type: " << typeid(e).name() << endl;
+		dirX = dirY = 0;
+	}
 }
 
 //GUARDA EN EL FICHERO

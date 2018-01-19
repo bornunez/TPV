@@ -11,13 +11,11 @@ class GameState
 protected:
 	const int B_WIDTH = 200;const int B_HEIGHT = 80;
 	int MIDDLESCREEN; int BUTTONSCALE = 2;
-
-
 	int nButtons;
 
 	list<GameObject*> stage;
-	//list<MenuButton*> buttons;
 	Game* game;
+	Font* gameFont;
 
 public:
 	GameState(Game* game);

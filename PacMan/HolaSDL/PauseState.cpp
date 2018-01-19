@@ -9,7 +9,8 @@ void PauseState::resume(Game * game)
 
 void PauseState::exitFromMenu(Game * game)
 {
-	game->getStateMachine()->exit();
+	game->getStateMachine()->popState();
+	game->getStateMachine()->popState();
 }
 
 void PauseState::saveGame(Game * game)
@@ -18,7 +19,7 @@ void PauseState::saveGame(Game * game)
 	game->getStateMachine()->popState();
 	static_cast<PlayState*> (game->getStateMachine()->currentState())->saveToFile(Utilities::intToStr( code));
 	cout << code;
-	game->getStateMachine()->exit();
+	//game->getStateMachine()->exit();
 }
 
 PauseState::PauseState(Game* game) : GameState(game)

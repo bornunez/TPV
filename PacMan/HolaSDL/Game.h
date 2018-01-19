@@ -23,7 +23,7 @@ const Region windowReg{ 1000, 750 };
 
 //Nombre de las texturas 
 enum TextureName { Characters, Background, FoodTexture, PowerUpTexture, SpriteFont, PlayButton, ExitButton, LoadButton, ResumeButton,SaveButton};
-enum TextName { ScoreText, LevelText, LifeText, StartText, LoadText };
+enum TextName { ScoreText, LevelText, LifeText, GameOverText, LoadText };
 enum MapCell { Empty, Wall, Food, PowerUp };
 
 class Game {
@@ -39,10 +39,6 @@ private:
 
 	bool exit = false;
 	bool hasSaveFile = false;
-
-	//Region canvas{ 0,0 };
-
-	//Region GUI{ 0,0 };
 
 	int winX, winY; // Posición de la ventana
 

@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-#include "Text.h"
 #include "Score.h"
 #include "GameState.h"
 #include "FileNotFoundError.h"
@@ -13,11 +12,9 @@ class GameMap;
 class PlayState : public GameState
 {
 private:
-
-
 	const int SMARTGHOST_SPRITE = 8;	//Columna de la imagen que contiene el sprite de SmartGhost
 	const int GUI_Ratio = 20; //Porcentaje de la pantalla que ocupa el GUI a la derecha
-	const int MAX_LEVEL = 4;
+	const int MAX_LEVEL = 0;	//A 0 para solo tener que pasar el primero para probar la funcionalidad
 
 	const int FRAME_RATE = 100;
 	const int NUM_SCORES_TOP = 10;
@@ -28,25 +25,18 @@ private:
 
 
 	//PROPIEDADES Y VARIABLES DE LA VENTANA
-	//SDL_Window*	window = nullptr;
-	//SDL_Renderer* renderer = nullptr;
-
 	Region canvas{ 0,0 };
 	Region GUI{ 0,0 };
 	int winX, winY; // Posición de la ventana
 
 	//PROPIEDADES Y VARIABLES DEL JUEGO (Flags de control)
-	bool menu = true;
-	bool exit = false;
-	bool error = false;
 	bool gameOver = false;
-	bool saveSt = false;
+	bool powered = false;
+
 	int foodCount = 0;
+	uint32_t auxTime = 0;
 
 	string userCode;
-
-	bool powered = false;
-	uint32_t auxTime = 0;
 
 	// Registro de puntuacion
 	Score scoreTable;
@@ -55,28 +45,18 @@ private:
 	
 	bool hasSaveFile = false; //Será true si existe un archivo de guardado
 	ScoreReg actualUserReg;			// Registro que se asigna si un usuario inicia sesion y ya estaba registrado previamente
-	Font* gameFont;
-
 
 	//VARIABLES DEL JUEGO
 	GameMap* gameMap;
-	
-	//Text* texts[NUM_TEXTS];
 	uint numGhost;
 	PacMan* pacMan;
-	//list<GameCharacter*> characters;
 
 	//METODOS AUXILIARES
-	//void loadTextures();
 	bool loadLevel(string filename, bool saved);
 	void screenRatioConfig();
-	void login();
-	//void manageScoreTable();
 	void adjustTexts(); //Ajusta los textos en funcion del GUI
 	void destroyGhosts();
 	void checkLevel();
-	//uint writeCode();
-	//void endGame();
 	bool freeSpace(int x, int y, int& nx, int& ny);
 	bool isGhost(int x, int y);
 	void pacCollision();
@@ -94,8 +74,6 @@ public:
 	void collision();
 	void powerUp();
 	void eat() { foodCount -= 1; score++; }
-	//bool save(string filename);
-	//void saveState();
 
 	//GETS Y SETS
 	MapCell getCell(int row, int col);
@@ -106,7 +84,7 @@ public:
 	int getTileWidth() { return TILE_W; }
 	int getTileHeight() { return TILE_H; }
 	void setCell(int row, int col, MapCell type);
-	void addFood() { foodCount++; }				//Quiza hay que llevarse foodCount a GameMap
+	void addFood() { foodCount++; }				
 	bool isPowered() { return powered; }
 	void saveToFile(string userCode);
 };
