@@ -11,10 +11,13 @@ GameStateMachine::~GameStateMachine()
 {
 }
 
-
+//Devuelve el ultimo elemento insertado en la pila, si la pila esta vacia devuelve nullptr
 GameState* GameStateMachine::currentState()
 {
-	return gameStateStack.top();
+	if(!empty())
+		return gameStateStack.top();
+	else 
+		return nullptr;
 }
 
 void GameStateMachine::pushState(GameState* state)

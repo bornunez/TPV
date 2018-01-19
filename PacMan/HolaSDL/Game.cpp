@@ -120,8 +120,8 @@ void Game::handleEvents() {
 	while (!exit && SDL_PollEvent(&event)) {
 		if (event.type == SDL_QUIT)
 			exit = true;
-		else
-			stateMachine->currentState()->handleEvent(event);
+		else if(!stateMachine->empty())
+				stateMachine->currentState()->handleEvent(event);
 	}
 }
 
