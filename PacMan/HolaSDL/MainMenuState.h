@@ -1,6 +1,7 @@
 #pragma once
 #include "PlayState.h"
 #include "GameStateMachine.h"
+#include "Colisiones.h"
 
 const int MENU_BUTTONS = 3;
 

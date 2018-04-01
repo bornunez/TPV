@@ -1,6 +1,2 @@
-﻿  GameStateMachine.cpp
-c:\users\miniman\desktop\cosas de la uni\tpv_git\tpv\pacman\holasdl\score.h(2): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-c:\users\miniman\desktop\cosas de la uni\tpv_git\tpv\pacman\holasdl\score.h(3): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-c:\users\miniman\desktop\cosas de la uni\tpv_git\tpv\pacman\holasdl\score.h(4): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-c:\users\miniman\desktop\cosas de la uni\tpv_git\tpv\pacman\holasdl\score.h(5): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-  HolaSDL.vcxproj -> C:\Users\Miniman\Desktop\Cosas de la uni\TPV_GIT\TPV\PacMan\bin\HolaSDLDebug.exe
+﻿  Colisiones.cpp
+  HolaSDL.vcxproj -> C:\Users\Miniman\Desktop\Cosas de la uni\Cosas viejas\TPV_GIT\TPV\PacMan\bin\HolaSDLDebug.exe

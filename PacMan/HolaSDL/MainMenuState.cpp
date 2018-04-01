@@ -13,7 +13,7 @@ MainMenuState::MainMenuState(Game* game) : GameState(game)
 
 void MainMenuState::menuToPlay(Game* game)
 {
-	game->getStateMachine()->pushState(new PlayState(game));
+	game->getStateMachine()->pushState(new Colisiones(game));
 
 }
 
